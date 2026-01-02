@@ -118,7 +118,8 @@ const AboutUs = () => {
         </div>
       </section>
 
-      {/* History of the chapter section */}
+      {/* History of the Chapter section */}
+
       <section className="flex flex-col items-center justify-center w-full max-w-3xl mt-10">
         <p className="uppercase text-[#138301] text-[14px] font-bold">our journey</p>
         <h1 className="text-[#0F172A] text-[20px] md:text-[30px] font-bold">History of the Chapter</h1>
