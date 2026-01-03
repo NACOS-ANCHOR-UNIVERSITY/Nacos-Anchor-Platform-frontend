@@ -1,6 +1,6 @@
 import React from 'react';
 import { useQuery } from '@tanstack/react-query';
-import { Mail,Star, User, Linkedin, Twitter } from 'lucide-react';
+import { Mail,Star,Users, User, Linkedin, Twitter } from 'lucide-react';
 import Navbar from '@/components/shared/Navbar';
 import Footer from '@/components/shared/Footer';
 // import client from '@/config/axios-client'; // Uncomment when API is ready
@@ -102,7 +102,7 @@ const Executivepage = () => {
   });
 
   return (
-    <div className="min-h-screen bg-[#ecf3e8]">
+    <div className="min-h-screen bg-[#f8f9f7]">
       <Navbar />
 
       <section className="bg-gradient-to-b from-[#0a6b01] via-[#0a5001] to-[#0a3001] text-white mx-auto my-6 rounded-[16px] px-6 max-w-[1274px] h-[400px] flex items-center justify-center">
@@ -142,12 +142,12 @@ const Executivepage = () => {
         {/* President Section */}
         {executives?.president && (
           <section className="mb-16">
-            <div className="flex items-center gap-3 mb-8">
-              <Star className=" text-green-700"/>
+            <div className="flex items-center gap-3 mb-8 ml-10">
+              <Star className=" text-green-700 "/>
               <h2 className="text-2xl font-bold text-gray-900">The President</h2>
             </div>
 
-            <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-8 max-w-4xl">
+            <div className="bg-white rounded-xl shadow-sm border  border-gray-200 p-8 max-w-4xl px-6 max-w-[1274px] flex items-center justify-center">
               <div className="flex flex-col md:flex-row gap-6 items-start">
                 <div className= "rounded-full bg-green-50">
                 <User className="w-32 h-32 object-cover text-green-200"/>
@@ -201,7 +201,7 @@ const Executivepage = () => {
           <section>
             <div className="flex items-center justify-between mb-8">
               <div className="flex items-center gap-3">
-                <div className="w-2 h-8 bg-[#128401] rounded-full"></div>
+                <Users className="text-green-700"/>
                 <h2 className="text-2xl font-bold text-gray-900">Executive Council</h2>
               </div>
               <span className="text-sm text-gray-500">
