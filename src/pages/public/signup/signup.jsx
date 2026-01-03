@@ -166,7 +166,7 @@ export default function PersonalInformation() {
                   </Link>
 
                   <Link
-                    to="/student-portal/academic-details"
+                    to="/signup/academic-details"
                     className="inline-flex items-center justify-center gap-2 rounded-md bg-[color:var(--color-brand-primary)] px-6 py-2.5 text-sm font-medium text-white hover:opacity-95"
                   >
                     Next Step
