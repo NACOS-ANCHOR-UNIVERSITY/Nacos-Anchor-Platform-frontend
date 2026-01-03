@@ -1,6 +1,6 @@
 import { Navigate, Route, Routes } from "react-router-dom";
-import AcademicDetails from "./pages/public/student-portal/AcademicDetails.jsx";
-import PersonalInformation from "./pages/public/student-portal/PersonalInformation.jsx";
+import AcademicDetails from "./pages/public/signup/signup2.jsx";
+import PersonalInformation from "./pages/public/signup/signup.jsx";
 
 export default function App() {
   return (
