@@ -16,7 +16,7 @@ export default function WalletSummary() {
           Statement
         </button>
       </div>
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+      {/* <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8"> */}
         {/* Total Paid */}
         <div className="bg-white border border-gray-200 rounded-xl p-6">
           <p className="text-xs text-gray-500 uppercase tracking-wide font-medium mb-2">
@@ -75,7 +75,7 @@ export default function WalletSummary() {
             className="absolute -right-3 -bottom-4 w-32 opacity-80 pointer-events-none"
           />
         </div>
-      </div>
+      {/* </div> */}
     </>
   )
 }
