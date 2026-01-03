@@ -5,10 +5,10 @@ import PersonalInformation from "./pages/public/student-portal/PersonalInformati
 export default function App() {
   return (
     <Routes>
-      <Route path="/" element={<Navigate to="/student-portal/academic-details" replace />} />
+      <Route path="/" element={<Navigate to="/student-portal/personal-information" replace />} />
       <Route path="/student-portal/personal-information" element={<PersonalInformation />} />
       <Route path="/student-portal/academic-details" element={<AcademicDetails />} />
-      <Route path="*" element={<Navigate to="/student-portal/academic-details" replace />} />
+      <Route path="*" element={<Navigate to="/student-portal/personal-information" replace />} />
     </Routes>
   );
 }
