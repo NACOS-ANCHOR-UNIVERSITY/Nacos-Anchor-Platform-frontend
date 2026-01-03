@@ -12,15 +12,17 @@ export default function StudentPaymentReceipt() {
       <Sidebar active="Payments" />
       <main className="flex-1">
         <PageHeader />
-        <div className=" p-8">
-          <div className="grid grid-cols-3 gap-4 mb-8">
-            <WalletSummary />
-          </div>
-          <PaymentAlert />
-          <PendingFees />
-          <PaymentHistory />
-        </div>
+        <div className="flex justify-center">
 
+          <div className=" container p-8">
+            <div className="grid grid-cols-3 gap-4 mb-8">
+              <WalletSummary />
+            </div>
+            <PaymentAlert />
+            <PendingFees />
+            <PaymentHistory />
+          </div>
+        </div>
       </main>
     </div>
   )

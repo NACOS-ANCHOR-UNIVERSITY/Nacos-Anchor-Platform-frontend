@@ -13,7 +13,7 @@ export default function PaymentHistory() {
 
   return (
     <div>
-      <div className="flex items-center justify-between mb-4">
+      <div className="flex items-center justify-between p-2 bg-white border border-gray-200 rounded-t-lg">
         <h2 className="text-xl font-bold text-gray-900 border-l-4 border-green-600 pl-3">Payment History</h2>
         <div className="flex gap-2">
           <button className="p-2 text-gray-600 hover:bg-gray-100 rounded-lg"><Filter className="w-4 h-4" /></button>
@@ -21,7 +21,7 @@ export default function PaymentHistory() {
         </div>
       </div>
 
-      <div className="bg-white border border-gray-200 rounded-lg overflow-hidden">
+      <div className="bg-white border border-gray-200  overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full">
             <thead>
