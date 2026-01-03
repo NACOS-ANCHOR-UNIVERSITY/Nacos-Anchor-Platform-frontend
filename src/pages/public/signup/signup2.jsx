@@ -22,16 +22,17 @@ export default function AcademicDetails() {
   return (
     <div className="min-h-screen bg-gray-50">
       <header className="border-b border-gray-200 bg-white">
-        <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-4">
-          <div className="flex items-center gap-3">
-            <div className="h-9 w-9 rounded-md bg-[color:var(--color-brand-primary)]/10" />
-            <div className="leading-tight">
-              <p className="text-xs font-semibold text-gray-700">NACOS</p>
-              <p className="text-xs text-gray-500">Anchor University</p>
+        <div className="mx-auto grid max-w-6xl grid-cols-12 items-center gap-4 px-4 py-4">
+          <div className="col-span-12 flex items-center justify-between md:col-span-3 md:justify-start">
+            <div className="flex items-center gap-2">
+              <div className="h-8 w-8 rounded bg-[color:var(--color-brand-primary)]/10" />
+              <div className="leading-tight">
+                <p className="text-[11px] font-semibold tracking-wide text-[color:var(--color-brand-primary)]">NACOS NATIONAL</p>
+              </div>
             </div>
           </div>
 
-          <nav className="hidden items-center gap-6 text-sm text-gray-600 md:flex">
+          <nav className="col-span-12 hidden justify-center gap-7 text-sm text-gray-700 md:col-span-6 md:flex">
             <a className="hover:text-gray-900" href="#">Home</a>
             <a className="hover:text-gray-900" href="#">About Us</a>
             <a className="hover:text-gray-900" href="#">Executives</a>
@@ -39,15 +40,15 @@ export default function AcademicDetails() {
             <a className="hover:text-gray-900" href="#">Contact</a>
           </nav>
 
-          <div className="flex items-center gap-3">
-            <div className="hidden items-center gap-2 rounded-md bg-gray-50 px-3 py-2 ring-1 ring-gray-200 md:flex">
-              <div className="h-4 w-4 rounded bg-gray-200" />
+          <div className="col-span-12 flex items-center justify-end gap-3 md:col-span-3">
+            <div className="hidden items-center gap-2 rounded-md bg-[color:var(--color-brand-primary)]/5 px-3 py-2 ring-1 ring-[color:var(--color-brand-primary)]/10 md:flex">
+              <div className="h-4 w-4 rounded bg-[color:var(--color-brand-primary)]/20" />
               <input
-                className="w-56 bg-transparent text-sm text-gray-700 outline-none placeholder:text-gray-400"
+                className="w-44 bg-transparent text-sm text-gray-700 outline-none placeholder:text-[color:var(--color-brand-primary)]/60"
                 placeholder="Search executives..."
               />
             </div>
-            <button className="rounded-md bg-[color:var(--color-brand-primary)] px-4 py-2 text-sm font-medium text-white hover:opacity-95">
+            <button className="rounded-md bg-[color:var(--color-brand-primary)] px-4 py-2 text-sm font-medium text-white shadow-sm hover:opacity-95">
               Login
             </button>
           </div>
