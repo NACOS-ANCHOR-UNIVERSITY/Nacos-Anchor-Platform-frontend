@@ -8,8 +8,7 @@ function App() {
       <Route path="/student" element={<StudentLayout />}>
         <Route path="/student/library" element={<LibraryPage />} />
       </Route>
-      {/* All Student Pages use the StudentLayout (and get the Navbar for free) */}
-    
+     
     </Routes>
   );
 }
