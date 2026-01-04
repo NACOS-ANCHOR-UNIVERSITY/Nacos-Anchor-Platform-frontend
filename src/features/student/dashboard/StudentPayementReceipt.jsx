@@ -10,10 +10,10 @@ export default function StudentPaymentReceipt() {
   const [isOpen, setIsOpen] = useState(false)
 
   return (
-    <div className="flex min-h-screen bg-[#fcfcf8]">
+    <div className="flex min-h-screen bg-[#F8FCF8] font-sans"> {/*bg-[#fcfcf8] */}
       <Sidebar {...{ isOpen, setIsOpen, active: "Payments" }} />
       <main className="flex-1 relative">
-        <PageHeader {...{ isOpen, setIsOpen, }} />
+        <PageHeader {...{ isOpen, setIsOpen, location: "Payments" }} />
         <div className="flex justify-center ">
 
           <div className=" container p-8">

@@ -2,6 +2,7 @@ import { BriefcaseBusinessIcon, CloudUploadIcon, CreditCard, IdCard, LayoutDashb
 import React, { useState } from "react"
 import NavItem from "./NavItem"
 import NACOSIMG from "../../assets/images/nacossLogo.png"
+import { Link } from "react-router-dom"
 
 export default function Sidebar({ active, isOpen, setIsOpen }) {
     const navItems = [
@@ -37,7 +38,9 @@ export default function Sidebar({ active, isOpen, setIsOpen }) {
 
                 <nav className="space-y-2 flex-1">
                     {navItems.map(item => (
-                        <NavItem key={item.label} icon={item.icon} label={item.label} active={active === item.label} onClick={() => setIsOpen(false)} />
+                        <Link key={item.label}  to={`/${item.label}`}>
+                            <NavItem icon={item.icon} label={item.label} active={active === item.label} onClick={() => setIsOpen(false)} />
+                        </Link>
                     ))}
                 </nav>
 

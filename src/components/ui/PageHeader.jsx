@@ -1,6 +1,6 @@
 import { Menu } from "lucide-react"
 
-export default function PageHeader({ setIsOpen }) {
+export default function PageHeader({ setIsOpen, location }) {
     return (
         <>
             <div className="mb-10"></div>
@@ -17,7 +17,7 @@ export default function PageHeader({ setIsOpen }) {
                                 <svg className="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                                 </svg>
-                                <span className="font-bold text-gray-900">Payments</span>
+                                <span className="font-bold text-gray-900">{location}</span>
                             </div>
                         </div>
 

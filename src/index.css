@@ -1,4 +1,6 @@
 @import "tailwindcss";
+@import "@fontsource/lexend";/* <-- Israel added this*/
+
 
 @theme {
   
@@ -9,10 +11,16 @@
   --color-status-success: #22c55e;
   --color-status-error: #ef4444;
   --color-status-pending: #f59e0b;
+   --font-sans: "Lexend", sans-serif; /* <-- Israel added this too*/
 }
 
 @layer base {
   body {
     @apply antialiased text-gray-900 bg-gray-50;
   }
+}
+
+@layer utilities {
+  .text-stroke-1 { -webkit-text-stroke: 1px currentColor; }
+  .text-stroke-2 { -webkit-text-stroke: 2px currentColor; }
 }
