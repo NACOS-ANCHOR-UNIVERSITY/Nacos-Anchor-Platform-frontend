@@ -8,6 +8,7 @@ import {
   MoreVertical,
   Paperclip,
   Smile,
+  BadgeCheck,
   Send,
   Info,
   Calendar,
@@ -18,12 +19,8 @@ import {
 const ChatPage = () => {
   return (
     <div className="flex flex-col h-screen bg-white font-sans overflow-hidden">
-    
-        
       <header className="h-16 border-b border-gray-200 bg-white flex items-center justify-between px-6 shrink-0 z-20">
-       
         <div className="flex items-center gap-8 flex-1">
-         
           <div className="flex items-center gap-2">
             <div className="w-8 h-8 rounded bg-green-100 text-green-700 flex items-center justify-center font-bold">
               N
@@ -36,7 +33,6 @@ const ChatPage = () => {
             </div>
           </div>
 
-         
           <div className="relative w-full max-w-md hidden md:block">
             <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
             <input
@@ -47,9 +43,7 @@ const ChatPage = () => {
           </div>
         </div>
 
-       
         <div className="flex items-center gap-6">
-        
           <nav className="hidden lg:flex items-center gap-6 text-sm font-medium">
             <a
               href="/student/dashboard"
@@ -70,7 +64,6 @@ const ChatPage = () => {
 
           <div className="h-6 w-px bg-gray-200 hidden lg:block"></div>
 
-         
           <div className="flex items-center gap-3">
             <button className="relative text-gray-500 hover:text-gray-700">
               <Bell className="w-5 h-5" />
@@ -83,9 +76,7 @@ const ChatPage = () => {
         </div>
       </header>
 
-     
       <div className="flex flex-1 overflow-hidden">
-      
         <aside className="w-64 bg-white border-r border-gray-200 flex flex-col shrink-0">
           <div className="p-4">
             <h2 className="font-bold text-gray-900 mb-1">Channels</h2>
@@ -116,7 +107,6 @@ const ChatPage = () => {
             </div>
           </div>
 
-        
           <div className="p-4 border-t border-gray-100 mt-auto">
             <div className="flex items-center gap-3 text-gray-500 hover:text-gray-900 cursor-pointer transition-colors">
               <Settings className="w-4 h-4" />
@@ -128,9 +118,7 @@ const ChatPage = () => {
           </div>
         </aside>
 
-        
         <main className="flex-1 flex flex-col min-w-0 bg-white relative">
-          
           <div className="h-14 border-b border-gray-100 flex items-center justify-between px-6 shrink-0 bg-white">
             <div>
               <h2 className="font-bold text-gray-900 flex items-center gap-2 text-sm">
@@ -147,7 +135,7 @@ const ChatPage = () => {
           </div>
 
           {/* Chat Messages */}
-          <div className="flex-1 overflow-y-auto p-6 space-y-6 bg-white">
+          <div className="flex-1 overflow-y-auto p-6 space-y-6 bg-gray-100">
             <DateDivider date="Today, October 24" />
 
             <Message
@@ -185,9 +173,10 @@ const ChatPage = () => {
             </div>
 
             <Message
-              user="You"
-              time="10:50 AM"
+             time="10:50 AM"
+              user="You"              
               isMe
+              swapHeader={true}
               text="Thanks for the update Sarah! I'll head to the library first then."
               read
             />
@@ -195,6 +184,7 @@ const ChatPage = () => {
             <Message
               user="Michael T."
               time="11:05 AM"
+              className="text-white"
               avatar="M"
               text="Guys, I found this PDF very useful for the upcoming test."
               attachment={{name: "CMP_301_Notes_Revised.pdf", size: "2.4 MB"}}
@@ -246,21 +236,21 @@ const ChatPage = () => {
                 Departmental dues deadline is this Friday. Ensure you pay via
                 the 'Payments' tab.
               </p>
-              <button className="text-[10px] font-bold text-green-700 hover:underline flex items-center gap-1">
+              <button className="text-[12px] font-bold text-green-700 hover:underline flex items-center gap-1">
                 Go to Payments →
               </button>
             </div>
 
-            {/* Quick Access */}
-            <div>
-              <h4 className="text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-3">
+            {/* gray Card */}
+            <div className="bg-gray-100 border border-gray-100 rounded-xl p-4 relative">
+              <h4 className="text-[12px] font-bold text-gray-400 uppercase tracking-wider mb-3">
                 Quick Access
               </h4>
               <div className="space-y-2">
-                <button className="w-full flex items-center gap-3 p-3 bg-gray-50 hover:bg-green-50 rounded-lg text-xs font-medium text-gray-700 transition-colors text-left border border-gray-100 hover:border-green-100">
+                <button className="w-full flex items-center gap-3 p-3  hover:bg-gray-50 rounded-lg text-xs font-medium text-gray-700 transition-colors text-left  hover:border-gray-100">
                   <Calendar className="w-4 h-4 text-green-600" /> Exam Timetable
                 </button>
-                <button className="w-full flex items-center gap-3 p-3 bg-gray-50 hover:bg-green-50 rounded-lg text-xs font-medium text-gray-700 transition-colors text-left border border-gray-100 hover:border-green-100">
+                <button className="w-full flex items-center gap-3 p-3 hover:bg-gray-50 rounded-lg text-xs font-medium text-gray-700 transition-colors text-left  hover:border-gray-100">
                   <FileText className="w-4 h-4 text-green-600" /> Shared
                   Materials
                 </button>
@@ -268,6 +258,7 @@ const ChatPage = () => {
             </div>
 
             {/* Members List */}
+          {/* Members List */}
             <div>
               <div className="flex items-center justify-between mb-3">
                 <h4 className="text-[10px] font-bold text-gray-400 uppercase tracking-wider">
@@ -278,7 +269,10 @@ const ChatPage = () => {
                 </span>
               </div>
               <div className="space-y-4">
-                <MemberItem name="James K." role="Class Rep" isOnline />
+                {/* Added hasBadge prop here */}
+                <MemberItem name="James K." role="Class Rep" isOnline hasBadge />
+                
+                {/* Others remain normal */}
                 <MemberItem name="Anita R." isOnline />
                 <MemberItem name="Chioma N." isOnline />
                 <MemberItem name="Bola T." status="Offline 15m ago" />
@@ -322,7 +316,7 @@ const ChannelItem = ({name, sub, active, count, isPrivate}) => (
           {name}
         </p>
         {sub && (
-          <p className="text-[10px] text-gray-400 group-hover:text-gray-500">
+          <p className="text-[10px] text-green-800 group-hover:text-gray-500">
             {sub}
           </p>
         )}
@@ -343,6 +337,7 @@ const Message = ({
   avatar,
   isMe,
   read,
+  swapHeader,
   attachment,
   reactions,
 }) => (
@@ -356,7 +351,12 @@ const Message = ({
     </div>
 
     <div className={`max-w-[75%] ${isMe ? "items-end flex flex-col" : ""}`}>
-      <div className="flex items-baseline gap-2 mb-1">
+      {/* 2. Added logic here to swap order if swapHeader is true */}
+      <div
+        className={`flex items-baseline gap-2 mb-1 ${
+          swapHeader ? "flex-row-reverse" : ""
+        }`}
+      >
         <span className="text-xs font-bold text-gray-900">{user}</span>
         <span className="text-[10px] text-gray-400">{time}</span>
       </div>
@@ -371,7 +371,7 @@ const Message = ({
         <p>{text}</p>
 
         {attachment && (
-          <div className="mt-3 flex items-center gap-3 bg-white/10 (isMe ? 'bg-black/10' : 'bg-white') border border-gray-200 p-2 rounded-lg">
+          <div className="mt-3 flex items-center gap-3 bg-white/10 border border-gray-200 p-2 rounded-lg">
             <div className="p-2 bg-white rounded flex items-center justify-center text-red-500 shadow-sm">
               <FileText className="w-4 h-4" />
             </div>
@@ -408,7 +408,7 @@ const Message = ({
   </div>
 );
 
-const MemberItem = ({name, role, isOnline, status}) => (
+const MemberItem = ({name, role, isOnline, status, hasBadge}) => (
   <div className="flex items-center gap-3">
     <div className="relative">
       <div className="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center text-xs font-bold text-gray-600 border border-gray-200">
@@ -419,17 +419,26 @@ const MemberItem = ({name, role, isOnline, status}) => (
       )}
     </div>
     <div>
-      <div className="flex items-center gap-1.5">
-        <h4 className="text-xs font-bold text-gray-800">{name}</h4>
+      <div>
+        <div className="flex items-center gap-1">
+          <h4 className="text-xs font-bold text-gray-800">{name}</h4>
+          {/* Only show badge if hasBadge is true */}
+          {hasBadge && <BadgeCheck className="w-3 h-3 text-green-600" />}
+        </div>
+
         {role && (
-          <span className="text-[9px] font-bold text-green-700 bg-green-100 px-1.5 py-0.5 rounded-full">
+          <span className="text-[9px] font-bold text-green-700 bg-green-100 px-1.5 py-0.5 rounded-full inline-block mt-0.5">
             {role}
           </span>
         )}
       </div>
-      <p className="text-[10px] text-gray-400">
-        {isOnline ? "Online" : status}
-      </p>
+      
+      {/* Hide the 'Online' text if the user has a badge */}
+      {!hasBadge && (
+        <p className="text-[10px] text-gray-400">
+          {isOnline ? "Online" : status}
+        </p>
+      )}
     </div>
   </div>
 );
