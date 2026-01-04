@@ -1,5 +1,10 @@
 import { useMemo, useRef, useState } from "react";
 import { Pencil, Eye, Github, Linkedin, Globe, Upload, X } from "lucide-react";
+import projectLibraryImg from "../../assets/images/Project-Library.png";
+import projectScraperImg from "../../assets/images/Project-Scrapper.png";
+import addProjectIcon from "../../assets/images/add-project-icon.svg";
+
+
 
 function Card({ title, right, children }) {
   return (
@@ -78,13 +83,7 @@ export default function Portfolio() {
   // public visibility
   const [isPublic, setIsPublic] = useState(true);
 
-  const PROJECT_IMAGES = {
-    library:
-      "https://images.unsplash.com/photo-1556155092-8707de31f9c4?q=80&w=1200&auto=format&fit=crop",
-    data:
-      "https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=1200&auto=format&fit=crop",
-  };
-
+  
   // about me editing
   const [about, setAbout] = useState(
     "I am a passionate Computer Science student with a strong focus on Full Stack Development and Artificial Intelligence. I love building tools that solve real-world problems. Currently serving as the General Secretary for NACOS Anchor University Chapter. Always eager to learn new technologies and collaborate on open-source projects."
@@ -139,21 +138,22 @@ export default function Portfolio() {
 
   // projects (mock)
   const projects = [
-    {
-      id: 1,
-      title: "University Library App",
-      desc: "A comprehensive MERN stack application designed to digitize the university library...",
-      tags: ["REACT", "MONGODB"],
-      image: PROJECT_IMAGES.library,
-    },
-    {
-      id: 2,
-      title: "Python Data Scraper",
-      desc: "Automated tool built with Beautiful Soup and Selenium to collect real-time housing data for...",
-      tags: ["PYTHON", "SELENIUM"],
-      image: PROJECT_IMAGES.data,
-    },
-  ];
+  {
+    id: 1,
+    title: "University Library App",
+    desc: "A comprehensive MERN stack application designed to digitize the university library...",
+    tags: ["REACT", "MONGODB"],
+    image: projectLibraryImg,
+  },
+  {
+    id: 2,
+    title: "Python Data Scraper",
+    desc: "Automated tool built with Beautiful Soup and Selenium to collect real-time housing data for...",
+    tags: ["PYTHON", "SELENIUM"],
+    image: projectScraperImg,
+  },
+];
+
 
   return (
     <div className="max-w-6xl">
@@ -466,9 +466,15 @@ export default function Portfolio() {
                 type="button"
                 className="flex min-h-[220px] flex-col items-center justify-center rounded-xl border border-dashed border-slate-300 bg-slate-50 text-center hover:bg-slate-100"
               >
-                <div className="grid h-10 w-10 place-items-center rounded-full border border-slate-200 bg-white text-slate-700">
-                  +
-                </div>
+               <div className="grid h-10 w-10 place-items-center rounded-full border border-slate-200 bg-white">
+  <img
+    src={addProjectIcon}
+    alt="Add project"
+    className="h-5 w-5"
+    draggable="false"
+  />
+</div>
+
                 <div className="mt-3 text-sm font-semibold text-slate-900">Add New Project</div>
                 <div className="mt-1 text-xs text-slate-500">Showcase your latest work</div>
               </button>
