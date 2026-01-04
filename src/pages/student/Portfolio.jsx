@@ -21,7 +21,7 @@ function Toggle({ checked, onChange }) {
       type="button"
       onClick={() => onChange(!checked)}
       className={`relative inline-flex h-6 w-11 items-center rounded-full transition ${
-        checked ? "bg-emerald-700" : "bg-slate-300"
+        checked ? "bg-[var(--color-brand-primary)]" : "bg-slate-300"
       }`}
       aria-pressed={checked}
     >
@@ -36,12 +36,12 @@ function Toggle({ checked, onChange }) {
 
 function SkillPill({ label, onRemove }) {
   return (
-    <span className="inline-flex items-center gap-2 rounded-full border border-emerald-200 bg-emerald-50 px-3 py-1 text-xs font-medium text-emerald-700">
+    <span className="inline-flex items-center gap-2 rounded-full border border-[color-mix(in_srgb,var(--color-brand-primary)_25%,white)] bg-[color-mix(in_srgb,var(--color-brand-primary)_10%,white)] px-3 py-1 text-xs font-medium text-[var(--color-brand-primary)]">
       {label}
       <button
         type="button"
         onClick={onRemove}
-        className="rounded-full px-1 hover:bg-emerald-100"
+        className="rounded-full px-1 hover:bg-[color-mix(in_srgb,var(--color-brand-primary)_15%,white)]"
         aria-label="remove"
       >
         ×
@@ -62,7 +62,7 @@ export default function Portfolio() {
 
   // avatar
   const avatarInputRef = useRef(null);
-  const DEFAULT_AVATAR ="https://api.dicebear.com/7.x/avataaars/svg?seed=portfolio";
+  const DEFAULT_AVATAR = "https://api.dicebear.com/7.x/avataaars/svg?seed=portfolio";
   const [avatarUrl, setAvatarUrl] = useState(DEFAULT_AVATAR);
 
   function pickAvatar() {
@@ -79,12 +79,11 @@ export default function Portfolio() {
   const [isPublic, setIsPublic] = useState(true);
 
   const PROJECT_IMAGES = {
-        library:
-            "https://images.unsplash.com/photo-1556155092-8707de31f9c4?q=80&w=1200&auto=format&fit=crop",
-        data:
-            "https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=1200&auto=format&fit=crop",
-    };
-
+    library:
+      "https://images.unsplash.com/photo-1556155092-8707de31f9c4?q=80&w=1200&auto=format&fit=crop",
+    data:
+      "https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=1200&auto=format&fit=crop",
+  };
 
   // about me editing
   const [about, setAbout] = useState(
@@ -139,35 +138,31 @@ export default function Portfolio() {
   }
 
   // projects (mock)
-    const projects = [
-        {
-            id: 1,
-            title: "University Library App",
-            desc:
-            "A comprehensive MERN stack application designed to digitize the university library...",
-            tags: ["REACT", "MONGODB"],
-            image: PROJECT_IMAGES.library,
-        },
-        {
-            id: 2,
-            title: "Python Data Scraper",
-            desc:
-            "Automated tool built with Beautiful Soup and Selenium to collect real-time housing data for...",
-            tags: ["PYTHON", "SELENIUM"],
-            image: PROJECT_IMAGES.data,
-        },
-        
-    ];
-    
+  const projects = [
+    {
+      id: 1,
+      title: "University Library App",
+      desc: "A comprehensive MERN stack application designed to digitize the university library...",
+      tags: ["REACT", "MONGODB"],
+      image: PROJECT_IMAGES.library,
+    },
+    {
+      id: 2,
+      title: "Python Data Scraper",
+      desc: "Automated tool built with Beautiful Soup and Selenium to collect real-time housing data for...",
+      tags: ["PYTHON", "SELENIUM"],
+      image: PROJECT_IMAGES.data,
+    },
+  ];
 
   return (
     <div className="max-w-6xl">
-      {/* Header (breadcrumb + title + subtitle + button) */}
+      {/* Header */}
       <div className="mb-6 flex items-start justify-between">
         <div>
           <div className="text-xs text-slate-500">
             Dashboard <span className="mx-1">/</span>{" "}
-            <span className="font-medium text-emerald-700">My Portfolio</span>
+            <span className="font-medium text-[var(--color-brand-primary)]">My Portfolio</span>
           </div>
           <h1 className="mt-2 text-3xl font-bold text-slate-900">My Portfolio</h1>
           <p className="mt-1 text-sm text-slate-600">
@@ -177,14 +172,14 @@ export default function Portfolio() {
 
         <button
           type="button"
-          className="inline-flex items-center gap-2 rounded-lg bg-emerald-700 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-emerald-800"
+          className="inline-flex items-center gap-2 rounded-lg bg-[var(--color-brand-primary)] px-4 py-2 text-sm font-semibold text-white shadow-sm hover:opacity-95"
         >
           <Eye className="h-4 w-4" />
           Preview Public Profile
         </button>
       </div>
 
-      {/* Main grid (matches screenshot proportions) */}
+      {/* Main grid */}
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
         {/* Left column */}
         <div className="space-y-6">
@@ -193,19 +188,18 @@ export default function Portfolio() {
             <div className="flex flex-col items-center text-center">
               <div className="relative">
                 <div className="h-20 w-20 overflow-hidden rounded-full border border-slate-200 bg-slate-100">
-                    <img
-                        src={avatarUrl}
-                        alt="profile avatar"
-                        className="h-full w-full object-cover"
-                    />
-
+                  <img
+                    src={avatarUrl}
+                    alt="profile avatar"
+                    className="h-full w-full object-cover"
+                  />
                 </div>
 
                 {/* edit avatar */}
                 <button
                   type="button"
                   onClick={pickAvatar}
-                  className="absolute -bottom-1 -right-1 grid h-7 w-7 place-items-center rounded-full bg-emerald-700 text-white shadow hover:bg-emerald-800"
+                  className="absolute -bottom-1 -right-1 grid h-7 w-7 place-items-center rounded-full bg-[var(--color-brand-primary)] text-white shadow hover:opacity-95"
                   title="Edit photo"
                 >
                   <Pencil className="h-4 w-4" />
@@ -222,16 +216,14 @@ export default function Portfolio() {
 
               <div className="mt-4">
                 <div className="text-base font-bold text-slate-900">{user.fullName}</div>
-                <div className="text-xs font-semibold text-emerald-700">
+                <div className="text-xs font-semibold text-[var(--color-brand-primary)]">
                   {user.deptLevel}
                 </div>
-                <div className="mt-1 text-xs text-slate-500">
-                  Matric No: {user.matric}
-                </div>
+                <div className="mt-1 text-xs text-slate-500">Matric No: {user.matric}</div>
               </div>
             </div>
 
-            {/* Public visibility block (with subtext + toggle like screenshot) */}
+            {/* Public visibility */}
             <div className="mt-5 rounded-lg border border-slate-200 bg-slate-50 p-3">
               <div className="flex items-center justify-between">
                 <div>
@@ -243,11 +235,11 @@ export default function Portfolio() {
             </div>
           </Card>
 
-          {/* Social Presence (with icons) */}
+          {/* Social Presence */}
           <Card
             title="Social Presence"
             right={
-              <button type="button" className="text-xs font-semibold text-emerald-700">
+              <button type="button" className="text-xs font-semibold text-[var(--color-brand-primary)]">
                 Save
               </button>
             }
@@ -341,7 +333,7 @@ export default function Portfolio() {
 
         {/* Right column */}
         <div className="space-y-6 lg:col-span-2">
-          {/* About Me (editable like screenshot) */}
+          {/* About Me */}
           <Card
             title="About Me"
             right={
@@ -365,7 +357,7 @@ export default function Portfolio() {
                 <textarea
                   value={aboutDraft}
                   onChange={(e) => setAboutDraft(e.target.value)}
-                  className="min-h-[110px] w-full rounded-lg border border-slate-200 bg-white p-3 text-sm outline-none focus:border-emerald-300"
+                  className="min-h-[110px] w-full rounded-lg border border-slate-200 bg-white p-3 text-sm outline-none focus:border-[var(--color-brand-primary)]"
                 />
                 <div className="flex justify-end gap-2">
                   <button
@@ -381,7 +373,7 @@ export default function Portfolio() {
                       setAbout(aboutDraft);
                       setIsEditingAbout(false);
                     }}
-                    className="rounded-lg bg-emerald-700 px-3 py-2 text-sm font-semibold text-white hover:bg-emerald-800"
+                    className="rounded-lg bg-[var(--color-brand-primary)] px-3 py-2 text-sm font-semibold text-white hover:opacity-95"
                   >
                     Save
                   </button>
@@ -390,14 +382,14 @@ export default function Portfolio() {
             )}
           </Card>
 
-          {/* Skills (add skill works like screenshot) */}
+          {/* Skills */}
           <Card
             title="Skills"
             right={
               <button
                 type="button"
                 onClick={addSkill}
-                className="text-xs font-semibold text-emerald-700 hover:text-emerald-800"
+                className="text-xs font-semibold text-[var(--color-brand-primary)] hover:opacity-90"
               >
                 + Add Skill
               </button>
@@ -422,7 +414,7 @@ export default function Portfolio() {
                   addSkill();
                 }
               }}
-              className="mt-3 w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm outline-none focus:border-emerald-300"
+              className="mt-3 w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm outline-none focus:border-[var(--color-brand-primary)]"
               placeholder="Type a skill..."
             />
           </Card>
@@ -433,17 +425,16 @@ export default function Portfolio() {
 
             <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
               {projects.map((p) => (
-                <div key={p.id} className="overflow-hidden rounded-xl border border-slate-200 bg-white">
+                <div
+                  key={p.id}
+                  className="overflow-hidden rounded-xl border border-slate-200 bg-white"
+                >
                   <img
-  src={p.image}
-  alt={p.title}
-  className="h-36 w-full object-cover"
-  loading="lazy"
-  onError={(e) => {
-    // fallback if the image URL fails for any reason
-    e.currentTarget.style.display = "none";
-  }}
-/>
+                    src={p.image}
+                    alt={p.title}
+                    className="h-36 w-full object-cover"
+                    loading="lazy"
+                  />
 
                   <div className="p-4">
                     <div className="flex items-start justify-between gap-3">
@@ -451,7 +442,7 @@ export default function Portfolio() {
                         <div className="text-sm font-semibold text-slate-900">{p.title}</div>
                         <div className="mt-1 text-xs text-slate-600">{p.desc}</div>
                       </div>
-                      <button className="text-xs font-semibold text-emerald-700 hover:text-emerald-800">
+                      <button className="text-xs font-semibold text-[var(--color-brand-primary)] hover:opacity-90">
                         View Project →
                       </button>
                     </div>
@@ -470,7 +461,7 @@ export default function Portfolio() {
                 </div>
               ))}
 
-              {/* Add New Project (dashed box like screenshot) */}
+              {/* Add New Project */}
               <button
                 type="button"
                 className="flex min-h-[220px] flex-col items-center justify-center rounded-xl border border-dashed border-slate-300 bg-slate-50 text-center hover:bg-slate-100"
@@ -490,6 +481,5 @@ export default function Portfolio() {
         </div>
       </div>
     </div>
-    
   );
 }
