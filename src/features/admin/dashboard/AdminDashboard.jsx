@@ -17,6 +17,7 @@ import {
   Plus,
 } from "lucide-react";
 
+
 export default function AdminDashboard() {
   const recentActivities = [
     {
@@ -54,95 +55,158 @@ export default function AdminDashboard() {
         </button>
       </div>
 
-      {/* //defined props to be used here */}
+      {/* STATS OVERVIEW */}
       <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6 mb-10">
+        {/* 1. Total Registration */}
         <StatsCard
-          label="Total Registration"
+          title="Total Registration"
           value="2,450"
-          sub="Target: 2,600 students"
-          progress={65}
-          icon={<Users className="text-green-600" />}
-         trend={
-         <div className="flex items-center gap-2 text-green-600 rounded-2xl h-7 w-15">
-            <div>{<TrendingUp className="text-green-600 pl-2"/>}</div>
-            <span>+12%</span>
-          </div>
-  }
-        />
-        <StatsCard
-          label="Dues Collected"
-          value="₦12.5M"
-          sub="85% Completion Rate"
-          progress={85}
-          icon={<TrendingUp className="text-green-600" />}
+          icon={<Users className="w-6 h-6" />}
+          color="green"
           trend={
-            <p className=" text-gray-600 rounded h-5.5 pt-1 w-20 text-center">This Session</p>
+            <span className="bg-green-50 text-green-600 text-xs font-bold px-2 py-1 rounded-lg">
+              +12%
+            </span>
+          }
+          progress={85}
+          footer="Target: 2,800 students"
+        />
+
+        {/* 2. Dues Collected */}
+        <StatsCard
+          title="Dues Collected"
+          value="₦12.5M"
+          icon={<CreditCard className="w-6 h-6" />}
+          color="green"
+          trend={
+            <span className="bg-gray-100 text-gray-600 text-xs font-bold px-2 py-1 rounded-lg">
+              This Session
+            </span>
+          }
+          progress={65}
+          footer="65% Completion Rate"
+        />
+
+        {/* 3. Pending Approvals (Split Footer) */}
+        <StatsCard
+          title="Pending Approvals"
+          value="14"
+          icon={<ClipboardCheck className="w-6 h-6" />}
+          color="orange"
+          trend={
+            <div className="w-2 h-2 bg-orange-500 rounded-full mt-2"></div>
+          }
+          // Custom Footer with Split Text
+          footer={
+            <div className="flex justify-between items-center text-xs font-medium text-gray-500 pt-2 border-t border-gray-50 mt-2">
+              <span>
+                Resources: <span className="text-gray-900 font-bold">8</span>
+              </span>
+              <span>
+                SIWES: <span className="text-gray-900 font-bold">6</span>
+              </span>
+            </div>
           }
         />
+
+        {/* 4. Daily Active Users (Avatar Stack) */}
         <StatsCard
-          label="Pending Approvals"
-          value="14"
-          sub="Resources : 8"
-          icon={<ClipboardCheck className="text-orange-500" />}
-          trend={<Dot className="w-2 h-2 bg-orange-500 rounded-full" />}
-        />
-        <StatsCard
-          label="Daily Active Users"
+          title="Daily Active Users"
           value="452"
-          sub="Active Now"
-          icon={<Users className="text-purple-500" />}
+          icon={<TrendingUp className="w-6 h-6" />}
+          color="purple"
           trend={
-            <p className="text-purple-500 rounded h-5.5 pt-1 w-10 text-center">Active</p>
+            <span className="bg-purple-50 text-purple-600 text-xs font-bold px-2 py-1 rounded-lg">
+              Active
+            </span>
+          }
+          // Custom Footer with Avatar Stack
+          footer={
+            <div className="flex items-center -space-x-2 pt-2">
+              {[1, 2, 3].map((i) => (
+                <div
+                  key={i}
+                  className="w-8 h-8 rounded-full border-2 border-white bg-gray-200 flex items-center justify-center text-[10px] font-bold text-gray-500"
+                >
+                  U{i}
+                </div>
+              ))}
+              <div className="w-8 h-8 rounded-full border-2 border-white bg-gray-100 flex items-center justify-center text-[10px] font-bold text-gray-500">
+                +400
+              </div>
+            </div>
           }
         />
       </div>
 
-      {/*  ADMINISTRATION MODULES */}
-      <div className="mb-10">
-        <h3 className="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
-          <div className="w-2 h-2 bg-green-600 rounded-full"></div>{" "}
-          Administration Modules
-        </h3>
+      {/* ADMINISTRATION MODULES GRID */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {/* 1. User Management (Checklist Style) */}
+        <ModuleCard
+          title="User Management"
+          sub="Manage students & class reps"
+          color="green"
+          features={["Assign Class Representatives", "Verify Student Profiles"]}
+          action="Manage Users"
+          icon={<Users className="w-6 h-6" />}
+        />
 
-        
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          <ModuleCard
-            title="User Management"
-            desc="Manage students & class reps. Assign roles and verify profiles."
-            action="Manage Users"
-            icon={<Users className="w-6 h-6 text-green-600" />}
-          />
-          <ModuleCard
-            title="Content Moderation"
-            desc="Review student uploads & chats. Approve or reject resources."
-            action="Review Content"
-            icon={<FileText className="w-6 h-6 text-orange-500" />}
-          />
-          <ModuleCard
-            title="Finance & Payments"
-            desc="Monitor incoming departmental dues and approve manual payments."
-            action="Go to Finance"
-            icon={<CreditCard className="w-6 h-6 text-green-700" />}
-          />
-          <ModuleCard
-            title="Voting System"
-            desc="Set up upcoming elections, manage candidates, and monitor live results."
-            action="Manage Elections"
-            icon={<Vote className="w-6 h-6 text-green-600" />}
-          />
-          <ModuleCard
-            title="SIWES Board"
-            desc="Review student logbooks, approve placement letters."
-            action="Open Board"
-            icon={<Briefcase className="w-6 h-6 text-purple-600" />}
-          />
-          <ModuleCard
-            title="Event Manager"
-            desc="Create new events, manage RSVPs, and broadcast notifications."
-            action="Manage Events"
-            icon={<Calendar className="w-6 h-6 text-red-500" />}
-          />
-        </div>
+        {/* 2. Content Moderation (Badge Style) */}
+        <ModuleCard
+          title="Content Moderation"
+          sub="Review uploads & chats"
+          color="orange"
+          stats={[
+            {label: "3 Reports", bg: "bg-red-100", text: "text-red-600"},
+            {
+              label: "8 Pending Resources",
+              bg: "bg-blue-100",
+              text: "text-blue-600",
+            },
+          ]}
+          action="Review Content"
+          icon={<FileText className="w-6 h-6" />}
+        />
+
+        {/* 3. Finance (Description Style) */}
+        <ModuleCard
+          title="Finance & Payments"
+          sub="Track dues and generate receipts"
+          desc="Monitor incoming departmental dues, approve manual payments, and manage refunds."
+          color="green"
+          action="Go to Finance"
+          icon={<CreditCard className="w-6 h-6" />}
+        />
+
+        {/* 4. Voting System (Description Style) */}
+        <ModuleCard
+          title="Voting System"
+          sub="Elections & Polls"
+          desc="Set up upcoming elections, manage candidates, and monitor live poll results."
+          color="purple"
+          action="Manage Elections"
+          icon={<Vote className="w-6 h-6" />} // Make sure <Vote> is imported from lucide-react
+        />
+
+        {/* 5. SIWES Board (Description Style) */}
+        <ModuleCard
+          title="SIWES Board"
+          sub="Internship Placements"
+          desc="Review student logbooks, approve placement letters, and track industry supervision."
+          color="purple"
+          action="Open Board"
+          icon={<Briefcase className="w-6 h-6" />}
+        />
+
+        {/* 6. Event Manager (Description Style) */}
+        <ModuleCard
+          title="Event Manager"
+          sub="Scheduling & Publicity"
+          desc="Create new events, manage RSVPs, and broadcast notifications to students."
+          color="red"
+          action="Manage Events"
+          icon={<Calendar className="w-6 h-6" />}
+        />
       </div>
 
       {/* RECENT ADMIN ACTIVITIES */}
@@ -231,58 +295,140 @@ export default function AdminDashboard() {
 
 
 
-function ModuleCard({title, desc, action, icon}) {
+function ModuleCard({
+  title,
+  sub,
+  icon,
+  action,
+  color = "green",
+  stats,
+  features,
+  desc,
+}) {
+  
+  const colorMap = {
+    green: "bg-green-50 text-green-600 border-green-100",
+    orange: "bg-orange-50 text-orange-500 border-orange-100",
+    purple: "bg-purple-50 text-purple-600 border-purple-100",
+    blue: "bg-blue-50 text-blue-600 border-blue-100",
+    red: "bg-red-50 text-red-600 border-red-100",
+  };
+
   return (
-    <div className="bg-white p-6 rounded-xl border border-gray-200 shadow-sm hover:shadow-md hover:border-green-200 transition-all flex flex-col h-full group">
-      <div className="flex items-start gap-4 mb-4">
-        <div className="p-3 bg-gray-50 rounded-lg shrink-0 group-hover:bg-green-50 transition-colors">
+    <div className="bg-white p-6 rounded-3xl border border-gray-100 shadow-sm hover:shadow-md hover:border-gray-200 transition-all flex flex-col h-full group">
+      {/* Header */}
+      <div className="flex items-start gap-4 mb-3">
+        <div className={`p-3 rounded-2xl border ${colorMap[color]} shrink-0`}>
           {icon}
         </div>
         <div>
-          <h4 className="font-bold text-gray-900 text-lg">{title}</h4>
+          <h4 className="font-bold text-gray-900 text-lg leading-tight">
+            {title}
+          </h4>
+          <p className="text-xs font-medium text-gray-500 mt-1">{sub}</p>
         </div>
       </div>
-      <p className="text-sm text-gray-500 mb-6 flex-1 leading-relaxed">
-        {desc}
-      </p>
-      <button className="w-full py-2.5 border border-gray-300 rounded-lg text-sm font-semibold text-gray-700 hover:bg-gray-50 hover:text-green-700 hover:border-green-200 transition-all">
+
+      <div className="flex-1 mb-6">
+        {features && (
+          <ul className="space-y-2 mt-2">
+            {features.map((item, i) => (
+              <li
+                key={i}
+                className="flex items-center gap-2 text-xs font-semibold text-gray-600"
+              >
+                <div className="w-4 h-4 rounded-full bg-green-100 text-green-600 flex items-center justify-center text-[10px]">
+                  ✔
+                </div>
+                {item}
+              </li>
+            ))}
+          </ul>
+        )}
+
+        {stats && (
+          <div className="flex flex-wrap gap-2 mt-2">
+            {stats.map((stat, i) => (
+              <span
+                key={i}
+                className={`text-xs px-3 py-1.5 font-bold  rounded-md ${stat.bg} ${stat.text}`}
+              >
+                {stat.label}
+              </span>
+            ))}
+          </div>
+        )}
+
+        {!features && !stats && desc && (
+          <p className="text-sm text-gray-500 leading-relaxed mt-1">{desc}</p>
+        )}
+      </div>
+
+      <button className="w-full py-3 bg-gray-50 text-gray-800 text-sm font-bold rounded-xl border border-gray-100 hover:bg-white hover:border-green-200 hover:text-green-700 hover:shadow-sm transition-all">
         {action}
       </button>
     </div>
   );
 }
+function StatsCard({
+  title,
+  value,
+  icon,
+  trend,
+  color = "green",
+  progress,
+  footer,
+}) {
+  const colorMap = {
+    green: "bg-green-50 text-green-600",
+    orange: "bg-orange-50 text-orange-500",
+    purple: "bg-purple-50 text-purple-600",
+    blue: "bg-blue-50 text-blue-600",
+  };
 
-function StatsCard({ label, value, sub, icon, trend, progress }) {
   return (
-    <div className="bg-white p-6 rounded-xl border border-gray-200 shadow-sm hover:border-green-200 transition-colors">
-      <div className="flex justify-between items-start mb-4">
-        <div className="p-2 bg-gray-50 rounded-lg">{icon}</div>
-        
-        {/* 1. Trend is now flexible. It renders whatever color/icon you pass in. */}
-        {trend && (
-          <div className="text-xs font-bold px-2 py-1 rounded bg-gray-50">
-            {trend}
-          </div>
-        )}
+    <div className="bg-white p-6 rounded-3xl border border-gray-100 shadow-sm hover:shadow-md transition-shadow flex flex-col h-full">
+      {/* 1. TOP SECTION (Icon & Trend) */}
+      <div className="flex justify-between items-start">
+        <div className={`p-3 rounded-2xl ${colorMap[color] || colorMap.green}`}>
+          {icon}
+        </div>
+        {trend}
       </div>
 
-      <h3 className="text-3xl font-bold text-gray-900 tracking-tight">
-        {value}
-      </h3>
-      <p className="text-sm font-medium text-gray-500 mt-1">{label}</p>
+      {/* 2. THE SPACER (This pushes the text & progress bar to the bottom) */}
+      <div className="flex-1 min-h-[24px]"></div>
 
-      {/* 2. Progress Line: Only renders if 'progress' prop exists */}
-      {progress && (
-        <div className="w-full bg-gray-100 h-1.5 rounded-full mt-3 overflow-hidden">
-          <div
-            className="bg-green-500 h-full rounded-full"
-            style={{ width: `${progress}%` }} // Dynamic width
-          ></div>
-        </div>
-      )}
+      {/* 3. MIDDLE SECTION (Title & Value) */}
+      {/* Reduced mb-1 to mb-0.5 for tighter spacing */}
+      <div className="mb-1">
+        <p className="text-sm font-medium text-gray-500 mb-0.5">{title}</p>
+        <h3 className="text-3xl font-bold text-gray-900 tracking-tight leading-none">
+          {value}
+        </h3>
+      </div>
 
-      <p className="text-xs text-gray-400 mt-2">{sub}</p>
+      {/* 4. BOTTOM SECTION (Progress & Footer) */}
+      {/* Changed mt-6 to mt-2 so it sits right under the number */}
+      <div className="mt-2">
+        {progress ? (
+          <div>
+            <div className="w-full bg-gray-100 h-1.5 rounded-full mb-1.5 overflow-hidden">
+              <div
+                className={`h-full rounded-full ${
+                  color === "green" ? "bg-green-500" : "bg-blue-500"
+                }`}
+                style={{width: `${progress}%`}}
+              ></div>
+            </div>
+            {footer && (
+              <p className="text-xs text-gray-400 font-medium">{footer}</p>
+            )}
+          </div>
+        ) : (
+          <div>{footer}</div>
+        )}
+      </div>
     </div>
   );
-
 }
