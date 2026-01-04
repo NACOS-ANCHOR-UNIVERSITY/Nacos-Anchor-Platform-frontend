@@ -21,7 +21,7 @@ export default function TopNavbar() {
           <input
             type="text"
             placeholder="Search for messages, students, or resources..."
-            className="w-full bg-gray-50 border border-transparent focus:bg-white focus:border-green-500 rounded-lg pl-10 pr-4 py-2 text-sm outline-none transition-all"
+            className="w-full bg-gray-100 border border-transparent focus:bg-white focus:border-green-500 rounded-lg pl-10 pr-4 py-2 text-sm outline-none transition-all"
           />
         </div>
       </div>
