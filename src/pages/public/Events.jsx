@@ -9,6 +9,8 @@ import Nacos from "../../assets/images/nacos night.png"
 import UIUX from "../../assets/images/ui ux.png"
 import CareerTalk from "../../assets/images/career talk.png"
 import CodeAThon from "../../assets/images/code a thon.png"
+import Time from "../../assets/icons/TIME.svg"
+import Location from "../../assets/icons/Location.svg"
 
 const Events = () => {
     const [filter, setFilter] = useState("All Events")
@@ -107,6 +109,7 @@ const Events = () => {
 
         return matchesCategory && matchesSearch
     })
+    console.log(filteredEvents)
 
     // Pagination Logic
     const indexOfLastItem = currentPage * itemsPerPage
@@ -220,10 +223,20 @@ const Events = () => {
                                 <h3 className="text-xl font-bold text-[#0F172A] line-clamp-2">{event.title}</h3>
 
                                 <div className="text-sm text-gray-500 flex items-center gap-2 mt-1">
-                                    <span>🕒 {event.time}</span>
+                                    <span 
+                                        className="flex items-center gap-2"
+                                    >
+                                        {<img src={Time} alt="Time icon" className="w-4 h-4" />} 
+                                        {event.time}
+                                    </span>
                                 </div>
                                 <div className="text-sm text-gray-500 flex items-center gap-2">
-                                    <span>📍 {event.location}</span>
+                                    <span 
+                                        className="flex items-center gap-2"
+                                    >
+                                        {<img src={Location} alt="Location icon" className="w-4 h-4" />}
+                                        {event.location}
+                                    </span>
                                 </div>
 
                                 <p className="text-sm text-gray-600 line-clamp-3 mt-3 mb-4 grow">
