@@ -21,7 +21,7 @@ function Toggle({ checked, onChange }) {
       type="button"
       onClick={() => onChange(!checked)}
       className={`relative inline-flex h-6 w-11 items-center rounded-full transition ${
-        checked ? "bg-emerald-700" : "bg-slate-300"
+        checked ? "bg-[var(--color-brand-primary)]" : "bg-slate-300"
       }`}
       aria-pressed={checked}
     >
@@ -36,7 +36,7 @@ function Toggle({ checked, onChange }) {
 
 function SkillPill({ label, onRemove }) {
   return (
-    <span className="inline-flex items-center gap-2 rounded-full border border-emerald-200 bg-emerald-50 px-3 py-1 text-xs font-medium text-emerald-700">
+    <span className="inline-flex items-center gap-2 rounded-full border border-emerald-200 bg-emerald-50 px-3 py-1 text-xs font-medium text-[var(--color-brand-primary)]">
       {label}
       <button
         type="button"
@@ -167,7 +167,7 @@ export default function Portfolio() {
         <div>
           <div className="text-xs text-slate-500">
             Dashboard <span className="mx-1">/</span>{" "}
-            <span className="font-medium text-emerald-700">My Portfolio</span>
+            <span className="font-medium text-[var(--color-brand-primary)]">My Portfolio</span>
           </div>
           <h1 className="mt-2 text-3xl font-bold text-slate-900">My Portfolio</h1>
           <p className="mt-1 text-sm text-slate-600">
@@ -177,7 +177,7 @@ export default function Portfolio() {
 
         <button
           type="button"
-          className="inline-flex items-center gap-2 rounded-lg bg-emerald-700 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-emerald-800"
+          className="inline-flex items-center gap-2 rounded-lg bg-[var(--color-brand-primary)] px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-emerald-800"
         >
           <Eye className="h-4 w-4" />
           Preview Public Profile
@@ -205,7 +205,7 @@ export default function Portfolio() {
                 <button
                   type="button"
                   onClick={pickAvatar}
-                  className="absolute -bottom-1 -right-1 grid h-7 w-7 place-items-center rounded-full bg-emerald-700 text-white shadow hover:bg-emerald-800"
+                  className="absolute -bottom-1 -right-1 grid h-7 w-7 place-items-center rounded-full bg-[var(--color-brand-primary)] text-white shadow hover:bg-emerald-800"
                   title="Edit photo"
                 >
                   <Pencil className="h-4 w-4" />
@@ -222,7 +222,7 @@ export default function Portfolio() {
 
               <div className="mt-4">
                 <div className="text-base font-bold text-slate-900">{user.fullName}</div>
-                <div className="text-xs font-semibold text-emerald-700">
+                <div className="text-xs font-semibold text-[var(--color-brand-primary)]">
                   {user.deptLevel}
                 </div>
                 <div className="mt-1 text-xs text-slate-500">
@@ -247,7 +247,7 @@ export default function Portfolio() {
           <Card
             title="Social Presence"
             right={
-              <button type="button" className="text-xs font-semibold text-emerald-700">
+              <button type="button" className="text-xs font-semibold text-[var(--color-brand-primary)]">
                 Save
               </button>
             }
@@ -381,7 +381,7 @@ export default function Portfolio() {
                       setAbout(aboutDraft);
                       setIsEditingAbout(false);
                     }}
-                    className="rounded-lg bg-emerald-700 px-3 py-2 text-sm font-semibold text-white hover:bg-emerald-800"
+                    className="rounded-lg bg-[var(--color-brand-primary)] px-3 py-2 text-sm font-semibold text-white hover:bg-emerald-800"
                   >
                     Save
                   </button>
@@ -397,7 +397,7 @@ export default function Portfolio() {
               <button
                 type="button"
                 onClick={addSkill}
-                className="text-xs font-semibold text-emerald-700 hover:text-emerald-800"
+                className="text-xs font-semibold text-[var(--color-brand-primary)] hover:text-emerald-800"
               >
                 + Add Skill
               </button>
@@ -451,7 +451,7 @@ export default function Portfolio() {
                         <div className="text-sm font-semibold text-slate-900">{p.title}</div>
                         <div className="mt-1 text-xs text-slate-600">{p.desc}</div>
                       </div>
-                      <button className="text-xs font-semibold text-emerald-700 hover:text-emerald-800">
+                      <button className="text-xs font-semibold text-[var(--color-brand-primary)] hover:text-emerald-800">
                         View Project →
                       </button>
                     </div>

@@ -18,7 +18,7 @@ function NavItem({ to, label, Icon }) {
         [
           "flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition",
           isActive
-            ? "bg-emerald-700 text-white"
+            ? "bg-[var(--color-brand-primary)] text-white"
             : "text-slate-700 hover:bg-slate-100",
         ].join(" ")
       }
@@ -36,7 +36,7 @@ export default function StudentLayout() {
       <aside className="w-72 border-r bg-white px-5 py-6 flex flex-col">
         {/* Logo */}
         <div className="flex items-center gap-3">
-          <div className="h-10 w-10 rounded-full bg-emerald-700 text-white grid place-items-center font-bold">
+          <div className="h-10 w-10 rounded-full bg-[var(--color-brand-primary)] text-white grid place-items-center font-bold">
             N
           </div>
           <div>

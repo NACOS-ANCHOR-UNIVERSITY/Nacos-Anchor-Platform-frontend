@@ -1,3 +1,6 @@
+import increase from "../assets/table/Increase.png";
+import decrease from "../assets/table/Decrease.png";
+
 export default function StatCards({ stats = [] }) {
   return (
     <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-4">
@@ -16,15 +19,26 @@ export default function StatCards({ stats = [] }) {
             <div className="mt-3 text-xl font-bold text-slate-900">{s.value}</div>
 
             <div className="mt-2 flex items-center gap-2 text-xs">
-              <span
-                className={
-                  "font-semibold " + (isUp ? "text-emerald-600" : "text-red-600")
-                }
-              >
-                {s.delta}
-              </span>
-              <span className="text-slate-500">{s.deltaLabel}</span>
-            </div>
+  <div className="flex items-center gap-1 font-semibold">
+    <img
+      src={isUp ? increase : decrease}
+      alt={isUp ? "increase" : "decrease"}
+      className="h-3 w-3"
+    />
+    <span
+      className={
+        isUp
+          ? "text-[var(--color-brand-primary)]"
+          : "text-red-600"
+      }
+    >
+      {s.delta}
+    </span>
+  </div>
+
+  <span className="text-slate-500">{s.deltaLabel}</span>
+</div>
+
           </div>
         );
       })}

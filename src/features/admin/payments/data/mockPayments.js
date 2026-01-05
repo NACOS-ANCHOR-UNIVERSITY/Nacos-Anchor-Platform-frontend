@@ -1,3 +1,6 @@
+import adebayoJohn from "../assets/table/adebayo-john.png";
+import emmanuelDavis from "../assets/table/emmanuel-davis.png";
+
 export const mockStats = [
   {
     label: "Total Revenue",
@@ -34,6 +37,7 @@ export const mockPayments = [
     id: "p1",
     name: "Adebayo John",
     matric: "19/2023/044",
+    avatar: adebayoJohn,
     transaction: "Departmental Dues",
     ref: "NCS-2023-884",
     date: "Oct 24, 2023",
@@ -51,11 +55,13 @@ export const mockPayments = [
     amount: "₦ 3,500",
     status: "Approved",
     initials: "CN",
+    avatarTone: "blue",
   },
   {
     id: "p3",
     name: "Emmanuel Davis",
     matric: "19/2023/012",
+    avatar: emmanuelDavis,
     transaction: "Dinner Ticket",
     ref: "NCS-2023-879",
     date: "Oct 22, 2023",
@@ -73,6 +79,7 @@ export const mockPayments = [
     amount: "₦ 5,000",
     status: "Approved",
     initials: "FB",
+    avatarTone: "red",
   },
   {
     id: "p5",
@@ -84,5 +91,6 @@ export const mockPayments = [
     amount: "₦ 1,500",
     status: "Pending",
     initials: "OS",
+    avatarTone: "blue",
   },
 ];

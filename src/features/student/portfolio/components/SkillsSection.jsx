@@ -6,7 +6,7 @@ export default function SkillsSection({ skills, onRemove }) {
         {skills.map((skill) => (
           <span
             key={skill}
-            className="rounded-full bg-emerald-100 px-3 py-1 text-xs text-emerald-700"
+            className="rounded-full bg-emerald-100 px-3 py-1 text-xs text-[var(--color-brand-primary)]"
           >
             {skill}
             <button

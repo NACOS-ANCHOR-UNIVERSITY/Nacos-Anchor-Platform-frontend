@@ -1,4 +1,7 @@
-import { CalendarDays, Filter, Search } from "lucide-react";
+import { Search } from "lucide-react";
+import adjust from "../assets/table/Adjust.png";
+import calendar from "../assets/table/Calendar.png";
+
 
 export default function TableToolbar({ selectedCount = 0 }) {
   return (
@@ -13,12 +16,12 @@ export default function TableToolbar({ selectedCount = 0 }) {
         </div>
 
         <button className="inline-flex items-center gap-2 rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50">
-          <Filter className="h-4 w-4" />
+        <img src={adjust} alt="Adjust" className="h-4 w-4" />
           Filter
         </button>
 
         <button className="inline-flex items-center gap-2 rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50">
-          <CalendarDays className="h-4 w-4" />
+          <img src={calendar} alt="Calendar" className="h-4 w-4" />
           Date
         </button>
       </div>
@@ -33,7 +36,7 @@ export default function TableToolbar({ selectedCount = 0 }) {
             "rounded-lg px-3 py-2 text-sm font-medium " +
             (selectedCount === 0
               ? "bg-slate-100 text-slate-400"
-              : "bg-emerald-700 text-white hover:bg-emerald-800")
+              : "bg-[var(--color-brand-primary)] text-white hover:bg-emerald-800")
           }
         >
           Bulk Approve

@@ -3,7 +3,7 @@ export default function ProfileCard({ profile, isPublic, onToggle }) {
     <div className="rounded-xl border bg-white p-5 text-center">
       <div className="mx-auto h-20 w-20 rounded-full bg-slate-200" />
       <h3 className="mt-3 font-bold">{profile.fullName}</h3>
-      <p className="text-sm text-emerald-700">
+      <p className="text-sm text-[var(--color-brand-primary)]">
         {profile.department} | {profile.level}
       </p>
       <p className="text-xs text-slate-500 mt-1">

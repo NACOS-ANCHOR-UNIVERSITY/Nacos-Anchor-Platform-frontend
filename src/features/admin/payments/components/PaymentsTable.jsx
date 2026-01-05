@@ -1,12 +1,16 @@
 import { useMemo, useState } from "react";
-import { CheckCircle2, Eye } from "lucide-react";
+import { CheckCircle2} from "lucide-react";
 import TableToolbar from "./TableToolbar";
+import checkMark from "../assets/table/Checkmark.png";
+import eyeIcon from "../assets/table/eye.png";
+
 
 function StatusPill({ status }) {
   const styles = useMemo(() => {
     switch (status) {
-      case "Approved":
-        return "bg-emerald-50 text-emerald-700";
+     case "Approved":
+        return "bg-[color-mix(in_srgb,var(--color-brand-primary)_10%,white)] text-[var(--color-brand-primary)]";
+
       case "Rejected":
         return "bg-red-50 text-red-700";
       default:
@@ -21,13 +25,36 @@ function StatusPill({ status }) {
   );
 }
 
-function Avatar({ initials }) {
+function Avatar({ src, initials, tone }) {
+  if (src) {
+    return (
+      <img
+        src={src}
+        alt=""
+        className="h-7 w-7 rounded-full object-cover"
+      />
+    );
+  }
+
+  const toneStyles = {
+    blue: "bg-blue-50 text-blue-600",
+    red: "bg-rose-50 text-rose-600",
+    neutral: "bg-slate-100 text-slate-600",
+  };
+
   return (
-    <div className="grid h-7 w-7 place-items-center rounded-full bg-slate-100 text-xs font-bold text-slate-600">
+    <div
+      className={[
+        "grid h-7 w-7 place-items-center rounded-full text-xs font-bold",
+        toneStyles[tone] || toneStyles.neutral,
+      ].join(" ")}
+    >
       {initials}
     </div>
   );
 }
+
+
 
 export default function PaymentsTable({ rows = [] }) {
   const [selected, setSelected] = useState(() => new Set());
@@ -87,7 +114,12 @@ export default function PaymentsTable({ rows = [] }) {
 
                 <td className="px-5 py-4">
                   <div className="flex items-center gap-3">
-                    <Avatar initials={r.initials} />
+                    <Avatar
+                      src={r.avatar}
+                      initials={r.initials}
+                      tone={r.avatarTone}
+                    />
+                    
                     <div>
                       <div className="text-sm font-semibold text-slate-900">
                         {r.name}
@@ -118,9 +150,10 @@ export default function PaymentsTable({ rows = [] }) {
                 <td className="px-5 py-4">
                   <div className="flex items-center justify-end gap-3">
                     <button className="text-slate-500 hover:text-slate-700" title="View">
-                      <Eye className="h-4 w-4" />
+                      <img src={eyeIcon} className="h-4 w-4" alt="" />
+                      <img src={checkMark} className="h-4 w-4" alt="" />
                     </button>
-                    <button className="text-emerald-600 hover:text-emerald-700" title="Approve">
+                    <button className="text-[var(--color-brand-primary)] hover:opacity-90" title="Approve">
                       <CheckCircle2 className="h-4 w-4" />
                     </button>
                   </div>
@@ -137,7 +170,7 @@ export default function PaymentsTable({ rows = [] }) {
 
         <div className="flex items-center gap-2">
           <button className="rounded-md px-2 py-1 hover:bg-slate-100">‹</button>
-          <button className="rounded-md bg-emerald-700 px-3 py-1 text-white">1</button>
+          <button className="rounded-md bg-[var(--color-brand-primary)] px-3 py-1 text-white">1</button>
           <button className="rounded-md px-3 py-1 hover:bg-slate-100">2</button>
           <button className="rounded-md px-3 py-1 hover:bg-slate-100">3</button>
           <span className="px-2">…</span>

@@ -1,5 +1,6 @@
-import { Download, Plus } from "lucide-react";
 import { AdminTopbar, StatCards, PaymentsTable, mockPayments, mockStats } from "../../features/admin/payments";
+import exportReport from "../../features/admin/payments/assets/icons/Export-report.png";
+import recordPayment from "../../features/admin/payments/assets/icons/Record-payment.png";
 
 export default function AdminPaymentsPage() {
   return (
@@ -18,15 +19,16 @@ export default function AdminPaymentsPage() {
 
           <div className="flex items-center gap-3">
             <button className="inline-flex items-center gap-2 rounded-lg border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50">
-              <Download className="h-4 w-4" />
+              <img src={exportReport} alt="" className="h-4 w-5  shrink-0" />
               Export Report
             </button>
 
-            <button className="inline-flex items-center gap-2 rounded-lg bg-emerald-700 px-4 py-2 text-sm font-semibold text-white hover:bg-emerald-800">
-              <Plus className="h-4 w-4" />
+            <button className="inline-flex items-center gap-2 rounded-lg bg-[var(--color-brand-primary)] px-4 py-2 text-sm font-semibold text-white hover:opacity-95">
+              <img src={recordPayment} alt="" className="h-4 w-5 shrink-0" />
               Record Payment
             </button>
           </div>
+
         </div>
 
         {/* Stat cards */}
