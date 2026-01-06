@@ -186,7 +186,7 @@ const StudentDashboardLayout = ({ children }) => {
               <button
                 type="button"
                 onClick={() => setShowProfileMenu(!showProfileMenu)}
-                className="flex items-center gap-3 w-44 hover:bg-gray-50 p-1.5 rounded-full transition-all pr-3"
+                className="flex items-center gap-3 md:w-44 hover:bg-gray-50 p-1.5 rounded-full transition-all pr-3"
               >
                 <div className="w-9 h-9 bg-orange-200 rounded-full flex items-center justify-center text-orange-700 font-bold text-sm">
                   ET
