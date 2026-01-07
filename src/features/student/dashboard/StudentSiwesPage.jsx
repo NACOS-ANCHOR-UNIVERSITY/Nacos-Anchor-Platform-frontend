@@ -1,20 +1,20 @@
 import { useState } from "react"
 import PageHeader from "../../../components/ui/PageHeader"
 import Sidebar from "../../../components/ui/Sidebar"
-import { Calendar, ChevronLeft, ChevronRight, Clock5, Code, HardDrive, Paintbrush, Search, ShieldUser } from "lucide-react"
+import { Calendar, ChevronDown, ChevronLeft, ChevronRight, Clock5, Code, HardDrive, Paintbrush, Search, ShieldUser } from "lucide-react"
 
 function StudentSiwesPageHeader() {
     return (
         <div className="bg-white rounded-2xl p-8 mt-2 mb-8 border-1 border-[#E2E8F099]">
-            <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-4">
+            <div className="flex flex-col sm:flex-row sm:justify-between sm:items-end gap-4">
                 <div>
                     <h1 className="text-3xl font-extrabold text-gray-900 text-stroke-1 mb-2">SIWES Opportunities Board</h1>
-                    <p className="text-gray-600 text-sm lg:w-3/5">
-                        Find your perfect Industrial Training placement. Browse curated internships and job openings posted
+                    <p className="text-gray-600 text-sm ">
+                        Find your perfect Industrial Training placement. Browse curated <br />internships and job openings posted
                         directly by the NACOS executives.
                     </p>
                 </div>
-                <button className="bg-[#138601] hover:bg-[#0f6600] text-white px-6 py-2 rounded-xl font-semibold flex items-center gap-2 transition whitespace-nowrap sm:ml-4 w-full sm:w-auto">
+                <button className="bg-[#138601] hover:bg-[#0f6600] text-white px-6 py-2 rounded-xl font-semibold flex items-center gap-2 transition whitespace-nowrap sm:ml-4 w-full sm:w-auto ">
                     <span>+</span> Post Opportunity
                 </button>
             </div>
@@ -45,12 +45,17 @@ function StudentSiwesPageBody() {
                 <div className="bg-white rounded-2xl p-6 border-1 border-[#E2E8F099]">
                     <label className="block text-sm font-bold text-gray-900 mb-3">Search</label>
                     <div className="relative">
-                        <Search className="absolute left-3 top-[10px] w-5 h-5 text-gray-400" />
+                        <Search className="absolute left-3 top-[10px] w-5 h-5 text-[#138601]" />
                         <input type="text" placeholder="Keywords..." value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} className="w-full pl-10 pr-4 py-2 bg-[#F8FCF8] border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#138601] text-sm" />
                     </div>
                 </div>
 
                 <div className="bg-white rounded-2xl p-6 border-1 border-[#E2E8F099]">
+                    <div className="flex justify-end">
+                        <button className="text-sm text-[#138601] cursor-pointer" onClick={() => setSelectedCategories([])}>
+                            Clear
+                        </button>
+                    </div>
                     <div className="mb-8 pb-8 border-b border-gray-200">
                         <label className="block text-sm font-bold text-gray-900 mb-3">Category</label>
                         <div className="space-y-3">
@@ -68,7 +73,7 @@ function StudentSiwesPageBody() {
                         {locations.map((location) => {
                             const isSelected = selectedLocation === location
                             return (
-                                <button key={location} onClick={() => setSelectedLocation(isSelected ? null : location)} className={`px-3 py-1 text-xs rounded-full transition font-medium ${isSelected ? "bg-[#138601] text-white border border-[#138601]" : "bg-[#F1F5F9] text-gray-600 border border-[#F1F5F9] hover:border-[#138601] hover:text-[#138601] hover:bg-[#1386010D]"}`}>
+                                <button key={location} onClick={() => setSelectedLocation(isSelected ? null : location)} className={`px-3 py-1 text-xs rounded-lg transition font-medium ${isSelected ? "border border-[#138601] text-[#138601] bg-[#1386010D]" : "bg-[#F1F5F9] text-gray-600 border border-[#F1F5F9] hover:border-0 hover:border-[#138601] hover:text-[#138601] hover:bg-[#1386010D]"}`}> {/*bg-[#138601] text-white border border-[#138601] */}
                                     {location}
                                 </button>
                             )
@@ -80,11 +85,21 @@ function StudentSiwesPageBody() {
             <div className="flex-1">
                 <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3 mb-6">
                     <p className="text-[#64748B] font-medium text-sm"><span className="font-bold text-black">12 </span>opportunities found</p>
-                    <select value={sortBy} onChange={(e) => setSortBy(e.target.value)} className="px-3 py-1 bg-transparent rounded-lg text-sm font-semibold text-[#138601] focus:outline-none focus:ring-2 focus:ring-[#138601] cursor-pointer">
-                        <option>Newest</option>
-                        <option>Oldest</option>
-                        <option>Most Relevant</option>
-                    </select>
+                    <div>
+                        <span className="text-gray-600 text">Sort by:</span>
+                        <div className="relative inline-block">
+                            <select value={sortBy} onChange={(e) => setSortBy(e.target.value)} className="px-3 py-1 pr-8 bg-transparent rounded-lg text-sm font-semibold text-[#138601] focus:outline-none focus:ring-2 focus:ring-[#138601] cursor-pointer appearance-none">
+                                <option>Newest</option>
+                                <option>Oldest</option>
+                                <option>Most Relevant</option>
+                            </select>
+                            {/* <svg className="pointer-events-none absolute right-2 top-1/2 -translate-y-1/2 w-4 h-4 text-[#138601]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                            </svg> */}
+                            <ChevronDown className=" pointer-events-none absolute right-2 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-600"/>
+                        </div>
+
+                    </div>
                 </div>
 
                 <div className="space-y-4">
@@ -100,11 +115,13 @@ function StudentSiwesPageBody() {
                                         </div>
                                     </div>
                                     <div className="flex flex-wrap gap-2 mb-3">
-                                        <span className="text-xs bg-[#1386010D] text-[#138601] px-2 py-1 rounded flex items-center gap-1"><Clock5 width="10" />{opp.duration}</span>
-                                        {opp.skills.map((skill) => <span key={skill} className="text-xs bg-gray-100 text-gray-600 px-2 py-1 rounded">{skill}</span>)}
+                                        <span className="text-xs bg-[#1386010D] text-[#138601] px-2 py-1/2 rounded flex items-center gap-1"><Clock5 width="10" />{opp.duration}</span>
+                                        {opp.skills.map((skill) => <span key={skill} className="text-xs bg-gray-100 text-gray-600 px-2 flex items-center py-1/2 rounded">{skill}</span>)}
                                     </div>
                                     <div className="flex justify-between items-center">
-                                        <p className="text-xs text-gray-500 flex items-center gap-1"><Calendar className="w-3" />Posted {opp.postedDays} days ago</p>
+                                        {/* <p className="text-xs text-gray-500 flex items-center gap-1"><Calendar className="w-3" />Posted {opp.postedDays} days ago</p> */}
+                                        <p className="text-xs text-gray-500 flex items-center gap-1"><Calendar className="w-3" />Posted {formatPostedTime(opp.postedDays)} ago</p>
+
                                         <a href="#" className="text-[#138601] font-semibold text-sm hover:underline">View Details →</a>
                                     </div>
                                 </div>
@@ -145,6 +162,7 @@ function StudentSiwesPageCTA() {
         </div>
     )
 }
+const formatPostedTime = (days) => days < 7 ? `${days} day${days === 1 ? "" : "s"}` : days < 30 ? `${Math.floor(days / 7)} week${Math.floor(days / 7) === 1 ? "" : "s"}` : `${Math.floor(days / 30)} month${Math.floor(days / 30) === 1 ? "" : "s"}`;
 
 export default function StudentSiwesPage() {
     const [isOpen, setIsOpen] = useState(false)
