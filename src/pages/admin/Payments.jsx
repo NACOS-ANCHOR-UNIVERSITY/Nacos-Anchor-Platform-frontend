@@ -4,15 +4,15 @@ import recordPayment from "../../features/admin/payments/assets/icons/Record-pay
 
 export default function AdminPaymentsPage() {
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen" style={{ fontFamily: 'Manrope' }}>
       <AdminTopbar />
 
       <div className="bg-slate-50 px-8 py-8">
         {/* Page header */}
         <div className="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
           <div>
-            <h1 className="text-2xl font-bold text-slate-900">Payments &amp; Receipts</h1>
-            <p className="mt-1 text-sm text-slate-600">
+            <h1 className="text-2xl font-bold text-slate-900 ">Payments &amp; Receipts</h1>
+            <p className="mt-1 text-sm font-normal text-slate-900">
               Manage student transactions, verify receipts, and track financial records.
             </p>
           </div>

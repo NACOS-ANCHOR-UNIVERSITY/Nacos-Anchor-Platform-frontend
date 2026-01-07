@@ -33,7 +33,7 @@ export default function StudentLayout() {
   return (
     <div className="min-h-screen bg-slate-50 flex">
       {/* Sidebar */}
-      <aside className="w-72 border-r bg-white px-5 py-6 flex flex-col">
+      <aside className="w-72 border-r bg-white px-5 py-6 flex flex-col" style={{ fontFamily: 'Lexend' }}>
         {/* Logo */}
         <div className="flex items-center gap-3">
           <div className="h-10 w-10 rounded-full bg-[var(--color-brand-primary)] text-white grid place-items-center font-bold">

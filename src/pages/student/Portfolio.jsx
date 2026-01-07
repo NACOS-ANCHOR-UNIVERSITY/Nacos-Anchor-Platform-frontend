@@ -161,9 +161,9 @@ export default function Portfolio() {
     
 
   return (
-    <div className="max-w-6xl">
+    <div className="max-w-6xl" style={{ fontFamily: 'Manrope' }}>
       {/* Header (breadcrumb + title + subtitle + button) */}
-      <div className="mb-6 flex items-start justify-between">
+      <div className="mb-6 flex items-start justify-between" style={{ fontFamily: 'Lexend' }}>
         <div>
           <div className="text-xs text-slate-500">
             Dashboard <span className="mx-1">/</span>{" "}

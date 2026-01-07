@@ -8,7 +8,7 @@ import paymentOverview from "../assets/topbar/Payment-overview.svg";
 
 export default function AdminTopbar() {
   return (
-    <div className="flex items-center justify-between border-b border-slate-200 bg-white px-8 py-4">
+    <div className="flex items-center justify-between border-b border-slate-200 bg-white px-8 py-4" style={{ fontFamily: 'Lexend' }}>
       <div className="flex items-center gap-3 text-sm text-slate-600">
         <img src={paymentOverview} alt="" className="h-4 w-4" />
         <span className="text-slate-400">/</span>

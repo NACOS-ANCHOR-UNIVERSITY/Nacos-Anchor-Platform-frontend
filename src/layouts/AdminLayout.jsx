@@ -33,13 +33,13 @@ function Item({ to, iconSrc, label }) {
 export default function AdminLayout() {
   return (
     <div className="min-h-screen bg-slate-50 flex">
-      <aside className="w-72 border-r bg-white px-5 py-6 flex flex-col">
+      <aside className="w-72 border-r bg-white px-5 py-6 flex flex-col" style={{ fontFamily: 'Lexend' }}>
         <div className="flex items-center gap-3">
           <div className="h-10 w-10 rounded-full bg-slate-50 grid place-items-center">
             <img src={adminConsole} alt="" className="h-4 w-4" />
           </div>
           <div>
-            <div className="text-sm font-bold text-slate-900">NACOS</div>
+            <div className="text-sm font-bold text-slate-700">NACOS</div>
             <div className="text-xs text-slate-500">Admin Console</div>
           </div>
         </div>
