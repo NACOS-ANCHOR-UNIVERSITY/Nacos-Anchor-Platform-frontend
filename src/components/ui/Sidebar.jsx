@@ -1,4 +1,4 @@
-import { BriefcaseBusinessIcon, CloudUploadIcon, CreditCard, IdCard, LayoutDashboard, LucideBookOpenText, Menu, Settings, X } from "lucide-react"
+import { BriefcaseBusinessIcon, CloudUploadIcon, CreditCard, IdCard, LayoutDashboard, LogOut, LucideBookOpenText, Menu, Settings, X } from "lucide-react"
 import React, { useState } from "react"
 import NavItem from "./NavItem"
 import NACOSIMG from "../../assets/images/nacossLogo.png"
@@ -48,7 +48,7 @@ export default function Sidebar({ active, isOpen, setIsOpen }) {
 
                 <div className="pt-4 mt-6">
                     <button className="flex items-center gap-2 text-red-600 hover:text-red-700 text-sm font-medium">
-                        <span>⬅️</span>
+                        <LogOut/>
                         Logout
                     </button>
                 </div>

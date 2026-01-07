@@ -1,3 +1,4 @@
+import { ArrowRight } from "lucide-react"
 import React from "react"
 
 export default function PaymentAlert() {
@@ -13,8 +14,8 @@ export default function PaymentAlert() {
         </div>
       </div>
 
-      <button className="bg-orange-600 hover:bg-orange-700 text-white px-4 py-2 rounded-lg text-sm font-medium self-start sm:self-auto">
-        Pay Now →
+      <button className="bg-orange-600 hover:bg-orange-700 text-white px-4 py-2 rounded-lg text-sm font-medium self-start sm:self-auto  flex justify-center items-center gap-2">
+        Pay Now <ArrowRight className="w-4"/>
       </button>
     </div>
   )
