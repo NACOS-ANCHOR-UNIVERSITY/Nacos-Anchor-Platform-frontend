@@ -1,9 +1,14 @@
 import { useMemo, useRef, useState } from "react";
-import { Pencil, Eye, Github, Linkedin, Globe, Upload, X } from "lucide-react";
-import projectLibraryImg from "../../assets/images/Project-Library.png";
-import projectScraperImg from "../../assets/images/Project-Scrapper.png";
-import addProjectIcon from "../../assets/images/add-project-icon.svg";
-
+import { LinkedIn, X } from "lucide-react";
+import projectLibraryImg from "../../features/student/portfolio/assets/body/Project-Library.png";
+import projectScraperImg from "../../features/student/portfolio/assets/body/Project-Scrapper.png";
+import addProjectIcon from "../../features/student/portfolio/assets/body/Add-project-icon.svg";
+import uploadFile from "../../features/student/portfolio/assets/body/Upload-file.svg";
+import pdf from "../../features/student/portfolio/assets/body/Pdf.svg";
+import gitHub from "../../features/student/portfolio/assets/body/Git-hub.svg";
+import globeIcon from "../../features/student/portfolio/assets/body/Portfolio.svg";
+import eye from "../../features/student/portfolio/assets/body/Eye.svg";
+import pencil from "../../features/student/portfolio/assets/body/Pencil.svg";
 
 
 function Card({ title, right, children }) {
@@ -174,7 +179,7 @@ export default function Portfolio() {
           type="button"
           className="inline-flex items-center gap-2 rounded-lg bg-[var(--color-brand-primary)] px-4 py-2 text-sm font-semibold text-white shadow-sm hover:opacity-95"
         >
-          <Eye className="h-4 w-4" />
+          <img src={eye} alt="Eye" className="h-4 w-4" />
           Preview Public Profile
         </button>
       </div>
@@ -202,7 +207,7 @@ export default function Portfolio() {
                   className="absolute -bottom-1 -right-1 grid h-7 w-7 place-items-center rounded-full bg-[var(--color-brand-primary)] text-white shadow hover:opacity-95"
                   title="Edit photo"
                 >
-                  <Pencil className="h-4 w-4" />
+                  <img src={pencil} alt="Pencil" className="h-4 w-4" />
                 </button>
 
                 <input
@@ -246,7 +251,7 @@ export default function Portfolio() {
           >
             <div className="space-y-3">
               <div className="flex items-center gap-2 rounded-lg border border-slate-200 bg-white px-3 py-2">
-                <Github className="h-4 w-4 text-slate-600" />
+                <img src={gitHub} alt="" className="h-4 w-4" />
                 <input
                   value={social.github}
                   onChange={(e) => setSocial((p) => ({ ...p, github: e.target.value }))}
@@ -256,7 +261,7 @@ export default function Portfolio() {
               </div>
 
               <div className="flex items-center gap-2 rounded-lg border border-slate-200 bg-white px-3 py-2">
-                <Linkedin className="h-4 w-4 text-slate-600" />
+                <LinkedIn className="h-4 w-4 text-slate-600" />
                 <input
                   value={social.linkedin}
                   onChange={(e) => setSocial((p) => ({ ...p, linkedin: e.target.value }))}
@@ -266,7 +271,7 @@ export default function Portfolio() {
               </div>
 
               <div className="flex items-center gap-2 rounded-lg border border-slate-200 bg-white px-3 py-2">
-                <Globe className="h-4 w-4 text-slate-600" />
+                <img src={globeIcon} alt="" className="h-4 w-4 text-slate-600" />
                 <input
                   value={social.portfolio}
                   onChange={(e) => setSocial((p) => ({ ...p, portfolio: e.target.value }))}
@@ -288,7 +293,7 @@ export default function Portfolio() {
                   onClick={pickResume}
                   className="grid h-10 w-10 place-items-center rounded-full border border-slate-200 bg-white text-slate-700 hover:bg-slate-50"
                 >
-                  <Upload className="h-5 w-5" />
+                  <img src={uploadFile} alt="" className="h-5 w-5" />
                 </button>
 
                 <button
@@ -313,9 +318,7 @@ export default function Portfolio() {
             {resume ? (
               <div className="mt-3 flex items-center justify-between rounded-lg border border-slate-200 bg-white px-3 py-2">
                 <div className="flex items-center gap-2">
-                  <span className="grid h-7 w-7 place-items-center rounded-md bg-rose-50 text-rose-600 text-xs font-bold">
-                    PDF
-                  </span>
+                  <img src={pdf} alt="PDF" className="h-2 w-4" />
                   <div className="text-xs font-semibold text-slate-800">{resume.name}</div>
                 </div>
                 <button
@@ -346,7 +349,7 @@ export default function Portfolio() {
                 className="rounded-md p-2 text-slate-500 hover:bg-slate-100"
                 aria-label="edit about"
               >
-                <Pencil className="h-4 w-4" />
+                <img src={pencil} alt="Pencil" className="h-4 w-4" />
               </button>
             }
           >
