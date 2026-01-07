@@ -1,5 +1,5 @@
 import { useMemo, useRef, useState } from "react";
-import { LinkedIn, X } from "lucide-react";
+import { Linkedin, X} from "lucide-react";
 import projectLibraryImg from "../../features/student/portfolio/assets/body/Project-Library.png";
 import projectScraperImg from "../../features/student/portfolio/assets/body/Project-Scrapper.png";
 import addProjectIcon from "../../features/student/portfolio/assets/body/Add-project-icon.svg";
@@ -261,7 +261,7 @@ export default function Portfolio() {
               </div>
 
               <div className="flex items-center gap-2 rounded-lg border border-slate-200 bg-white px-3 py-2">
-                <LinkedIn className="h-4 w-4 text-slate-600" />
+                <Linkedin className="h-4 w-4 text-slate-600" />
                 <input
                   value={social.linkedin}
                   onChange={(e) => setSocial((p) => ({ ...p, linkedin: e.target.value }))}
@@ -286,14 +286,14 @@ export default function Portfolio() {
           <Card title="Resume / CV">
             <p className="text-xs text-slate-600">Upload a PDF version of your resume.</p>
 
-            <div className="mt-3 rounded-xl border border-dashed border-slate-300 bg-slate-50 p-5">
+            <div className="mt-3 rounded-xl border border-dashed border-slate-300 bg-white p-5">
               <div className="flex flex-col items-center text-center">
                 <button
                   type="button"
                   onClick={pickResume}
-                  className="grid h-10 w-10 place-items-center rounded-full border border-slate-200 bg-white text-slate-700 hover:bg-slate-50"
+                  className="grid h-10 w-10 place-items-center rounded-full border border-slate-200 bg-slate-50 text-slate-700 hover:bg-white"
                 >
-                  <img src={uploadFile} alt="" className="h-5 w-5" />
+                  <img src={uploadFile} alt="" className="h-6 w-5" />
                 </button>
 
                 <button
@@ -318,7 +318,7 @@ export default function Portfolio() {
             {resume ? (
               <div className="mt-3 flex items-center justify-between rounded-lg border border-slate-200 bg-white px-3 py-2">
                 <div className="flex items-center gap-2">
-                  <img src={pdf} alt="PDF" className="h-2 w-4" />
+                  <img src={pdf} alt="PDF" className="h-6 w-5" />
                   <div className="text-xs font-semibold text-slate-800">{resume.name}</div>
                 </div>
                 <button
@@ -334,7 +334,7 @@ export default function Portfolio() {
           </Card>
         </div>
 
-        {/* Right column */}
+              {/* Right column */}
         <div className="space-y-6 lg:col-span-2">
           {/* About Me */}
           <Card
@@ -469,14 +469,14 @@ export default function Portfolio() {
                 type="button"
                 className="flex min-h-[220px] flex-col items-center justify-center rounded-xl border border-dashed border-slate-300 bg-slate-50 text-center hover:bg-slate-100"
               >
-               <div className="grid h-10 w-10 place-items-center rounded-full border border-slate-200 bg-white">
-  <img
-    src={addProjectIcon}
-    alt="Add project"
-    className="h-5 w-5"
-    draggable="false"
-  />
-</div>
+                <div className="grid h-12 w-12 place-items-center rounded-full border border-slate-200 bg-slate-60">
+                  <img
+                    src={addProjectIcon}
+                    alt="Add project"
+                    className="h-5 w-5"
+                    draggable="false"
+                  />
+                </div>
 
                 <div className="mt-3 text-sm font-semibold text-slate-900">Add New Project</div>
                 <div className="mt-1 text-xs text-slate-500">Showcase your latest work</div>

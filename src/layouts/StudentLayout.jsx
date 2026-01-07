@@ -35,16 +35,14 @@ export default function StudentLayout() {
       <aside className="w-72 border-r bg-white px-5 py-6 flex flex-col">
         {/* Logo */}
         <div className="flex items-center gap-3">
-          <div className="h-10 w-10 rounded-full bg-[var(--color-brand-primary)]  place-items-center">
-            <img src={overlay} alt="" className="h-4 w-4" />
-          </div>
+          <img src={overlay} alt="" className="h-10 w-10" />
           <div>
             <div className="text-sm font-bold text-slate-900">NACOS</div>
             <div className="text-xs text-slate-500">Anchor University</div>
           </div>
         </div>
 
-        /* Nav */
+        {/* Nav */}
           <nav className="mt-7 space-y-1">
             <NavItem to="/student/dashboard" label="Dashboard" Icon={() => <img src={dashboard} alt="Dashboard" className="h-4 w-4" />} />
             <NavItem to="/student/library" label="Academic Library" Icon={() => <img src={academicLibrary} alt="Academic Library" className="h-4 w-4" />} />
@@ -61,13 +59,13 @@ export default function StudentLayout() {
           <div className="flex-1" />
 
           {/* Logout */}
-        <button
-          type="button"
-          className="mt-6 flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium text-red-600 hover:bg-red-50"
-        >
-          <img src={logout} alt="Logout" className="h-4 w-4" />
-          Logout
-        </button>
+          <button
+            type="button"
+            className="mt-6 flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium text-red-600 hover:bg-red-50"
+          >
+            <img src={logout} alt="Logout" className="h-4 w-4" />
+            Logout
+          </button>
       </aside>
 
       {/* Content area */}
