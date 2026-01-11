@@ -2,8 +2,8 @@ import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { Eye, EyeOff } from 'lucide-react';
 import { useMutation } from '@tanstack/react-query';
-import client from '@/config/axios-client';
-import useUserStore from '@/store/useUserStore';
+import client from "../../config/axios-client"
+import useUserStore from '../../store/useUserStore';
 
 const Login = () => {
   const navigate = useNavigate();
