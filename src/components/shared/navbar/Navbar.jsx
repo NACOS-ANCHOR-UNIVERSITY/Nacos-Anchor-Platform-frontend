@@ -12,8 +12,8 @@ const Navbar = () => {
             <img src={img1} alt="" />
           </div>
           <div className="flex gap-[32px]">
-            <Link className="font-medium text-[#0F1C0C] text-[14px]">Home</Link>
-            <Link className="font-medium text-[#0F1C0C] text-[14px]">
+            <Link to="/" className="font-medium text-[#0F1C0C] text-[14px]">Home</Link>
+            <Link to="/about" className="font-medium text-[#0F1C0C] text-[14px]">
               About us
             </Link>
             <Link className="font-medium text-[#0F1C0C] text-[14px]">

@@ -1,4 +1,3 @@
-import Navbar from "../../components/shared/navbar/Navbar";
 import Footer from "../../components/shared/footer/Footer";
 import React from "react";
 import hero from "../../assets/images/hero1.png";
@@ -20,7 +19,6 @@ import star from "../../assets/images/star.png";
 const Landing = () => {
   return (
     <div>
-      <Navbar />
       <div>
         {/* ====hero section==== */}
         <div className="flex w-[1500px] mx-auto items-center mt-[178px] mb-[316px]">
@@ -331,7 +329,6 @@ const Landing = () => {
           </div>
         </div>
       </div>
-      <Footer />
     </div>
   );
 };
