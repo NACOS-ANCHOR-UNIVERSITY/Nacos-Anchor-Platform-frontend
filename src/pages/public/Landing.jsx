@@ -12,6 +12,10 @@ import questions from "../../assets/images/question.png";
 import happy from "../../assets/images/happy.png";
 import payments from "../../assets/images/payment.png";
 import fifteen from "../../assets/images/15th.png";
+import communicate from "../../assets/images/communication.png";
+import collarb from "../../assets/images/collaboration.png";
+import innovate from "../../assets/images/innovation.png";
+import star from "../../assets/images/star.png";
 
 const Landing = () => {
   return (
@@ -165,6 +169,56 @@ const Landing = () => {
         </div>
 
         {/* ====Section six==== */}
+
+        <div className="max-w-[1400px] mx-auto mb-[195px] mt-[210px] px-[32px] text-center relative">
+          <h3 className="text-center font-semibold text-[40px] text-[#000000] pb-[181px]">
+            How we work
+          </h3>
+          <div className="grid grid-cols-2 gap-[150px] place-items-center">
+            <div className="col-span-2 w-[760px] text-center flex flex-col items-center">
+              <img src={communicate} alt="" />
+
+              <p className="font-normal text-[18px] text-[#717171]">
+                <span className="font-semibold text-[40px] text-[#000000]">
+                  Communication
+                </span>{" "}
+                <br /> We believe in open governance. From real-time election
+                results to automated receipt generation for departmental dues,
+                our platform ensures every transaction and vote is accounted for
+                and visible.
+              </p>
+            </div>
+
+            <img src={star} alt="" className="absolute bottom-[150px]" />
+
+            <div className="text-center flex flex-col items-center">
+              <img src={collarb} alt="" />
+
+              <p className="font-normal text-[18px] text-[#717171]">
+                <span className="font-semibold text-[40px] text-[#000000]">
+                  Collaboration
+                </span>{" "}
+                <br /> Knowledge grows when shared. Our platform breaks down
+                silos between levels, allowing 100L to 400L students to share
+                resources, mentor one another, and collaborate on projects
+                through our digital library.
+              </p>
+            </div>
+
+            <div className="text-center flex flex-col items-center">
+              <img src={innovate} alt="" />
+              <p className="font-normal text-[18px] text-[#717171]">
+                <span className="font-semibold text-[40px] text-[#000000]">
+                  Innovation
+                </span>{" "}
+                <br /> We are preparing for the future. By integrating digital
+                ID cards, QR-based attendance (future), and portfolio
+                management, we are building a tech-first culture that reflects
+                the spirit of Computer Science.
+              </p>
+            </div>
+          </div>
+        </div>
 
         {/* ====Section seven==== */}
         <div className="flex items-center gap-[90px] mt-[69px] w-[1000px] mx-auto">
