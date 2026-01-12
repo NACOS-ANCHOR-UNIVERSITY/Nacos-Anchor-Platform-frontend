@@ -1,5 +1,5 @@
 import Navbar from "../../components/shared/navbar/Navbar";
-import Footer from "../../components/shared/footer/footer";
+import Footer from "../../components/shared/footer/Footer"
 import React from "react";
 import hero from "../../assets/images/hero1.png";
 import secondimg from "../../assets/images/section1.png";
