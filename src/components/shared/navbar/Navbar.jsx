@@ -16,7 +16,7 @@ const Navbar = () => {
             <Link to="/about" className="font-medium text-[#0F1C0C] text-[14px]">
               About us
             </Link>
-            <Link className="font-medium text-[#0F1C0C] text-[14px]">
+            <Link to="/executives" className="font-medium text-[#0F1C0C] text-[14px]">
               Executives
             </Link>
             <Link className="font-medium text-[#0F1C0C] text-[14px]">

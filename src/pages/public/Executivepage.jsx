@@ -103,8 +103,6 @@ const Executivepage = () => {
 
   return (
     <div className="min-h-screen bg-[#f8f9f7]">
-      <Navbar />
-
       <section className="bg-gradient-to-b from-[#0a6b01] via-[#0a5001] to-[#0a3001] text-white mx-auto my-6 rounded-[16px] px-6 max-w-[1274px] h-[400px] flex items-center justify-center">
         <div className="max-w-4xl mx-auto text-center">
           <h1 className="text-6xl md:text-5xl lg:text-6xl font-bold mb-6 text-white">
@@ -272,7 +270,6 @@ const Executivepage = () => {
           </section>
         )}
       </div>
-      <Footer />
     </div>
   );
 };
