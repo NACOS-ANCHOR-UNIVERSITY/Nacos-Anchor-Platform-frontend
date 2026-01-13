@@ -1,4 +1,4 @@
-export const DashboardIcon = ({className}) => {
+export const DashboardIcon = ({ className }) => {
   return (
     <svg
       className={className}
@@ -16,7 +16,7 @@ export const DashboardIcon = ({className}) => {
   );
 };
 
-export const BookIcon = ({className}) => {
+export const BookIcon = ({ className }) => {
   return (
     <svg
       className={className}
@@ -34,7 +34,7 @@ export const BookIcon = ({className}) => {
   );
 };
 
-export const BriefcaseIcon = ({className}) => {
+export const BriefcaseIcon = ({ className }) => {
   return (
     <svg
       className={className}
@@ -52,7 +52,7 @@ export const BriefcaseIcon = ({className}) => {
   );
 };
 
-export const CashIcon = ({className}) => {
+export const CashIcon = ({ className }) => {
   return (
     <svg
       className={className}
@@ -70,7 +70,7 @@ export const CashIcon = ({className}) => {
   );
 };
 
-export const CloudIcon = ({className}) => {
+export const CloudIcon = ({ className }) => {
   return (
     <svg
       className={className}
@@ -88,7 +88,7 @@ export const CloudIcon = ({className}) => {
   );
 };
 
-export const IDCardIcon = ({className}) => {
+export const IDCardIcon = ({ className }) => {
   return (
     <svg
       className={className}
@@ -106,7 +106,7 @@ export const IDCardIcon = ({className}) => {
   );
 };
 
-export const SettingsIcon = ({className}) => {
+export const SettingsIcon = ({ className }) => {
   return (
     <svg
       className={className}
@@ -124,7 +124,7 @@ export const SettingsIcon = ({className}) => {
   );
 };
 
-export const LogoutIcon = ({className}) => {
+export const LogoutIcon = ({ className }) => {
   return (
     <svg
       className={className}
@@ -142,7 +142,7 @@ export const LogoutIcon = ({className}) => {
   );
 };
 
-export const HomeIcon = ({className}) => {
+export const HomeIcon = ({ className }) => {
   return (
     <svg
       className={className}
@@ -160,7 +160,7 @@ export const HomeIcon = ({className}) => {
   );
 };
 
-export const SearchIcon = ({className}) => {
+export const SearchIcon = ({ className }) => {
   return (
     <svg
       className={className}
@@ -178,7 +178,7 @@ export const SearchIcon = ({className}) => {
   );
 };
 
-export const NotificationIcon = ({className}) => {
+export const NotificationIcon = ({ className }) => {
   return (
     <svg
       className={className}
@@ -196,7 +196,7 @@ export const NotificationIcon = ({className}) => {
   );
 };
 
-export const HatIcon = ({className}) => {
+export const HatIcon = ({ className }) => {
   return (
     <svg
       className={className}
@@ -214,7 +214,7 @@ export const HatIcon = ({className}) => {
   );
 };
 
-export const ActiveIcon = ({className}) => {
+export const ActiveIcon = ({ className }) => {
   return (
     <svg
       className={className}
@@ -232,7 +232,7 @@ export const ActiveIcon = ({className}) => {
   );
 };
 
-export const ModuleIcon = ({className}) => {
+export const ModuleIcon = ({ className }) => {
   return (
     <svg
       className={className}
@@ -250,7 +250,7 @@ export const ModuleIcon = ({className}) => {
   );
 };
 
-export const WalletIcon = ({className}) => {
+export const WalletIcon = ({ className }) => {
   return (
     <svg
       className={className}
@@ -268,7 +268,7 @@ export const WalletIcon = ({className}) => {
   );
 };
 
-export const Briefcase2Icon = ({className}) => {
+export const Briefcase2Icon = ({ className }) => {
   return (
     <svg
       className={className}
@@ -286,7 +286,7 @@ export const Briefcase2Icon = ({className}) => {
   );
 };
 
-export const MegaphoneIcon = ({className}) => {
+export const MegaphoneIcon = ({ className }) => {
   return (
     <svg
       className={className}
@@ -304,7 +304,7 @@ export const MegaphoneIcon = ({className}) => {
   );
 };
 
-export const CheckMarkIcon = ({className}) => {
+export const CheckMarkIcon = ({ className }) => {
   return (
     <svg
       className={className}
@@ -322,7 +322,7 @@ export const CheckMarkIcon = ({className}) => {
   );
 };
 
-export const AlertIcon = ({className}) => {
+export const AlertIcon = ({ className }) => {
   return (
     <svg
       className={className}
@@ -340,7 +340,7 @@ export const AlertIcon = ({className}) => {
   );
 };
 
-export const SupportIcon = ({className}) => {
+export const SupportIcon = ({ className }) => {
   return (
     <svg
       className={className}
@@ -358,7 +358,7 @@ export const SupportIcon = ({className}) => {
   );
 };
 
-export const UploadIcon = ({className}) => {
+export const UploadIcon = ({ className }) => {
   return (
     <svg
       className={className}
@@ -376,7 +376,7 @@ export const UploadIcon = ({className}) => {
   );
 };
 
-export const CameraIcon = ({className}) => {
+export const CameraIcon = ({ className }) => {
   return (
     <svg
       className={className}
@@ -394,7 +394,7 @@ export const CameraIcon = ({className}) => {
   );
 };
 
-export const MailIcon = ({className}) => {
+export const MailIcon = ({ className }) => {
   return (
     <svg
       className={className}
@@ -412,7 +412,7 @@ export const MailIcon = ({className}) => {
   );
 };
 
-export const PhoneIcon = ({className}) => {
+export const PhoneIcon = ({ className }) => {
   return (
     <svg
       className={className}
@@ -430,7 +430,7 @@ export const PhoneIcon = ({className}) => {
   );
 };
 
-export const UserIcon = ({className}) => {
+export const UserIcon = ({ className }) => {
   return (
     <svg
       className={className}
@@ -448,7 +448,7 @@ export const UserIcon = ({className}) => {
   );
 };
 
-export const LockIcon = ({className}) => {
+export const LockIcon = ({ className }) => {
   return (
     <svg
       className={className}
@@ -466,7 +466,7 @@ export const LockIcon = ({className}) => {
   );
 };
 
-export const CreditCardIcon = ({className}) => {
+export const CreditCardIcon = ({ className }) => {
   return (
     <svg
       className={className}
@@ -483,3 +483,94 @@ export const CreditCardIcon = ({className}) => {
     </svg>
   );
 };
+
+export const CalendarIcon = ({ className }) => {
+  return (
+    <svg
+      className={className}
+      width="10"
+      height="12"
+      viewBox="0 0 10 12"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path
+        d="M1.11111 11.1111C0.805556 11.1111 0.543981 11.0023 0.326389 10.7847C0.108796 10.5671 0 10.3056 0 10V2.22223C0 1.91667 0.108796 1.6551 0.326389 1.4375C0.543981 1.21991 0.805556 1.11111 1.11111 1.11111H1.66667V2.86102e-06H2.77778V1.11111H7.22222V2.86102e-06H8.33333V1.11111H8.88889C9.19444 1.11111 9.45602 1.21991 9.67361 1.4375C9.8912 1.6551 10 1.91667 10 2.22223V10C10 10.3056 9.8912 10.5671 9.67361 10.7847C9.45602 11.0023 9.19444 11.1111 8.88889 11.1111H1.11111ZM1.11111 10H8.88889V4.44445H1.11111V10ZM1.11111 3.33334H8.88889V2.22223H1.11111V3.33334Z"
+        fill="currentColor"
+      />
+    </svg>
+  );
+};
+
+export const CodeIcon = ({ className }) => {
+  return (
+    <svg
+      className={className}
+      width="25"
+      height="15"
+      viewBox="0 0 25 15"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path
+        d="M7.5 15L0 7.5L7.5 0L9.28125 1.78125L3.53125 7.53125L9.25 13.25L7.5 15ZM17.5 15L15.7188 13.2188L21.4688 7.46875L15.75 1.75L17.5 0L25 7.5L17.5 15Z"
+        fill="currentColor"
+      />
+    </svg>
+  );
+};
+
+export const ServerIcon = ({ className }) => {
+  return (
+    <svg
+      className={className}
+      width="23"
+      height="24"
+      viewBox="0 0 23 24"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path
+        d="M5.625 3.75C5.10417 3.75 4.66146 3.93229 4.29688 4.29688C3.93229 4.66146 3.75 5.10417 3.75 5.625C3.75 6.14583 3.93229 6.58854 4.29688 6.95312C4.66146 7.31771 5.10417 7.5 5.625 7.5C6.14583 7.5 6.58854 7.31771 6.95312 6.95312C7.31771 6.58854 7.5 6.14583 7.5 5.625C7.5 5.10417 7.31771 4.66146 6.95312 4.29688C6.58854 3.93229 6.14583 3.75 5.625 3.75ZM5.625 16.25C5.10417 16.25 4.66146 16.4323 4.29688 16.7969C3.93229 17.1615 3.75 17.6042 3.75 18.125C3.75 18.6458 3.93229 19.0885 4.29688 19.4531C4.66146 19.8177 5.10417 20 5.625 20C6.14583 20 6.58854 19.8177 6.95312 19.4531C7.31771 19.0885 7.5 18.6458 7.5 18.125C7.5 17.6042 7.31771 17.1615 6.95312 16.7969C6.58854 16.4323 6.14583 16.25 5.625 16.25ZM1.25 0H21.25C21.6042 0 21.901 0.119791 22.1406 0.359375C22.3802 0.598959 22.5 0.895834 22.5 1.25V10C22.5 10.3542 22.3802 10.651 22.1406 10.8906C21.901 11.1302 21.6042 11.25 21.25 11.25H1.25C0.895833 11.25 0.598958 11.1302 0.359375 10.8906C0.119792 10.651 0 10.3542 0 10V1.25C0 0.895834 0.119792 0.598959 0.359375 0.359375C0.598958 0.119791 0.895833 0 1.25 0ZM2.5 2.5V8.75H20V2.5H2.5ZM1.25 12.5H21.25C21.6042 12.5 21.901 12.6198 22.1406 12.8594C22.3802 13.099 22.5 13.3958 22.5 13.75V22.5C22.5 22.8542 22.3802 23.151 22.1406 23.3906C21.901 23.6302 21.6042 23.75 21.25 23.75H1.25C0.895833 23.75 0.598958 23.6302 0.359375 23.3906C0.119792 23.151 0 22.8542 0 22.5V13.75C0 13.3958 0.119792 13.099 0.359375 12.8594C0.598958 12.6198 0.895833 12.5 1.25 12.5ZM2.5 15V21.25H20V15H2.5Z"
+        fill="currentColor"
+      />
+    </svg>
+  );
+};
+
+export const PaintIcon = ({ className }) => {
+  return (
+    <svg
+      className={className}
+      width="24"
+      height="23"
+      viewBox="0 0 24 23"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path
+        d="M5 22.485C4.0625 22.485 3.13542 22.2558 2.21875 21.7975C1.30208 21.3392 0.5625 20.735 0 19.985C0.541667 19.985 1.09375 19.7715 1.65625 19.3444C2.21875 18.9173 2.5 18.2975 2.5 17.485C2.5 16.4433 2.86458 15.5579 3.59375 14.8287C4.32292 14.0996 5.20833 13.735 6.25 13.735C7.29167 13.735 8.17708 14.0996 8.90625 14.8287C9.63542 15.5579 10 16.4433 10 17.485C10 18.86 9.51042 20.0371 8.53125 21.0162C7.55208 21.9954 6.375 22.485 5 22.485ZM5 19.985C5.6875 19.985 6.27604 19.7402 6.76562 19.2506C7.25521 18.761 7.5 18.1725 7.5 17.485C7.5 17.1308 7.38021 16.834 7.14062 16.5944C6.90104 16.3548 6.60417 16.235 6.25 16.235C5.89583 16.235 5.59896 16.3548 5.35938 16.5944C5.11979 16.834 5 17.1308 5 17.485C5 17.9642 4.94271 18.4017 4.82812 18.7975C4.71354 19.1933 4.5625 19.5683 4.375 19.9225C4.47917 19.9642 4.58333 19.985 4.6875 19.985C4.79167 19.985 4.89583 19.985 5 19.985ZM12.1875 14.985L8.75 11.5475L19.9375 0.36C20.1667 0.130834 20.4531 0.0110409 20.7969 0.000624895C21.1406 -0.00979114 21.4375 0.11 21.6875 0.36L23.375 2.0475C23.625 2.2975 23.75 2.58917 23.75 2.9225C23.75 3.25583 23.625 3.5475 23.375 3.7975L12.1875 14.985Z"
+        fill="currentColor"
+      />
+    </svg>
+  );
+};
+
+export const ShieldIcon = ({ className }) => {
+  return (
+    <svg
+      className={className}
+      width="20"
+      height="25"
+      viewBox="0 0 20 25"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path
+        d="M10 25C7.10417 24.2708 4.71354 22.6094 2.82812 20.0156C0.942708 17.4219 0 14.5417 0 11.375V3.75L10 0L20 3.75V11.375C20 14.5417 19.0573 17.4219 17.1719 20.0156C15.2865 22.6094 12.8958 24.2708 10 25ZM10 22.375C12.0208 21.75 13.7083 20.5156 15.0625 18.6719C16.4167 16.8281 17.2083 14.7708 17.4375 12.5H10V2.65625L2.5 5.46875V11.375C2.5 11.6042 2.5 11.7917 2.5 11.9375C2.5 12.0833 2.52083 12.2708 2.5625 12.5H10V22.375Z"
+        fill="currentColor"
+      />
+    </svg>
+  );
+};
+
