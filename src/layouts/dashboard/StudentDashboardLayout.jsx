@@ -121,7 +121,10 @@ const StudentDashboardLayout = () => {
               <Menu size={24} />
             </button>
             <div className="hidden md:flex items-center text-sm text-[#94A3B8]">
-              <Link to="/" className="hover:text-[#1E293B] transition-colors">
+              <Link
+                to="/student/dashboard/"
+                className="hover:text-[#1E293B] transition-colors"
+              >
                 <HomeIcon className="size-3.5" />
               </Link>
               <span className="mx-2">/</span>
