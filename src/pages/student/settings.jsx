@@ -24,7 +24,7 @@ const Settings = () => {
   ];
 
   return (
-    <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-10">
+    <div>
       <div className="mb-8">
         <h1 className="text-4xl font-bold text-[#0F1C0C]">Account Settings</h1>
         <p className="text-[#52A046] text-base mt-1">
@@ -66,7 +66,7 @@ const Settings = () => {
             <>
               {/* Profile Header */}
               <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 flex flex-col sm:flex-row sm:items-center justify-between gap-6">
-                <div className="flex items-center gap-6">
+                <div className="flex flex-col sm:flex-row items-center gap-6">
                   <div className="relative">
                     <img
                       src="https://api.dicebear.com/7.x/avataaars/svg?seed=Sue"
@@ -80,7 +80,7 @@ const Settings = () => {
                       <CameraIcon className="size-4 text-gray-600" />
                     </button>
                   </div>
-                  <div className="flex flex-col gap-1">
+                  <div className="flex flex-col gap-1 items-center sm:items-start">
                     <h2 className="text-xl md:text-2xl font-bold text-[#0F1C0C]">
                       Adefemi Oluwatobi
                     </h2>

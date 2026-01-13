@@ -1,7 +1,7 @@
-import React, {useState} from "react";
+import React, { useState } from "react";
 
-import {Link, useLocation, Outlet} from "react-router-dom";
-import {Menu, X, ChevronDown} from "lucide-react";
+import { Link, useLocation, Outlet } from "react-router-dom";
+import { Menu, X, ChevronDown } from "lucide-react";
 import {
   DashboardIcon,
   BriefcaseIcon,
@@ -21,20 +21,18 @@ const StudentDashboardLayout = () => {
   const [showNotifications, setShowNotifications] = useState(false);
   const [showProfileMenu, setShowProfileMenu] = useState(false);
 
- 
   const location = useLocation();
 
   const toggleSidebar = () => setIsSidebarOpen(!isSidebarOpen);
 
-  
   const navItems = [
-    {name: "Dashboard", icon: DashboardIcon, href: "/student/dashboard"},
-    {name: "Academic Library", icon: BookIcon, href: "/student/library"},
-    {name: "SIWES", icon: BriefcaseIcon, href: "/student/siwes"},
-    {name: "Payments", icon: CashIcon, href: "/student/payments"},
-    {name: "Resources", icon: CloudIcon, href: "/student/resources"},
-    {name: "Profile", icon: IDCardIcon, href: "/student/profile"},
-    {name: "Settings", icon: SettingsIcon, href: "/student/settings"},
+    { name: "Dashboard", icon: DashboardIcon, href: "/student/dashboard" },
+    { name: "Academic Library", icon: BookIcon, href: "/student/library" },
+    { name: "SIWES", icon: BriefcaseIcon, href: "/student/siwes" },
+    { name: "Payments", icon: CashIcon, href: "/student/payments" },
+    { name: "Resources", icon: CloudIcon, href: "/student/resources" },
+    { name: "Profile", icon: IDCardIcon, href: "/student/profile" },
+    { name: "Settings", icon: SettingsIcon, href: "/student/settings" },
   ];
 
   return (
@@ -77,7 +75,6 @@ const StudentDashboardLayout = () => {
         {/* Navigation */}
         <nav className="flex-1 p-4 flex flex-col gap-2 overflow-y-auto">
           {navItems.map((item) => {
-            
             const isActive =
               location.pathname === item.href ||
               (location.pathname.includes(item.href) &&
@@ -253,3 +250,4 @@ const StudentDashboardLayout = () => {
 };
 
 export default StudentDashboardLayout;
+
