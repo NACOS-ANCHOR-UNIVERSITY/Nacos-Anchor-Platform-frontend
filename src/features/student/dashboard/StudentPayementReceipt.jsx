@@ -11,7 +11,7 @@ export default function StudentPaymentReceipt() {
 
   return (
     <div className="flex min-h-screen bg-[#F8FCF8] font-sans"> {/*bg-[#fcfcf8] */}
-      <Sidebar {...{ isOpen, setIsOpen, active: "Payments" }} />
+      {/* <Sidebar {...{ isOpen, setIsOpen, active: "Payments" }} /> */}
       <main className="flex-1 relative">
         <PageHeader {...{ isOpen, setIsOpen, location: "Payments" }} />
         <div className="flex justify-center ">

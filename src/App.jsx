@@ -30,9 +30,11 @@ function App() {
         {/* student dashboard layout */}
         <Route element={<StudentDashboardLayout />}>
           <Route path="/student/dashboard" element={<DashboardHome />} />
-          <Route path={"/Payments"} element={<StudentPaymentReceipt />} />
-        <Route path={"/SIWES"} element={<StudentSiwesPage />} />
-      </Route>
+          <Route path={"/student/Payments"} element={<StudentPaymentReceipt />} />
+        <Route path={"/student/siwes"} element={<StudentSiwesPage />} />
+        </Route>
+        
+        {/* Admin dashboard */}
 
 
         <Route path="/signup" element={<Signup />} />

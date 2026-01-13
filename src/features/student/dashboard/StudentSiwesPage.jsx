@@ -169,7 +169,7 @@ export default function StudentSiwesPage() {
 
     return (
         <div className="flex min-h-screen bg-[#F8FCF8] font-sans">
-            <Sidebar {...{ isOpen, setIsOpen, active: "SIWES" }} />
+            {/* <Sidebar {...{ isOpen, setIsOpen, active: "SIWES" }} /> */}
             <main className="flex-1 relative">
                 <PageHeader {...{ isOpen, setIsOpen, location: "SIWES Board" }} />
                 <div className="flex justify-center">

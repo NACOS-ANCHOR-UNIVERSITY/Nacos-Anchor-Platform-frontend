@@ -1,5 +1,7 @@
-import React, { useState } from "react";
-import { Menu, X, ChevronDown } from "lucide-react";
+import React, {useState} from "react";
+
+import {Link, useLocation, Outlet} from "react-router-dom";
+import {Menu, X, ChevronDown} from "lucide-react";
 import {
   DashboardIcon,
   BriefcaseIcon,
@@ -13,28 +15,26 @@ import {
   NotificationIcon,
   BookIcon,
 } from "../../assets/icons";
-import { Outlet } from "react-router-dom";
 
 const StudentDashboardLayout = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [showNotifications, setShowNotifications] = useState(false);
   const [showProfileMenu, setShowProfileMenu] = useState(false);
 
+ 
+  const location = useLocation();
+
   const toggleSidebar = () => setIsSidebarOpen(!isSidebarOpen);
 
+  
   const navItems = [
-    { name: "Dashboard", icon: DashboardIcon, href: "/", active: true },
-    {
-      name: "Academic Library",
-      icon: BookIcon,
-      href: "/library",
-      active: false,
-    },
-    { name: "SIWES", icon: BriefcaseIcon, href: "/siwes", active: false },
-    { name: "Payments", icon: CashIcon, href: "/student/payments", active: false },
-    { name: "Resources", icon: CloudIcon, href: "/resources", active: false },
-    { name: "Profile", icon: IDCardIcon, href: "/profile", active: false },
-    { name: "Settings", icon: SettingsIcon, href: "/settings", active: false },
+    {name: "Dashboard", icon: DashboardIcon, href: "/student/dashboard"},
+    {name: "Academic Library", icon: BookIcon, href: "/student/library"},
+    {name: "SIWES", icon: BriefcaseIcon, href: "/student/siwes"},
+    {name: "Payments", icon: CashIcon, href: "/student/payments"},
+    {name: "Resources", icon: CloudIcon, href: "/student/resources"},
+    {name: "Profile", icon: IDCardIcon, href: "/student/profile"},
+    {name: "Settings", icon: SettingsIcon, href: "/student/settings"},
   ];
 
   return (
@@ -55,7 +55,7 @@ const StudentDashboardLayout = () => {
       >
         {/* Logo  */}
         <div className="flex items-center justify-between p-6 h-22">
-          <a href="/" className="flex items-center gap-3">
+          <Link to="/" className="flex items-center gap-3">
             <img
               src="/src/assets/images/nacos-logo.svg"
               alt="NACOS Logo"
@@ -68,7 +68,7 @@ const StudentDashboardLayout = () => {
                 Anchor University
               </p>
             </div>
-          </a>
+          </Link>
           <button onClick={toggleSidebar} className="lg:hidden text-gray-500">
             <X size={24} />
           </button>
@@ -76,20 +76,28 @@ const StudentDashboardLayout = () => {
 
         {/* Navigation */}
         <nav className="flex-1 p-4 flex flex-col gap-2 overflow-y-auto">
-          {navItems.map((item) => (
-            <a
-              key={item.name}
-              href={item.href}
-              className={`flex items-center gap-3 px-4 py-2.5 h-12 rounded-xl transition-all font-medium text-sm duration-200 ${
-                item.active
-                  ? "bg-[#138601] text-white drop-shadow-md drop-shadow-[#13860133]"
-                  : "text-[#475569] hover:bg-green-50 hover:text-green-700"
-              }`}
-            >
-              <item.icon className="size-4.5" />
-              <span>{item.name}</span>
-            </a>
-          ))}
+          {navItems.map((item) => {
+            
+            const isActive =
+              location.pathname === item.href ||
+              (location.pathname.includes(item.href) &&
+                item.href !== "/student/dashboard");
+
+            return (
+              <Link
+                key={item.name}
+                to={item.href} // Use 'to' instead of 'href'
+                className={`flex items-center gap-3 px-4 py-2.5 h-12 rounded-xl transition-all font-medium text-sm duration-200 ${
+                  isActive
+                    ? "bg-[#138601] text-white drop-shadow-md drop-shadow-[#13860133]" // Active Style
+                    : "text-[#475569] hover:bg-green-50 hover:text-green-700" // Inactive Style
+                }`}
+              >
+                <item.icon className="size-4.5" />
+                <span>{item.name}</span>
+              </Link>
+            );
+          })}
         </nav>
 
         <div className="p-4 border-t border-gray-100">
@@ -116,11 +124,14 @@ const StudentDashboardLayout = () => {
               <Menu size={24} />
             </button>
             <div className="hidden md:flex items-center text-sm text-[#94A3B8]">
-              <a href="/" className="hover:text-[#1E293B] transition-colors">
+              <Link to="/" className="hover:text-[#1E293B] transition-colors">
                 <HomeIcon className="size-3.5" />
-              </a>
+              </Link>
               <span className="mx-2">/</span>
-              <span className="text-[#1E293B] font-medium">Dashboard</span>
+              {/* Simple dynamic breadcrumb */}
+              <span className="text-[#1E293B] font-medium capitalize">
+                {location.pathname.split("/").pop() || "Dashboard"}
+              </span>
             </div>
           </div>
 
@@ -152,6 +163,7 @@ const StudentDashboardLayout = () => {
 
               {showNotifications && (
                 <div className="absolute right-0 mt-3 w-80 bg-white rounded-xl shadow-xl border border-gray-100 p-4 z-50">
+                  {/* ... Notification Content ... */}
                   <div className="flex justify-between items-center mb-3">
                     <h4 className="font-bold text-sm">Notifications</h4>
                     <span className="text-xs text-[#138601] cursor-pointer">
@@ -165,14 +177,6 @@ const StudentDashboardLayout = () => {
                       </p>
                       <p className="text-xs mt-1">
                         Departmental meeting starts in 15 mins.
-                      </p>
-                    </div>
-                    <div className="p-3 bg-white hover:bg-gray-50 border border-gray-100 rounded-lg text-sm text-gray-600 transition-colors cursor-pointer">
-                      <p className="font-semibold text-gray-800">
-                        New Assignment
-                      </p>
-                      <p className="text-xs mt-1">
-                        CSC301 assignment uploaded.
                       </p>
                     </div>
                   </div>
@@ -203,29 +207,27 @@ const StudentDashboardLayout = () => {
 
               {showProfileMenu && (
                 <div className="absolute right-0 mt-3 w-48 bg-white rounded-xl shadow-xl border border-gray-100 py-2 z-50">
+                  {/* ... Profile Menu Content ... */}
                   <div className="px-4 py-2 border-b border-gray-100 mb-1">
                     <p className="text-sm font-bold text-gray-800">
                       Emmanuel Taiwo
                     </p>
                     <p className="text-xs text-gray-500">Student</p>
                   </div>
-                  <a
-                    href="/profile"
+                  <Link
+                    to="/student/profile"
                     className="block px-4 py-2 text-sm text-gray-600 hover:bg-gray-50 hover:text-green-600"
                   >
                     View Profile
-                  </a>
-                  <a
-                    href="/settings"
+                  </Link>
+                  <Link
+                    to="/student/settings"
                     className="block px-4 py-2 text-sm text-gray-600 hover:bg-gray-50 hover:text-green-600"
                   >
                     Account Settings
-                  </a>
+                  </Link>
                   <div className="border-t border-gray-100 mt-1 pt-1">
-                    <button
-                      type="button"
-                      className="w-full text-left px-4 py-2 text-sm text-red-500 hover:bg-red-50"
-                    >
+                    <button className="w-full text-left px-4 py-2 text-sm text-red-500 hover:bg-red-50">
                       Log Out
                     </button>
                   </div>
@@ -235,26 +237,14 @@ const StudentDashboardLayout = () => {
           </div>
         </header>
 
-        {/* Page Content Scrollable Area */}
+        {/* Page Content */}
         <main className="flex-1 overflow-y-auto bg-[#F6F7F8] p-4 lg:p-8 flex flex-col">
           <div className="max-w-7xl mx-auto w-full flex-1">
             <Outlet />
           </div>
-
-          {/* Footer / Copyright Section */}
+          {/* Footer */}
           <div className="max-w-7xl mx-auto w-full mt-12 pt-6 border-t border-[#E2E8F0] flex flex-col md:flex-row justify-between items-center text-xs text-[#94A3B8] gap-4">
-            <p>
-              © {new Date().getFullYear()} NACOS Anchor University. All rights
-              reserved.
-            </p>
-            <div className="flex gap-6">
-              <a href="/privacy" className="hover:text-gray-600">
-                Privacy Policy
-              </a>
-              <a href="/terms" className="hover:text-gray-600">
-                Terms of Service
-              </a>
-            </div>
+            <p>© {new Date().getFullYear()} NACOS Anchor University.</p>
           </div>
         </main>
       </div>
@@ -263,4 +253,3 @@ const StudentDashboardLayout = () => {
 };
 
 export default StudentDashboardLayout;
-
