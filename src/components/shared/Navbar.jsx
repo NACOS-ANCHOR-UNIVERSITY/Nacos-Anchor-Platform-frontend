@@ -1,18 +1,18 @@
-import React, { useState } from 'react';
-import { Link, useLocation } from 'react-router-dom';
-import { Search, Menu, X } from 'lucide-react';
+import React, {useState} from "react";
+import {Link, useLocation} from "react-router-dom";
+import {Search, Menu, X} from "lucide-react";
 
 const Navbar = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [searchQuery, setSearchQuery] = useState('');
+  const [searchQuery, setSearchQuery] = useState("");
   const location = useLocation();
 
   const navLinks = [
-    { name: 'Home', path: '/' },
-    { name: 'About Us', path: '/about' },
-    { name: 'Executives', path: '/executives' },
-    { name: 'Events', path: '/events' },
-    { name: 'Contact', path: '/contact' },
+    {name: "Home", path: "/"},
+    {name: "About Us", path: "/about"},
+    {name: "Executives", path: "/executives"},
+    {name: "Events", path: "/events"},
+    {name: "Contact", path: "/contact"},
   ];
 
   const isActive = (path) => location.pathname === path;
@@ -38,8 +38,8 @@ const Navbar = () => {
                 to={link.path}
                 className={`text-sm font-medium transition-colors ${
                   isActive(link.path)
-                    ? 'text-[#128401] border-b-2 border-[#128401] pb-1'
-                    : 'text-gray-700 hover:text-[#128401]'
+                    ? "text-[#128401] border-b-2 border-[#128401] pb-1"
+                    : "text-gray-700 hover:text-[#128401]"
                 }`}
               >
                 {link.name}
@@ -108,8 +108,8 @@ const Navbar = () => {
                 onClick={() => setIsMobileMenuOpen(false)}
                 className={`block px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
                   isActive(link.path)
-                    ? 'bg-green-50 text-[#128401]'
-                    : 'text-gray-700 hover:bg-gray-50'
+                    ? "bg-green-50 text-[#128401]"
+                    : "text-gray-700 hover:bg-gray-50"
                 }`}
               >
                 {link.name}
