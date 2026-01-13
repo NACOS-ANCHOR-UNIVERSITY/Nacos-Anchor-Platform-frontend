@@ -122,7 +122,7 @@ const StudentDashboardLayout = () => {
             </button>
             <div className="hidden md:flex items-center text-sm text-[#94A3B8]">
               <Link
-                to="/student/dashboard/"
+                to="/student/dashboard"
                 className="hover:text-[#1E293B] transition-colors"
               >
                 <HomeIcon className="size-3.5" />
