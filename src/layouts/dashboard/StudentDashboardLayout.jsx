@@ -13,8 +13,9 @@ import {
   NotificationIcon,
   BookIcon,
 } from "../../assets/icons";
+import { Outlet } from "react-router-dom";
 
-const StudentDashboardLayout = ({ children }) => {
+const StudentDashboardLayout = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [showNotifications, setShowNotifications] = useState(false);
   const [showProfileMenu, setShowProfileMenu] = useState(false);
@@ -30,7 +31,7 @@ const StudentDashboardLayout = ({ children }) => {
       active: false,
     },
     { name: "SIWES", icon: BriefcaseIcon, href: "/siwes", active: false },
-    { name: "Payments", icon: CashIcon, href: "/payments", active: false },
+    { name: "Payments", icon: CashIcon, href: "/student/payments", active: false },
     { name: "Resources", icon: CloudIcon, href: "/resources", active: false },
     { name: "Profile", icon: IDCardIcon, href: "/profile", active: false },
     { name: "Settings", icon: SettingsIcon, href: "/settings", active: false },
@@ -236,7 +237,9 @@ const StudentDashboardLayout = ({ children }) => {
 
         {/* Page Content Scrollable Area */}
         <main className="flex-1 overflow-y-auto bg-[#F6F7F8] p-4 lg:p-8 flex flex-col">
-          <div className="max-w-7xl mx-auto w-full flex-1">{children}</div>
+          <div className="max-w-7xl mx-auto w-full flex-1">
+            <Outlet />
+          </div>
 
           {/* Footer / Copyright Section */}
           <div className="max-w-7xl mx-auto w-full mt-12 pt-6 border-t border-[#E2E8F0] flex flex-col md:flex-row justify-between items-center text-xs text-[#94A3B8] gap-4">

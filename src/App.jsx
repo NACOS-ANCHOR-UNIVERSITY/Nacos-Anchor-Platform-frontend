@@ -10,11 +10,14 @@ import Events from "./pages/public/Events";
 import Login from "./features/auth/Login";
 import Signup from "./pages/student/Signup";
 import PublicLayout from "./layouts/PublicLayout";
+import StudentDashboardLayout from "./layouts/dashboard/StudentDashboardLayout";
+import DashboardHome from "./pages/student/dashboard-home";
 
 function App() {
   return (
     <>
       <Routes>
+      {/* public layout for the landing page and the navbar links */}
         <Route element={<PublicLayout />}>
           <Route path="/" element={<Landing />} />
           <Route path="/about" element={<AboutUs />} />
@@ -22,6 +25,12 @@ function App() {
           <Route path="/events" element={<Events />} />
           <Route path="/contact" element={<Contact />} />
         </Route>
+        {/* student dashboard layout */}
+        <Route element={<StudentDashboardLayout />}>
+          <Route path="/student/dashboard" element={<DashboardHome />} />
+      </Route>
+
+
         <Route path="/signup" element={<Signup />} />
         <Route path="/login" element={<Login />} />
       </Routes>

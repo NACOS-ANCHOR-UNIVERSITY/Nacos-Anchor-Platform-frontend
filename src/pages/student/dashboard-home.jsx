@@ -30,7 +30,7 @@ const DashboardHome = () => {
   const { user } = useUserStore();
 
   return (
-    <StudentDashboardLayout>
+    // <StudentDashboardLayout>
       <div className="flex flex-col gap-8 pb-10">
         {/* Header Section */}
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
@@ -366,7 +366,7 @@ const DashboardHome = () => {
           </div>
         </div>
       </div>
-    </StudentDashboardLayout>
+    // </StudentDashboardLayout>
   );
 };
 
