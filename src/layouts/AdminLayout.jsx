@@ -1,5 +1,5 @@
 import React from "react";
-import {Outlet, Link, useLocation} from "react-router-dom";
+import { Outlet, Link, useLocation } from "react-router-dom";
 import {
   LayoutDashboard,
   Users,
@@ -13,23 +13,23 @@ import {
   Bell,
   ChevronDown,
 } from "lucide-react";
-import profileImg from "../assets/images/profile.png"
+import profileImg from "../assets/images/profile.png";
 
 const AdminLayout = () => {
   const location = useLocation();
 
   // SIDEBAR LINKS
   const mainLinks = [
-    {name: "Dashboard", path: "/admin/dashboard", icon: LayoutDashboard},
-    {name: "User Management", path: "/admin/users", icon: Users},
-    {name: "Content Moderation", path: "/admin/moderation", icon: FileText},
-    {name: "Payments", path: "/admin/payments", icon: CreditCard},
+    { name: "Dashboard", path: "/admin/dashboard", icon: LayoutDashboard },
+    { name: "User Management", path: "/admin/users", icon: Users },
+    { name: "Content Moderation", path: "/admin/moderation", icon: FileText },
+    { name: "Payments", path: "/admin/payments", icon: CreditCard },
   ];
 
   const moduleLinks = [
-    {name: "Events & Polls", path: "/admin/events", icon: Calendar},
-    {name: "SIWES Board", path: "/admin/siwes", icon: Briefcase},
-    {name: "Voting System", path: "/admin/voting", icon: Vote},
+    { name: "Events & Polls", path: "/admin/events", icon: Calendar },
+    { name: "SIWES Board", path: "/admin/siwes", icon: Briefcase },
+    { name: "Voting System", path: "/admin/voting", icon: Vote },
   ];
 
   const renderLink = (item) => {
@@ -126,7 +126,6 @@ const AdminLayout = () => {
                 <p className="text-sm font-semibold text-gray-700 leading-none">
                   Admin User
                 </p>
-              
               </div>
               <ChevronDown className="w-4 h-4 text-gray-400 cursor-pointer" />
             </div>
@@ -142,3 +141,4 @@ const AdminLayout = () => {
 };
 
 export default AdminLayout;
+
