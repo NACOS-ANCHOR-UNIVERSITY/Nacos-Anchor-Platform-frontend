@@ -1,7 +1,7 @@
 import Navbar from "./components/shared/navbar/Navbar";
 import Footer from "./components/shared/footer/Footer";
 import "./index.css";
-import {Routes, Route} from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
 import Landing from "./pages/public/Landing";
 import AboutUs from "./pages/public/AboutUs";
 import Executivepage from "./pages/public/Executivepage";
@@ -12,16 +12,17 @@ import Signup from "./pages/student/Signup";
 import PublicLayout from "./layouts/PublicLayout";
 import StudentDashboardLayout from "./layouts/dashboard/StudentDashboardLayout";
 import DashboardHome from "./pages/student/dashboard-home";
-import StudentSiwesPage from './features/student/dashboard/StudentSiwesPage'
-import StudentPaymentReceipt from './features/student/dashboard/StudentPayementReceipt'
+import StudentSiwesPage from "./features/student/dashboard/StudentSiwesPage";
+import StudentPaymentReceipt from "./features/student/dashboard/StudentPayementReceipt";
 import Settings from "./pages/student/settings";
 import Portfolio from "./pages/student/Portfolio";
+import SiwesBoard from "./pages/student/siwes-board";
 
 function App() {
   return (
     <>
       <Routes>
-      {/* public layout for the landing page and the navbar links */}
+        {/* public layout for the landing page and the navbar links */}
         <Route element={<PublicLayout />}>
           <Route path="/" element={<Landing />} />
           <Route path="/about" element={<AboutUs />} />
@@ -32,14 +33,17 @@ function App() {
         {/* student dashboard layout */}
         <Route element={<StudentDashboardLayout />}>
           <Route path="/student/dashboard" element={<DashboardHome />} />
-          <Route path={"/student/Payments"} element={<StudentPaymentReceipt />} />
-          <Route path={"/student/siwes"} element={<StudentSiwesPage />} />
+          <Route
+            path={"/student/Payments"}
+            element={<StudentPaymentReceipt />}
+          />
+          {/* <Route path={"/student/siwes"} element={<StudentSiwesPage />} /> */}
+          <Route path={"/student/siwes"} element={<SiwesBoard />} />
           <Route path="/student/settings" element={<Settings />} />
           <Route path="/student/profile" element={<Portfolio />} />
         </Route>
-        
-        {/* Admin dashboard */}
 
+        {/* Admin dashboard */}
 
         <Route path="/signup" element={<Signup />} />
         <Route path="/login" element={<Login />} />
@@ -49,3 +53,4 @@ function App() {
 }
 
 export default App;
+
