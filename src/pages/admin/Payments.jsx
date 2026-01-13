@@ -5,7 +5,7 @@ import recordPayment from "../../features/admin/payments/assets/icons/Record-pay
 export default function AdminPaymentsPage() {
   return (
     <div className="min-h-screen" style={{ fontFamily: 'Manrope' }}>
-      <AdminTopbar />
+      {/* <AdminTopbar /> */}
 
       <div className="bg-slate-50 px-8 py-8">
         {/* Page header */}
