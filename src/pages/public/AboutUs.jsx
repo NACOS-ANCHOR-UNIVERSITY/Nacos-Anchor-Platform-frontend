@@ -121,7 +121,7 @@ const AboutUs = () => {
       {/* History of the Chapter section */}
 
       <section className="flex flex-col items-center justify-center w-full max-w-3xl mt-10">
-        <p className="uppercase text-[#138301] text-[14px] font-bold">our journey</p>
+        <p className="uppercase text-brand-primary text-[14px] font-bold">our journey</p>
         <h1 className="text-[#0F172A] text-[20px] md:text-[30px] font-bold">History of the Chapter</h1>
 
         <div className="relative mt-10 w-full">
@@ -138,7 +138,7 @@ const AboutUs = () => {
                 
                 <div className="pt-2">
                   <div className="w-11.5 h-6 py-4 px-7 flex items-center justify-center bg-[#E0EDDD] rounded-lg">
-                    <p className="text-[#138301] font-bold">{year}</p>
+                    <p className="text-brand-primary font-bold">{year}</p>
                   </div>
                   <h2 className="text-[#0F172A] text-[18px] md:text-[20px] font-bold">{title}</h2>
                   <p className="text-[#475569] text-sm md:text-[16px] leading-relaxed">{description}</p>
@@ -159,7 +159,7 @@ const AboutUs = () => {
               <div key={index} className="flex flex-col items-center mt-10">
                 <img src={image} alt={name} className="w-38 h-38 rounded-full object-cover shadow-md border-4 border-white" />
                 <h2 className="text-[#0F172A] text-[18px] font-bold mt-4">{name}</h2>
-                <p className="text-[#138301] text-sm md:text-[14px] font-medium my-2">{role}</p>
+                <p className="text-brand-primary text-sm md:text-[14px] font-medium my-2">{role}</p>
                 
                 {/* Executive social links */}
                 <div className="flex gap-4 mt-2 items-center">
@@ -176,7 +176,7 @@ const AboutUs = () => {
       </section>
 
       {/* cta */}
-      <div className="flex flex-col justify-center items-center text-white bg-[#138301] text-center p-10 gap-6 rounded-3xl mt-10 w-full max-w-3xl">
+      <div className="flex flex-col justify-center items-center text-white bg-brand-primary text-center p-10 gap-6 rounded-3xl mt-10 w-full max-w-3xl">
             <h1 className="font-black text-[30px]">Ready to be part of the movement?</h1>
             <p className="text-sm md:text-[18px] max-w-xl">Join NACOS Anchor University today to access exclusive resources, mentorship, and event updates.</p>
             <div className="flex gap-4">
@@ -184,7 +184,7 @@ const AboutUs = () => {
               {/* <Link to="/register">Register on Portal</Link>
               <Link to="/support">Contact Support</Link> */}
 
-              <button className="bg-white text-[#138301] font-bold px-6 py-2 rounded-lg">Register on Portal</button>
+              <button className="bg-white text-brand-primary font-bold px-6 py-2 rounded-lg">Register on Portal</button>
               <button className="border border-white text-white font-bold px-6 py-2 rounded-lg">Contact Support</button>
             </div>
       </div>
