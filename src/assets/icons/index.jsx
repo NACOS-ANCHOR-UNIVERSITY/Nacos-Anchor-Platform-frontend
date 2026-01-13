@@ -1,4 +1,4 @@
-export const DashboardIcon = ({ className }) => {
+export const DashboardIcon = ({className}) => {
   return (
     <svg
       className={className}
@@ -16,7 +16,7 @@ export const DashboardIcon = ({ className }) => {
   );
 };
 
-export const BookIcon = ({ className }) => {
+export const BookIcon = ({className}) => {
   return (
     <svg
       className={className}
@@ -34,7 +34,7 @@ export const BookIcon = ({ className }) => {
   );
 };
 
-export const BriefcaseIcon = ({ className }) => {
+export const BriefcaseIcon = ({className}) => {
   return (
     <svg
       className={className}
@@ -52,7 +52,7 @@ export const BriefcaseIcon = ({ className }) => {
   );
 };
 
-export const CashIcon = ({ className }) => {
+export const CashIcon = ({className}) => {
   return (
     <svg
       className={className}
@@ -70,7 +70,7 @@ export const CashIcon = ({ className }) => {
   );
 };
 
-export const CloudIcon = ({ className }) => {
+export const CloudIcon = ({className}) => {
   return (
     <svg
       className={className}
@@ -88,7 +88,7 @@ export const CloudIcon = ({ className }) => {
   );
 };
 
-export const IDCardIcon = ({ className }) => {
+export const IDCardIcon = ({className}) => {
   return (
     <svg
       className={className}
@@ -106,7 +106,7 @@ export const IDCardIcon = ({ className }) => {
   );
 };
 
-export const SettingsIcon = ({ className }) => {
+export const SettingsIcon = ({className}) => {
   return (
     <svg
       className={className}
@@ -124,7 +124,7 @@ export const SettingsIcon = ({ className }) => {
   );
 };
 
-export const LogoutIcon = ({ className }) => {
+export const LogoutIcon = ({className}) => {
   return (
     <svg
       className={className}
@@ -142,7 +142,7 @@ export const LogoutIcon = ({ className }) => {
   );
 };
 
-export const HomeIcon = ({ className }) => {
+export const HomeIcon = ({className}) => {
   return (
     <svg
       className={className}
@@ -160,7 +160,7 @@ export const HomeIcon = ({ className }) => {
   );
 };
 
-export const SearchIcon = ({ className }) => {
+export const SearchIcon = ({className}) => {
   return (
     <svg
       className={className}
@@ -178,7 +178,7 @@ export const SearchIcon = ({ className }) => {
   );
 };
 
-export const NotificationIcon = ({ className }) => {
+export const NotificationIcon = ({className}) => {
   return (
     <svg
       className={className}
@@ -196,7 +196,7 @@ export const NotificationIcon = ({ className }) => {
   );
 };
 
-export const HatIcon = ({ className }) => {
+export const HatIcon = ({className}) => {
   return (
     <svg
       className={className}
@@ -214,7 +214,7 @@ export const HatIcon = ({ className }) => {
   );
 };
 
-export const ActiveIcon = ({ className }) => {
+export const ActiveIcon = ({className}) => {
   return (
     <svg
       className={className}
@@ -232,7 +232,7 @@ export const ActiveIcon = ({ className }) => {
   );
 };
 
-export const ModuleIcon = ({ className }) => {
+export const ModuleIcon = ({className}) => {
   return (
     <svg
       className={className}
@@ -250,7 +250,7 @@ export const ModuleIcon = ({ className }) => {
   );
 };
 
-export const WalletIcon = ({ className }) => {
+export const WalletIcon = ({className}) => {
   return (
     <svg
       className={className}
@@ -268,7 +268,7 @@ export const WalletIcon = ({ className }) => {
   );
 };
 
-export const Briefcase2Icon = ({ className }) => {
+export const Briefcase2Icon = ({className}) => {
   return (
     <svg
       className={className}
@@ -286,7 +286,7 @@ export const Briefcase2Icon = ({ className }) => {
   );
 };
 
-export const MegaphoneIcon = ({ className }) => {
+export const MegaphoneIcon = ({className}) => {
   return (
     <svg
       className={className}
@@ -304,7 +304,7 @@ export const MegaphoneIcon = ({ className }) => {
   );
 };
 
-export const CheckMarkIcon = ({ className }) => {
+export const CheckMarkIcon = ({className}) => {
   return (
     <svg
       className={className}
@@ -322,7 +322,7 @@ export const CheckMarkIcon = ({ className }) => {
   );
 };
 
-export const AlertIcon = ({ className }) => {
+export const AlertIcon = ({className}) => {
   return (
     <svg
       className={className}
@@ -340,7 +340,7 @@ export const AlertIcon = ({ className }) => {
   );
 };
 
-export const SupportIcon = ({ className }) => {
+export const SupportIcon = ({className}) => {
   return (
     <svg
       className={className}
@@ -357,4 +357,3 @@ export const SupportIcon = ({ className }) => {
     </svg>
   );
 };
-

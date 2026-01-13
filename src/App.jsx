@@ -14,6 +14,7 @@ import StudentDashboardLayout from "./layouts/dashboard/StudentDashboardLayout";
 import DashboardHome from "./pages/student/dashboard-home";
 import StudentSiwesPage from './features/student/dashboard/StudentSiwesPage'
 import StudentPaymentReceipt from './features/student/dashboard/StudentPayementReceipt'
+import Settings from "./pages/student/settings";
 
 function App() {
   return (
@@ -31,7 +32,8 @@ function App() {
         <Route element={<StudentDashboardLayout />}>
           <Route path="/student/dashboard" element={<DashboardHome />} />
           <Route path={"/student/Payments"} element={<StudentPaymentReceipt />} />
-        <Route path={"/student/siwes"} element={<StudentSiwesPage />} />
+          <Route path={"/student/siwes"} element={<StudentSiwesPage />} />
+          <Route path="/student/settings" element={<Settings />} />
         </Route>
         
         {/* Admin dashboard */}
