@@ -168,6 +168,7 @@ export default function Portfolio() {
           <div className="text-xs text-slate-500">
             Dashboard <span className="mx-1">/</span>{" "}
             <span className="font-medium text-[var(--color-brand-primary)]">My Portfolio</span>
+            <span className="font-medium text-[var(--color-brand-primary)]">My Portfolio</span>
           </div>
           <h1 className="mt-2 text-3xl font-bold text-slate-900">My Portfolio</h1>
           <p className="mt-1 text-sm text-slate-600">

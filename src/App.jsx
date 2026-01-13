@@ -19,6 +19,7 @@ import Portfolio from "./pages/student/Portfolio";
 import SiwesBoard from "./pages/student/siwes-board";
 import AdminLayout from "./layouts/AdminLayout";
 import AdminDashboard from "./features/admin/dashboard/AdminDashboard";
+import AdminPaymentsPage from "./pages/admin/Payments";
 import UserManagement from "./pages/admin/UserManagement";
 
 function App() {
@@ -50,6 +51,7 @@ function App() {
         <Route element={<AdminLayout />}>
           <Route path="/admin/dashboard" element={<AdminDashboard />} />
           <Route path="/admin/users" element={<UserManagement />} />
+          <Route path="/admin/payments" element={<AdminPaymentsPage />} />
         </Route>
 
         <Route path="/signup" element={<Signup />} />
