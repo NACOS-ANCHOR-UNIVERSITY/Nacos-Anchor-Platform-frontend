@@ -1,0 +1,68 @@
+import React from "react"
+import { Tag, Shirt, ArrowLeft, ArrowRight, GraduationCap, PartyPopper } from "lucide-react"
+
+export default function PendingFees() {
+  return (
+    <div className="mb-8">
+      <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between mb-4">
+        <div className="flex items-center">
+          <div className="w-1.5 h-7 rounded-lg bg-[#138601]">
+          </div>
+          <h2 className="text-xl font-bold text-gray-900 pl-3">Pending Fees</h2>
+        </div>
+        <button className="text-[#138601] text-sm hover:text-gray-900 font-medium self-start sm:self-auto flex justify-center items-center gap-2">View all <ArrowRight className="w-4"/></button>
+      </div>
+
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="relative bg-white border border-gray-200 rounded-xl p-6 flex flex-col">
+          <span className="absolute top-4 right-4 bg-orange-100 text-orange-700 text-xs px-3 py-1 rounded-full font-bold">PENDING</span>
+          <div className="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center mb-4">
+            <GraduationCap className="w-6 h-6 text-blue-600" />
+          </div>
+          <h3 className="font-semibold text-gray-900 mb-1">Departmental Dues</h3>
+          <p className="text-sm text-gray-500 leading-relaxed flex-1">Annual departmental levy for the 2023/2024 academic session.</p>
+          <div className="border-t border-gray-200 mt-6 pt-4 flex items-center justify-between gap-3">
+            <div>
+              <p className="text-xs tracking-wide text-gray-400 mb-1">AMOUNT</p>
+              <h4 className="text-2xl font-bold text-gray-900">₦2,000</h4>
+            </div>
+            <button className="min-w-[5rem] bg-[#138601] hover:bg-[#138601] shadow-[0px_2px_4px_-2px_#138601] hover:shadow-[0px_4px_6px_-1px_#138601] transition text-white py-2.5 rounded-lg text-sm font-medium">Pay Now</button>
+          </div>
+        </div>
+
+        <div className="relative bg-white border border-gray-200 rounded-xl p-6 flex flex-col">
+          <span className="absolute top-4 right-4 bg-gray-100 text-gray-600 text-xs px-3 py-1 rounded-full font-bold">OPTIONAL</span>
+          <div className="w-12 h-12 bg-purple-100 rounded-xl flex items-center justify-center mb-4">
+            <PartyPopper className="text-purple-600"/>
+            {/* <span className="text-xl">🎟️</span> */}
+          </div>
+          <h3 className="font-semibold text-gray-900 mb-1">Dinner Night Ticket</h3>
+          <p className="text-sm text-gray-500 leading-relaxed flex-1">Exclusive access ticket for the NACOS Annual Dinner & Award Night.</p>
+          <div className="border-t border-gray-200 mt-6 pt-4 flex items-center justify-between gap-3">
+            <div>
+              <p className="text-xs tracking-wide text-gray-400 mb-1">AMOUNT</p>
+              <h4 className="text-2xl font-bold text-gray-900">₦5,000</h4>
+            </div>
+            <button className="min-w-[5rem] border border-gray-300 hover:bg-gray-50 transition py-2.5 px-2 rounded-lg text-sm font-medium">Add to Cart</button>
+          </div>
+        </div>
+
+        <div className="relative bg-white border border-gray-200 rounded-xl p-6 flex flex-col">
+          <span className="absolute top-4 right-4 bg-gray-100 text-gray-600 text-xs px-3 py-1 rounded-full font-bold">NEW</span>
+          <div className="w-12 h-12 bg-green-100 rounded-xl flex items-center justify-center mb-4">
+            <Shirt className="w-6 h-6 text-green-600" />
+          </div>
+          <h3 className="font-semibold text-gray-900 mb-1">Departmental T-Shirt</h3>
+          <p className="text-sm text-gray-500 leading-relaxed flex-1">Official NACOS merchandise. 100% Cotton. Available in multiple sizes.</p>
+          <div className="border-t border-gray-200 mt-6 pt-4 flex items-center justify-between gap-3">
+            <div>
+              <p className="text-xs tracking-wide text-gray-400 mb-1">AMOUNT</p>
+              <h4 className="text-2xl font-bold text-gray-900">₦4,500</h4>
+            </div>
+            <button className="min-w-[5rem] border border-gray-300 hover:bg-gray-50 transition py-2.5 rounded-lg text-sm font-medium">Buy Now</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  )
+}

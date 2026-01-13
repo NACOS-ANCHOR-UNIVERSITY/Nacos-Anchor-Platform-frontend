@@ -12,6 +12,8 @@ import Signup from "./pages/student/Signup";
 import PublicLayout from "./layouts/PublicLayout";
 import StudentDashboardLayout from "./layouts/dashboard/StudentDashboardLayout";
 import DashboardHome from "./pages/student/dashboard-home";
+import StudentSiwesPage from './features/student/dashboard/StudentSiwesPage'
+import StudentPaymentReceipt from './features/student/dashboard/StudentPayementReceipt'
 
 function App() {
   return (
@@ -28,6 +30,8 @@ function App() {
         {/* student dashboard layout */}
         <Route element={<StudentDashboardLayout />}>
           <Route path="/student/dashboard" element={<DashboardHome />} />
+          <Route path={"/Payments"} element={<StudentPaymentReceipt />} />
+        <Route path={"/SIWES"} element={<StudentSiwesPage />} />
       </Route>
 
 

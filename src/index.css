@@ -1,4 +1,6 @@
 @import "tailwindcss";
+@import "@fontsource/lexend";/* <-- Israel added this*/
+
 
 @theme {
 
@@ -9,7 +11,7 @@
   --color-status-success: #22c55e;
   --color-status-error: #ef4444;
   --color-status-pending: #f59e0b;
-
+ --font-sans: "Lexend", sans-serif;
   --font-family-sans: 'Roboto', ui-sans-serif, system-ui, sans-serif;
 }
 
