@@ -1,6 +1,6 @@
 import React from 'react';
 import { useQuery } from '@tanstack/react-query';
-import { Mail,Star,Users, User, Linkedin, Twitter } from 'lucide-react';
+import { Mail, CheckCircle, Users, Linkedin, Twitter, MessageCircle } from 'lucide-react';
 import Navbar from '@/components/shared/Navbar';
 import Footer from '@/components/shared/Footer';
 // import client from '@/config/axios-client'; // Uncomment when API is ready
@@ -9,7 +9,7 @@ import Footer from '@/components/shared/Footer';
 const mockExecutives = {
   president: {
     name: "OMOSIGHO GODSWILL",
-    image: "https://ui-avatars.com/api/?name=Omodosho+Godswill&size=200&background=128401&color=fff",
+    image: "/president_image.png",
     bio: "Leading the vision for a digital transformation in the department. Committed to serving every student's interest and bridging the gap between students and the faculty management.",
     email: "president@nacos.edu",
     linkedin: "https://linkedin.com",
@@ -19,7 +19,8 @@ const mockExecutives = {
     {
       name: "JULIA FRANCES",
       position: "Vice President",
-      image: "https://ui-avatars.com/api/?name=Alex+Johnson&size=200&background=128401&color=fff",
+      image: "/vice_president_image.png",
+      icon:"/vice_president_icon.svg",
       bio: "Ensuring smooth operations and suppodting welfare initiatives across all levels.",
       email: "vp@nacos.edu",
       linkedin: "https://linkedin.com",
@@ -28,7 +29,8 @@ const mockExecutives = {
     {
       name: "EZIRIM KINGDOM",
       position: "Software Director",
-      image: "https://ui-avatars.com/api/?name=Emmanuel+Brown&size=200&background=128401&color=fff",
+      image: "/software_director_image.png",
+      icon:"/software_director_icon.svg",
       bio: "Managing communications and documentation for the executive council.",
       email: "secretary@nacos.edu",
       linkedin: "https://linkedin.com"
@@ -36,7 +38,8 @@ const mockExecutives = {
     {
       name: "RAPHEAL FULFILLED",
       position: "General Secretary",
-      image: "https://ui-avatars.com/api/?name=Sarah+Williams&size=200&background=128401&color=fff",
+      image: "/general_secretary_image.png",
+      icon:"/general_secretary_icon.svg",
       bio: "Overseeing financial operations and ensuring transparency in all transactions.",
       email: "general@nacos.edu",
       twitter: "https://twitter.com"
@@ -44,7 +47,8 @@ const mockExecutives = {
     {
       name: "IYANDA JERRIE",
       position: "Financial Secretary",
-      image: "https://ui-avatars.com/api/?name=Michael+Davis&size=200&background=128401&color=fff",
+      image: "/financial_secretary_image.png",
+      icon:"/financial_secretary_icon.svg",
       bio: "Managing the association's funds and financial planning.",
       email: "finance@nacos.edu",
       linkedin: "https://linkedin.com"
@@ -142,31 +146,43 @@ const Executivepage = () => {
         {/* President Section */}
         {executives?.president && (
           <section className="mb-16">
-            <div className="flex items-center gap-3 mb-8 ml-10">
-              <Star className=" text-green-700 "/>
+            <div className="flex items-center gap-3 mb-8">
+              <CheckCircle className="w-6 h-6 text-[#128401]" />
               <h2 className="text-2xl font-bold text-gray-900">The President</h2>
             </div>
 
-            <div className="bg-white rounded-xl shadow-sm border  border-gray-200 p-8 max-w-4xl px-6 max-w-[1274px] flex items-center justify-center">
-              <div className="flex flex-col md:flex-row gap-6 items-start">
-                <div className= "rounded-full bg-green-50">
-                <User className="w-32 h-32 object-cover text-green-200"/>
+            <div className="bg-white rounded-2xl shadow-sm border border-gray-200 p-8 max-w-5xl mx-auto">
+              <div className="flex flex-col md:flex-row gap-8 items-start">
+                {/* President Image */}
+                <div className="relative flex-shrink-0">
+                  <div className="w-64 h-64 rounded-3xl overflow-hidden bg-gradient-to-br from-gray-100 to-gray-200">
+                    <img
+                      src={executives.president.image}
+                      alt={executives.president.name}
+                      className="w-full h-full object-cover"
+                    />
+                  </div>
                 </div>
+
+                {/* President Info */}
                 <div className="flex-1">
-                  <h3 className="text-2xl font-bold text-gray-900 mb-1">
+                  <h3 className="text-3xl font-bold text-gray-900 ">
                     {executives.president.name}
                   </h3>
-                  <p className="text-[#128401] font-semibold mb-3">President</p>
-                  <p className="text-gray-600 leading-relaxed mb-4">
+                  <img
+                  src="/president_icon.jpg"
+                  className="mb-5"/>
+                  <p className="text-gray-600 leading-relaxed mb-6 text-base">
                     {executives.president.bio || 'Leading the NACOS community with a vision for academic excellence and student empowerment.'}
                   </p>
                   <div className="flex gap-3">
                     {executives.president.email && (
                       <a
                         href={`mailto:${executives.president.email}`}
-                        className="w-9 h-9 flex items-center justify-center rounded-full bg-gray-100 hover:bg-[#128401] hover:text-white transition-colors"
+                        className="w-10 h-10 flex items-center justify-center rounded-full bg-[#128401] text-white hover:bg-[#0f6b01] transition-colors shadow-md"
+                        title="Email"
                       >
-                        <Mail className="w-4 h-4" />
+                        <Mail className="w-5 h-5" />
                       </a>
                     )}
                     {executives.president.linkedin && (
@@ -174,19 +190,11 @@ const Executivepage = () => {
                         href={executives.president.linkedin}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="w-9 h-9 flex items-center justify-center rounded-full bg-gray-100 hover:bg-[#128401] hover:text-white transition-colors"
+                        className="w-10 h-10 flex items-center justify-center rounded-full bg-[#128401] text-white hover:bg-[#0f6b01] transition-colors shadow-md"
+                        title="LinkedIn"
                       >
-                        <Linkedin className="w-4 h-4" />
-                      </a>
-                    )}
-                    {executives.president.twitter && (
-                      <a
-                        href={executives.president.twitter}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="w-9 h-9 flex items-center justify-center rounded-full bg-gray-100 hover:bg-[#128401] hover:text-white transition-colors"
-                      >
-                        <Twitter className="w-4 h-4" />
+                        <img
+                        src="/Link.svg"/>
                       </a>
                     )}
                   </div>
@@ -201,30 +209,43 @@ const Executivepage = () => {
           <section>
             <div className="flex items-center justify-between mb-8">
               <div className="flex items-center gap-3">
-                <Users className="text-green-700"/>
+                <Users className="w-6 h-6 text-[#128401]" />
                 <h2 className="text-2xl font-bold text-gray-900">Executive Council</h2>
               </div>
-              <span className="text-sm text-gray-500">
-                {executives.council.length} Members
+              <div className="">
+              <span className="text-sm text-gray-500 flex-items-center gap-2 font-medium">
+                View All Roles 
+                <img
+                src="/up_arrow.svg"
+                />
               </span>
+              </div>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
               {executives.council.map((member, index) => (
                 <div
                   key={index}
-                  className="bg-white rounded-xl shadow-sm border border-gray-200 p-6 hover:shadow-md transition-shadow"
+                  className="bg-white rounded-2xl shadow-sm border border-gray-200 p-6 hover:shadow-lg transition-all duration-300 hover:-translate-y-1"
                 >
-                <div className= "rounded-full bg-green-50 p-5 m-5">
-                <User className="w-32 h-32 object-cover text-green-200 justify-center "/>
-                </div>
+                  {/* Profile Image with Online Status */}
+                  <div className="relative mb-4">
+                    <div className="w-32 h-32 mx-auto rounded-full overflow-hidden bg-gradient-to-br from-gray-100 to-gray-200 border-4 border-white shadow-md">
+                      <img
+                        src={member.image}
+                        alt={member.name}
+                        className="w-full h-full object-cover"
+                      />
+                    </div>
+                    {/* Online Status Indicator */}
+                   
+                    <div className="absolute bottom-2 right-1/2 transform translate-x-12 w-8 h-8 rounded-full border-4 flex items-center justify-center">
+                     <img
+                    src={member.icon}/>
+                    </div>
+                  </div>
 
-                 {/* <img
-                    src={member.image || '/placeholder-avatar.jpg'}
-                    alt={member.name}
-                    className="w-20 h-20 rounded-lg object-cover mx-auto mb-4"
-                  />*/}
-
+                  {/* Member Info */}
                   <h3 className="text-lg font-bold text-gray-900 text-center mb-1">
                     {member.name}
                   </h3>
@@ -232,17 +253,20 @@ const Executivepage = () => {
                     {member.position}
                   </p>
                   {member.bio && (
-                    <p className="text-gray-600 text-sm text-center mb-4 line-clamp-3">
+                    <p className="text-gray-600 text-sm text-center mb-4 line-clamp-3 leading-relaxed">
                       {member.bio}
                     </p>
                   )}
-                  <div className="flex gap-2 justify-center">
+
+                  {/* Social Icons */}
+                  <div className="flex gap-2 justify-center pt-4 border-t border-gray-100">
                     {member.email && (
                       <a
                         href={`mailto:${member.email}`}
-                        className="w-8 h-8 flex items-center justify-center rounded-full bg-gray-100 hover:bg-[#128401] hover:text-white transition-colors"
+                        className="w-9 h-9 flex items-center justify-center rounded-full bg-[#128401] text-white hover:bg-[#0f6b01] transition-colors shadow-sm"
+                        title="Email"
                       >
-                        <Mail className="w-3.5 h-3.5" />
+                        <Mail className="w-4 h-4" />
                       </a>
                     )}
                     {member.linkedin && (
@@ -250,9 +274,10 @@ const Executivepage = () => {
                         href={member.linkedin}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="w-8 h-8 flex items-center justify-center rounded-full bg-gray-100 hover:bg-[#128401] hover:text-white transition-colors"
+                        className="w-9 h-9 flex items-center justify-center rounded-full bg-[#128401] text-white hover:bg-[#0f6b01] transition-colors shadow-sm"
+                        title="LinkedIn"
                       >
-                        <Linkedin className="w-3.5 h-3.5" />
+                        <Linkedin className="w-4 h-4" />
                       </a>
                     )}
                     {member.twitter && (
@@ -260,9 +285,10 @@ const Executivepage = () => {
                         href={member.twitter}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="w-8 h-8 flex items-center justify-center rounded-full bg-gray-100 hover:bg-[#128401] hover:text-white transition-colors"
+                        className="w-9 h-9 flex items-center justify-center rounded-full bg-[#128401] text-white hover:bg-[#0f6b01] transition-colors shadow-sm"
+                        title="Twitter"
                       >
-                        <Twitter className="w-3.5 h-3.5" />
+                        <Twitter className="w-4 h-4" />
                       </a>
                     )}
                   </div>
