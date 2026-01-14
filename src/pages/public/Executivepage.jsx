@@ -148,7 +148,7 @@ const Executivepage = () => {
 
         {/* President Section */}
         {executives?.president && (
-          <section className="mb-16 mr-5">
+          <section className="mb-16 mr-5 pr-9">
             <div className="flex items-center gap-3 mb-8">
               <img 
               src="/president.svg"/>
