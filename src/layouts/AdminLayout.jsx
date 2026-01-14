@@ -14,6 +14,7 @@ import {
   Menu,
   X,
 } from "lucide-react";
+import { Briefcase2Icon } from "../assets/icons";
 import profileImg from "../assets/images/profile.png";
 import Logo from "../assets/images/nacos-logo.svg";
 
@@ -133,9 +134,19 @@ const AdminLayout = () => {
               <Menu className="w-6 h-6" />
             </button>
 
-            <div className="hidden md:flex items-center gap-2 text-sm text-gray-500">
-              <span className="font-medium text-[#1E293B]">Dashboard</span>
-              {/* You can make this dynamic based on route later */}
+            <div className="flex items-center text-sm text-[#94A3B8]">
+              <Link
+                to="/student/dashboard"
+                className="hover:text-[#1E293B] transition-colors"
+              >
+                <Briefcase2Icon className="size-4.5" />
+              </Link>
+              <span className="mx-2">/</span>
+              <span className="text-[#1E293B] font-medium capitalize text-sm sm:text-base">
+                {[...mainLinks, ...moduleLinks].find((link) =>
+                  location.pathname.startsWith(link.path)
+                )?.name || "Dashboard"}
+              </span>
             </div>
           </div>
 
@@ -180,7 +191,9 @@ const AdminLayout = () => {
 
         {/* DYNAMIC CONTENT AREA */}
         <div className="flex-1 overflow-y-auto p-4 md:p-6 lg:p-8 bg-[#F8FAFC]">
-          <Outlet />
+          <div className="w-full max-w-7xl mx-auto">
+            <Outlet />
+          </div>
         </div>
       </main>
     </div>
