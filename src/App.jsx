@@ -10,7 +10,7 @@ import Events from "./pages/public/Events";
 import Login from "./features/auth/Login";
 import Signup from "./pages/student/Signup";
 import PublicLayout from "./layouts/PublicLayout";
-import StudentDashboardLayout from "./layouts/dashboard/StudentDashboardLayout";
+import StudentDashboardLayout from "./layouts/StudentDashboardLayout";
 import DashboardHome from "./pages/student/dashboard-home";
 import StudentSiwesPage from "./features/student/dashboard/StudentSiwesPage";
 import StudentPaymentReceipt from "./features/student/dashboard/StudentPayementReceipt";
@@ -21,6 +21,7 @@ import AdminLayout from "./layouts/AdminLayout";
 import AdminDashboard from "./features/admin/dashboard/AdminDashboard";
 import AdminPaymentsPage from "./pages/admin/Payments";
 import UserManagement from "./pages/admin/UserManagement";
+import SiwesBoardMgt from "./pages/admin/siwes-board";
 
 function App() {
   return (
@@ -52,6 +53,7 @@ function App() {
           <Route path="/admin/dashboard" element={<AdminDashboard />} />
           <Route path="/admin/users" element={<UserManagement />} />
           <Route path="/admin/payments" element={<AdminPaymentsPage />} />
+          <Route path="/admin/siwes" element={<SiwesBoardMgt />} />
         </Route>
 
         <Route path="/signup" element={<Signup />} />
