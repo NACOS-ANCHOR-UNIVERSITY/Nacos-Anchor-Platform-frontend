@@ -23,7 +23,7 @@ const Landing = () => {
       <Navbar />
       <div>
         {/* ====hero section==== */}
-        <div className="flex w-[1500px] mx-auto items-center mt-[178px] mb-[316px]">
+        <div className="flex w-[1500px] mx-auto items-center mt-[118px] mb-[110px]">
           <div className="w-[808px] mx-auto flex flex-col gap-[32px] items-start">
             <h1 className="font-semibold text-[64px] text-[#4D4D4D]">
               Unlock Your Full Potential as a NACOS Student.
@@ -32,7 +32,7 @@ const Landing = () => {
               Welcome to your new digital home. From lecture notes to exam past
               questions, everything you need is now just a click away.
             </p>
-            <button className="bg-[#138601] rounded-[4px] py-[14px] px-[32px] font-medium text-[16px] text-[#FFFFFF]">
+            <button className="bg-[#138601] rounded-[4px] py-[14px] px-[32px] font-medium text-[16px] text-[#FFFFFF] cursor-pointer">
               Join the Community
             </button>
           </div>
@@ -52,7 +52,7 @@ const Landing = () => {
         </div>
 
         {/* ====Section three==== */}
-        <div className="flex items-center gap-[180px] mt-[69px] w-[1493px] mx-auto">
+        <div className="flex items-center gap-[180px] mt-[49px] w-[1493px] mx-auto">
           <div>
             <img src={secondimg} alt="" />
           </div>
@@ -66,14 +66,14 @@ const Landing = () => {
               the tech industry, providing our students with a centralized
               platform for academic resources, mentorship, and career growth.
             </p>
-            <button className="bg-[#128401] rounded-[4px] py-[14px] px-[32px] font-medium text-[16px] text-[#FFFFFF]">
+            <button className="bg-[#128401] rounded-[4px] py-[14px] px-[32px] font-medium text-[16px] text-[#FFFFFF] cursor-pointer">
               Meet the Excos
             </button>
           </div>
         </div>
 
         {/* ====Section four==== */}
-        <div className="w-[1300px] mx-auto mb-[241px] flex flex-col gap-[16px] mt-[117px] text-center">
+        <div className="w-[1300px] mx-auto mb-[184px] flex flex-col gap-[16px] mt-[67px] text-center">
           <h2 className="font-semibold text-[36px] text-[#000000]">
             Why we are here
           </h2>
@@ -170,10 +170,15 @@ const Landing = () => {
 
         {/* ====Section six==== */}
 
-        <div className="max-w-[1400px] mx-auto mb-[195px] mt-[210px] px-[32px] text-center relative">
-          <h3 className="text-center font-semibold text-[40px] text-[#000000] pb-[181px]">
-            How we work
-          </h3>
+        <div className="max-w-[1400px] mx-auto mb-[195px] mt-[180px] px-[32px] text-center relative">
+          <div className="pb-[81px]">
+            <span>
+              <h3 className="text-center font-semibold text-[40px] text-[#000000]">
+                How we work
+              </h3>
+            </span>
+            <div class="w-[88px] rounded-[7px] border-b-4 border-[#A3DD9A] mx-auto"></div>
+          </div>
           <div className="grid grid-cols-2 gap-[150px] place-items-center">
             <div className="col-span-2 w-[760px] text-center flex flex-col items-center">
               <img src={communicate} alt="" />
@@ -236,7 +241,7 @@ const Landing = () => {
               this platform replaces manual processes with transparency,
               accountability, and speed.
             </p>
-            <button className="bg-[#128401] rounded-[4px] py-[14px] px-[32px] font-medium text-[16px] text-[#FFFFFF]">
+            <button className="bg-[#128401] rounded-[4px] py-[14px] px-[32px] font-medium text-[16px] text-[#FFFFFF] cursor-pointer">
               Explore Features
             </button>
           </div>
@@ -267,8 +272,8 @@ const Landing = () => {
                     </div>
                   </div>
                 </div>
-                <div className="border-[#128401] border-2 bg-[#FFFFFF] rounded-[4px] py-[14px] px-[34px]">
-                  <button className="font-bold text-[14px] text-[#128401]">
+                <div className="border-[#128401] border-2 bg-[#FFFFFF] rounded-[4px] py-[14px] px-[34px] cursor-pointer">
+                  <button className="font-bold text-[14px] text-[#128401] cursor-pointer">
                     Read More
                   </button>
                 </div>
@@ -292,8 +297,8 @@ const Landing = () => {
                     </div>
                   </div>
                 </div>
-                <div className="border-[#128401] border-2 bg-[#FFFFFF] rounded-[4px] py-[14px] px-[34px]">
-                  <button className="font-bold text-[14px] text-[#128401]">
+                <div className="border-[#128401] border-2 bg-[#FFFFFF] rounded-[4px] py-[14px] px-[34px] cursor-pointer">
+                  <button className="font-bold text-[14px] text-[#128401] cursor-pointer">
                     Read More
                   </button>
                 </div>
@@ -317,14 +322,14 @@ const Landing = () => {
                     </div>
                   </div>
                 </div>
-                <div className="border-[#128401] border-2 bg-[#FFFFFF] rounded-[4px] py-[14px] px-[34px]">
-                  <button className="font-bold text-[14px] text-[#128401]">
+                <div className="border-[#128401] border-2 bg-[#FFFFFF] rounded-[4px] py-[14px] px-[34px] cursor-pointer">
+                  <button className="font-bold text-[14px] text-[#128401] cursor-pointer">
                     Read More
                   </button>
                 </div>
               </div>
 
-              <button className="font-bold text-[14px] bg-[#128401] text-[#FFFFFF] rounded-[4px] py-[14px] px-[34px] w-[976px] mx-auto mt-[45px]">
+              <button className="font-bold text-[14px] bg-[#128401] text-[#FFFFFF] rounded-[4px] py-[14px] px-[34px] w-[976px] mx-auto mt-[45px] cursor-pointer">
                 See all events
               </button>
             </div>
