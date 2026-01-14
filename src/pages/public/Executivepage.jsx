@@ -13,7 +13,6 @@ const mockExecutives = {
     bio: "Leading the vision for a digital transformation in the department. Committed to serving every student's interest and bridging the gap between students and the faculty management.",
     email: "president@nacos.edu",
     linkedin: "https://linkedin.com",
-    twitter: "https://twitter.com"
   },
   council: [
     {
@@ -24,7 +23,7 @@ const mockExecutives = {
       bio: "Ensuring smooth operations and suppodting welfare initiatives across all levels.",
       email: "vp@nacos.edu",
       linkedin: "https://linkedin.com",
-      twitter: "https://twitter.com"
+      
     },
     {
       name: "EZIRIM KINGDOM",
@@ -42,7 +41,7 @@ const mockExecutives = {
       icon:"/general_secretary_icon.svg",
       bio: "Overseeing financial operations and ensuring transparency in all transactions.",
       email: "general@nacos.edu",
-      twitter: "https://twitter.com"
+      linkedin:"https://linkedin.com"
     },
     {
       name: "IYANDA JERRIE",
@@ -56,7 +55,8 @@ const mockExecutives = {
     {
       name: "FAITHFUL",
       position: "Legislative Officer I",
-      image: "https://ui-avatars.com/api/?name=Favour+Wilson&size=200&background=128401&color=fff",
+      image: "/legislative_officer_image.png",
+      icon:"/legislative_officer_icon.svg",
       bio: "Public Relations Officer handling media and external communications.",
       email: "legislative@nacos.edu",
       twitter: "https://twitter.com"
@@ -64,14 +64,16 @@ const mockExecutives = {
     {
       name: "NORUWA CALEB",
       position: "Director of Sports",
-      image: "https://ui-avatars.com/api/?name=Daniel+Moore&size=200&background=128401&color=fff",
+      image: "/director_sports_image.png",
+      icon:"/director_sports_icon.svg",
       bio: "Organizing social events and fostering community engagement.",
       email: "sports@nacos.edu"
     },
     {
       name: "OKEOGHENE",
       position: "Welfare Director",
-      image: "https://ui-avatars.com/api/?name=Grace+Taylor&size=200&background=128401&color=fff",
+      image: "/welfare_director_image.png",
+      icon:"/welfare_director_icon.svg",
       bio: "Ensuring the wellbeing and welfare of all NACOS members.",
       email: "welfare@nacos.edu",
       linkedin: "https://linkedin.com"
@@ -79,10 +81,11 @@ const mockExecutives = {
     {
       name: "TREASURE",
       position: "Treasurer",
-      image: "https://ui-avatars.com/api/?name=James+Anderson&size=200&background=128401&color=fff",
+      image: "/treasurer_image.png",
+      icon:"/treasurer_icon.svg",
       bio: "Coordinating sports activities and inter-departmental competitions.",
       email: "treasure@nacos.edu",
-      twitter: "https://twitter.com"
+      linkedin: "https://linkedin.com"
     }
   ]
 };
@@ -145,13 +148,14 @@ const Executivepage = () => {
 
         {/* President Section */}
         {executives?.president && (
-          <section className="mb-16">
+          <section className="mb-16 mr-5">
             <div className="flex items-center gap-3 mb-8">
-              <CheckCircle className="w-6 h-6 text-[#128401]" />
+              <img 
+              src="/president.svg"/>
               <h2 className="text-2xl font-bold text-gray-900">The President</h2>
             </div>
 
-            <div className="bg-white rounded-2xl shadow-sm border border-gray-200 p-8 max-w-5xl mx-auto">
+            <div className="bg-white rounded-2xl shadow-sm border border-gray-200 p-8 max-w-5xl ">
               <div className="flex flex-col md:flex-row gap-8 items-start">
                 {/* President Image */}
                 <div className="relative flex-shrink-0">
@@ -179,10 +183,12 @@ const Executivepage = () => {
                     {executives.president.email && (
                       <a
                         href={`mailto:${executives.president.email}`}
-                        className="w-10 h-10 flex items-center justify-center rounded-full bg-[#128401] text-white hover:bg-[#0f6b01] transition-colors shadow-md"
+                        className="w-10 h-10 flex items-center justify-center rounded-full text-white  transition-colors shadow-md"
                         title="Email"
                       >
-                        <Mail className="w-5 h-5" />
+                        <img
+                        src="/email.svg"
+                        />
                       </a>
                     )}
                     {executives.president.linkedin && (
@@ -209,7 +215,8 @@ const Executivepage = () => {
           <section>
             <div className="flex items-center justify-between mb-8">
               <div className="flex items-center gap-3">
-                <Users className="w-6 h-6 text-[#128401]" />
+                <img 
+                src="/executive.svg"/>
                 <h2 className="text-2xl font-bold text-gray-900">Executive Council</h2>
               </div>
               <div className="">
