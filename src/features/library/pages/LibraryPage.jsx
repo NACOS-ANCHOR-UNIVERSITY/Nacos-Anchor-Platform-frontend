@@ -64,9 +64,7 @@ const LibraryPage = () => {
 
   return (
     <div className="max-w-7xl mx-auto">
-      {/* -----------------------------------------------------------------
-          1. TOP BANNER (Updated: Smaller & Compact)
-         ----------------------------------------------------------------- */}
+    
       <div className="bg-green-50 border border-green-100 rounded-xl p-6 mb-6 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
         <div>
           <h1 className="text-2xl font-bold text-gray-900 mb-1">
@@ -84,9 +82,7 @@ const LibraryPage = () => {
         </Link>
       </div>
 
-      {/* -----------------------------------------------------------------
-          2. CONTENT AREA (Split Layout: Filters Left, Grid Right)
-         ----------------------------------------------------------------- */}
+    
       <div className="flex flex-col lg:flex-row gap-8 items-start">
         {/* --- LEFT SIDEBAR (FILTERS) --- */}
         <aside className="w-full lg:w-64 shrink-0">
