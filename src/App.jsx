@@ -19,6 +19,7 @@ import Portfolio from "./pages/student/Portfolio";
 import SiwesBoard from "./pages/student/siwes-board";
 import AdminLayout from "./layouts/AdminLayout";
 import AdminDashboard from "./features/admin/dashboard/AdminDashboard";
+import UploadResourcePage from "./features/library/pages/UploadResourcePage";
 import AdminPaymentsPage from "./pages/admin/Payments";
 import UserManagement from "./pages/admin/UserManagement";
 import LibraryPage from "./features/library/pages/LibraryPage";
@@ -47,6 +48,10 @@ function App() {
           <Route path={"/student/siwes"} element={<SiwesBoard />} />
           <Route path="/student/library" element={<LibraryPage />} />
           <Route path="/student/settings" element={<Settings />} />
+            <Route
+          path="/student/resources/upload"
+          element={<UploadResourcePage />}
+        />
           <Route path="/student/profile" element={<Portfolio />} />
         </Route>
 
