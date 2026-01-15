@@ -14,7 +14,7 @@ import {
   SearchIcon,
   NotificationIcon,
   BookIcon,
-} from "../../assets/icons";
+} from "../assets/icons";
 
 const StudentDashboardLayout = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);

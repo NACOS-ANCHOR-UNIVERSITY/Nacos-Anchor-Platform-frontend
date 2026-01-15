@@ -17,7 +17,6 @@ import {
   Plus,
 } from "lucide-react";
 
-
 export default function AdminDashboard() {
   const recentActivities = [
     {
@@ -39,7 +38,7 @@ export default function AdminDashboard() {
   ];
 
   return (
-    <div className="max-w-7xl mx-auto">
+    <div className="">
       {/* PAGE HEADER */}
       <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-8 gap-4">
         <div>
@@ -157,7 +156,7 @@ export default function AdminDashboard() {
           sub="Review uploads & chats"
           color="orange"
           stats={[
-            {label: "3 Reports", bg: "bg-red-100", text: "text-red-600"},
+            { label: "3 Reports", bg: "bg-red-100", text: "text-red-600" },
             {
               label: "8 Pending Resources",
               bg: "bg-blue-100",
@@ -293,8 +292,6 @@ export default function AdminDashboard() {
   );
 }
 
-
-
 function ModuleCard({
   title,
   sub,
@@ -305,7 +302,6 @@ function ModuleCard({
   features,
   desc,
 }) {
-  
   const colorMap = {
     green: "bg-green-50 text-green-600 border-green-100",
     orange: "bg-orange-50 text-orange-500 border-orange-100",
@@ -418,7 +414,7 @@ function StatsCard({
                 className={`h-full rounded-full ${
                   color === "green" ? "bg-green-500" : "bg-blue-500"
                 }`}
-                style={{width: `${progress}%`}}
+                style={{ width: `${progress}%` }}
               ></div>
             </div>
             {footer && (
@@ -432,3 +428,4 @@ function StatsCard({
     </div>
   );
 }
+
