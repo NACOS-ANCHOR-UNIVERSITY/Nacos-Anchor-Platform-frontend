@@ -1,11 +1,11 @@
 import {
-  FaPhoneAlt,
-  FaEnvelope,
-  FaMapMarkerAlt,
-  FaTwitter,
-  FaInstagram,
-  FaDiscord,
-} from "react-icons/fa";
+  Instagram,
+  Mail,
+  MapPin,
+  MessageCircle,
+  Phone,
+  Twitter,
+} from "lucide-react";
 
 import InquiryOptions from "../../components/shared/InquiryOptions";
 
@@ -36,19 +36,19 @@ export default function Contact() {
 
           <div className="mt-8 space-y-5 text-sm">
             <div className="flex items-start gap-3">
-              <FaPhoneAlt className="mt-1 shrink-0" />
+              <Phone className="mt-1 shrink-0 w-4 h-4" />
               <span>+234 123 4567 890</span>
             </div>
 
             <div className="flex items-start gap-3">
-              <FaEnvelope className="mt-1 shrink-0" />
+              <Mail className="mt-1 shrink-0 w-4 h-4" />
               <span className="break-all">
                 info@nacosanchor.edu.ng
               </span>
             </div>
 
             <div className="flex items-start gap-3">
-              <FaMapMarkerAlt className="mt-1 shrink-0" />
+              <MapPin className="mt-1 shrink-0 w-4 h-4" />
               <span>
                 Anchor University, Lagos. <br />
                 Ayobo Road, Ipaja.
@@ -59,13 +59,13 @@ export default function Contact() {
           {/* Social Icons */}
           <div className="flex gap-3 mt-10">
             <span className="bg-black p-2 rounded-full cursor-pointer">
-              <FaTwitter />
+              <Twitter className="w-4 h-4" />
             </span>
             <span className="bg-white text-black p-2 rounded-full cursor-pointer">
-              <FaInstagram />
+              <Instagram className="w-4 h-4" />
             </span>
             <span className="bg-black p-2 rounded-full cursor-pointer">
-              <FaDiscord />
+              <MessageCircle className="w-4 h-4" />
             </span>
           </div>
 

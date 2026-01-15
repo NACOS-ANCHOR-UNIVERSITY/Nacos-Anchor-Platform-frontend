@@ -22,6 +22,7 @@ import AdminDashboard from "./features/admin/dashboard/AdminDashboard";
 import AdminPaymentsPage from "./pages/admin/Payments";
 import UserManagement from "./pages/admin/UserManagement";
 import SiwesBoardMgt from "./pages/admin/siwes-board";
+import EventsAndPolls from "./pages/admin/EventsAndPolls";
 
 function App() {
   return (
@@ -53,6 +54,7 @@ function App() {
           <Route path="/admin/dashboard" element={<AdminDashboard />} />
           <Route path="/admin/users" element={<UserManagement />} />
           <Route path="/admin/payments" element={<AdminPaymentsPage />} />
+          <Route path="/admin/events" element={<EventsAndPolls />} />
           <Route path="/admin/siwes" element={<SiwesBoardMgt />} />
         </Route>
 

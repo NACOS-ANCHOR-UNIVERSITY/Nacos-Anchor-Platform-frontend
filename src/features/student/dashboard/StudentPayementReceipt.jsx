@@ -1,14 +1,10 @@
-import React, { useState } from "react";
-import Sidebar from "../../../components/ui/Sidebar";
+import React from "react";
 import WalletSummary from "../payments/WalletSummary";
 import PaymentAlert from "../payments/PaymentAlert";
 import PendingFees from "../payments/PendingFees";
 import PaymentHistory from "../payments/PaymentHistory";
-import PageHeader from "../../../components/ui/PageHeader";
 
 export default function StudentPaymentReceipt() {
-  const [isOpen, setIsOpen] = useState(false);
-
   return (
     <main className="flex-1 relative">
       {/* <Sidebar {...{ isOpen, setIsOpen, active: "Payments" }} /> */}

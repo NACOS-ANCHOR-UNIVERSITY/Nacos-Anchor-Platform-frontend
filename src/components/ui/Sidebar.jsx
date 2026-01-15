@@ -1,5 +1,4 @@
-import { BriefcaseBusinessIcon, CloudUploadIcon, CreditCard, IdCard, LayoutDashboard, LogOut, LucideBookOpenText, Menu, Settings, X } from "lucide-react"
-import React, { useState } from "react"
+import { BriefcaseBusinessIcon, CloudUploadIcon, CreditCard, IdCard, LayoutDashboard, LogOut, LucideBookOpenText, Settings, X } from "lucide-react"
 import NavItem from "./NavItem"
 import NACOSIMG from "../../assets/images/nacossLogo.png"
 import { Link } from "react-router-dom"
