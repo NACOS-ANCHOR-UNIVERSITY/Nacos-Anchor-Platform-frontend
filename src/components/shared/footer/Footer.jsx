@@ -3,12 +3,12 @@ import img2 from "../../../assets/images/Icon.png";
 import icon2 from "../../../assets/icons/Container2.png";
 import icon3 from "../../../assets/icons/Container 3.png";
 import icon4 from "../../../assets/icons/Container 4.png";
-import { Link } from "react-router-dom";
+import {Link} from "react-router-dom";
 
 const Footer = () => {
   return (
     <div className="flex flex-col justify-center mx-auto max-w-[1800x]">
-      <div className="px-[32px] bg-[#FFFFFF] border border-[#E8F4E6] pt-[64px] pb-[32px]">
+      <div className="px-[260px] bg-white border border-[#E8F4E6] pt-[64px] pb-[32px]">
         <div className="grid grid-cols-4 w-[1096px] pb-[48px] mx-auto">
           <div className="flex flex-col w-[238px]">
             <div className="flex items-center gap-[8px]">
