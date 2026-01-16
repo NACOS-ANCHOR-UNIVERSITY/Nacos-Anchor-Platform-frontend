@@ -1,62 +1,62 @@
-import { Link } from "react-router-dom";
-import logo from "../../assets/download.png";
+// src/components/shared/Navbar.jsx
+import { Link, useLocation } from 'react-router-dom';
+import { FaSearch } from 'react-icons/fa';
 
-export default function Navbar() {
+const Navbar = () => {
+  const location = useLocation();
+
+  const navLinks = [
+    { name: 'Home', path: '/' },
+    { name: 'About Us', path: '/about' },
+    { name: 'Executives', path: '/executives' },
+    { name: 'Events', path: '/events' },
+    { name: 'Contact', path: '/contact' },
+  ];
+
   return (
-    <header className="w-full bg-green-50">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 py-4 flex items-center justify-between">
-        
-        {/* LOGO */}
-        <Link to="/" className="flex items-center">
-          <img
-            src={logo}
-            alt="NACOS Anchor University Logo"
-            className="h-8 sm:h-10 w-auto"
-          />
-        </Link>
+    <nav className="bg-white shadow-sm sticky top-0 z-50">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="flex justify-between h-16 items-center">
+          {/* Logo */}
+          <Link to="/" className="flex items-center space-x-2">
+            <img src="/logo-header.png" alt="NACOS National" className="h-8" />
+          </Link>
 
-        {/* NAV LINKS (Desktop only) */}
-        <nav className="hidden md:flex items-center gap-8 text-gray-700 font-medium">
-          <Link to="/" className="hover:text-green-700">
-            Home
-          </Link>
-          <Link to="/about" className="hover:text-green-700">
-            About Us
-          </Link>
-          <Link to="/executives" className="hover:text-green-700">
-            Executives
-          </Link>
-          <Link to="/events" className="hover:text-green-700">
-            Events
-          </Link>
-          <Link
-            to="/contact"
-            className="text-green-700 font-semibold"
-          >
-            Contact
-          </Link>
-        </nav>
-
-        {/* SEARCH + LOGIN */}
-        <div className="flex items-center gap-3 sm:gap-4">
-          
-          {/* Search (hidden on small screens) */}
-          <div className="hidden md:flex items-center bg-green-100 px-4 py-2 rounded-full">
-            <span className="mr-2 text-green-700">🔍</span>
-            <input
-              type="text"
-              placeholder="Search..."
-              className="bg-transparent outline-none text-sm w-32 placeholder-gray-500"
-            />
+          {/* Nav Links – Green "Contact" when active (Matches Image 1) */}
+          <div className="hidden md:flex space-x-6">
+            {navLinks.map((link) => (
+              <Link
+                key={link.path}
+                to={link.path}
+                className={`text-sm font-medium ${
+                  location.pathname === link.path
+                    ? 'text-nacos-green' // 👈 Green when on /contact
+                    : 'text-gray-700 hover:text-nacos-green'
+                }`}
+              >
+                {link.name}
+              </Link>
+            ))}
           </div>
 
-          {/* Login Button */}
-          <button className="bg-green-700 text-white px-4 sm:px-5 py-2 rounded-lg text-sm sm:text-base hover:bg-green-800 transition">
-            Login
-          </button>
+          {/* Search + Login */}
+          <div className="flex items-center space-x-4">
+            <div className="relative ml-4">
+              <input
+                type="text"
+                placeholder="Search executives..."
+                className="pl-10 pr-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-nacos-green"
+              />
+              <FaSearch className="absolute left-3 top-2.5 text-gray-500" />
+            </div>
+            <button className="bg-nacos-green hover:bg-[#0f6a01] text-white px-4 py-2 rounded-md text-sm font-medium">
+              Login
+            </button>
+          </div>
         </div>
-
       </div>
-    </header>
+    </nav>
   );
-}
+};
+
+export default Navbar;
