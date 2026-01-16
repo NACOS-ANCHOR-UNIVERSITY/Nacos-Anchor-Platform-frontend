@@ -86,7 +86,7 @@ const Login = () => {
   };
 
   return (
-    <div className=" bg-slate-100 flex">
+    <div className=" bg-[#F6F7F8] flex">
       {/* Left Side - Illustration */}
       <div className="hidden lg:flex lg:w-1/2  p-6 flex-col justify-between">
         <div>
@@ -129,7 +129,7 @@ const Login = () => {
       </div>
 
       {/* Right Side - Login Form */}
-      <div className=" lg:w-1/2 flex items-center justify-center p-8 pt-32 bg-slate-100">
+      <div className=" lg:w-1/2 flex items-center justify-center p-8 pt-38 bg-[#F6F7F8]">
         <div className="w-full max-w-md">
           {/* Header */}
           <div className="text-left mb-8">
@@ -252,10 +252,10 @@ const Login = () => {
 
               {/* Create Account Link */}
               <div className="text-center">
-              <button className="border border-transparent bg-gray-200 rounded-lg w-full">
+              <button className="border border-[#E2E8F0] bg-[#F1F5F9] p-2 rounded-lg w-full">
                 <Link
                   to="/signup"
-                  className="text-sm font-semibold text-gray-900 hover:text-[#0d7c01] transition-colors"
+                  className="text-md font-bold tracking-tight text-[#0F172A] hover:text-[#0d7c01] transition-colors"
                 >
                   Create New Account
                 </Link>
