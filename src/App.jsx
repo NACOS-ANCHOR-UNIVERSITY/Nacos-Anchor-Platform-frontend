@@ -48,10 +48,10 @@ function App() {
           <Route path={"/student/siwes"} element={<SiwesBoard />} />
           <Route path="/student/library" element={<LibraryPage />} />
           <Route path="/student/settings" element={<Settings />} />
-            <Route
-          path="/student/resources/upload"
-          element={<UploadResourcePage />}
-        />
+          <Route
+            path="/student/resources/upload"
+            element={<UploadResourcePage />}
+          />
           <Route path="/student/profile" element={<Portfolio />} />
         </Route>
 
