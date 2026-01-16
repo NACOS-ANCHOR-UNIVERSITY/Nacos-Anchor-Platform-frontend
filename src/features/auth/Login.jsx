@@ -88,7 +88,7 @@ const Login = () => {
   return (
     <div className="min-h-screen bg-gray-50 flex">
       {/* Left Side - Illustration */}
-      <div className="hidden lg:flex lg:w-1/2 bg-white p-12 flex-col justify-between">
+      <div className="hidden lg:flex lg:w-1/2  p-6 flex-col justify-between">
         <div>
           {/* Logo */}
           <div className="flex items-center gap-2 mb-12">
@@ -119,7 +119,7 @@ const Login = () => {
         </div>
 
         {/* Footer */}
-        <div className="text-sm text-gray-500 flex items-center gap-2 flex-wrap">
+        <div className="text-sm text-[#000000] flex items-center gap-2 flex-wrap">
           <span>© 2026 NACOS Anchor University</span>
           <span>•</span>
           <Link to="/privacy" className="hover:text-gray-700 transition-colors">Privacy Policy</Link>
@@ -129,16 +129,15 @@ const Login = () => {
       </div>
 
       {/* Right Side - Login Form */}
-      <div className="w-full lg:w-1/2 flex items-center justify-center p-8 bg-gray-50">
+      <div className=" lg:w-1/2 flex items-center justify-center p-8 pt-32 bg-gray-50">
         <div className="w-full max-w-md">
           {/* Header */}
-          <div className="text-right mb-8">
-            <h2 className="text-base font-semibold text-gray-900">NACOS Anchor University</h2>
+          <div className="text-left mb-8">
+            <h2 className="text-xl font-bold  text-[#0F172A]">NACOS Anchor University</h2>
           </div>
 
           {/* Login Card */}
-          <div className=" rounded-xl shadow-sm p-8">
-            <h3 className="text-2xl font-bold text-gray-900 mb-2">Welcome Back, Student</h3>
+            <h3 className="text-3xl font-bold  tracking-tight text-gray-900 mb-2">Welcome Back, Student</h3>
             <p className="text-gray-600 text-sm mb-6">
               Enter your credentials to access your student portal.
             </p>
@@ -168,7 +167,7 @@ const Login = () => {
                     name="email"
                     value={formData.email}
                     onChange={handleChange}
-                    placeholder="e.g. 001234 or student@aul.edu.ng"
+                    placeholder="e.g. 19/1234 or student@aul.edu.ng"
                     className={`w-full pl-10 pr-4 py-3 border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#0d7c01] focus:border-transparent transition-all ${
                       errors.email ? 'border-red-500' : 'border-gray-300'
                     }`}
@@ -187,7 +186,7 @@ const Login = () => {
                   </label>
                   <Link
                     to="/forgot-password"
-                    className="text-sm text-[#0d7c01] hover:text-[#0a6001] font-medium"
+                    className="text-sm text-[#138601] hover:text-[#0a6001] text-semibold text-[lexend] font-medium"
                   >
                     Forgot Password?
                   </Link>
@@ -269,7 +268,7 @@ const Login = () => {
                 Contact Support
               </Link>
             </div>
-          </div>
+          
         </div>
       </div>
     </div>
