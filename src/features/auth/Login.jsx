@@ -86,7 +86,7 @@ const Login = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 flex">
+    <div className=" bg-slate-100 flex">
       {/* Left Side - Illustration */}
       <div className="hidden lg:flex lg:w-1/2  p-6 flex-col justify-between">
         <div>
@@ -129,7 +129,7 @@ const Login = () => {
       </div>
 
       {/* Right Side - Login Form */}
-      <div className=" lg:w-1/2 flex items-center justify-center p-8 pt-32 bg-gray-50">
+      <div className=" lg:w-1/2 flex items-center justify-center p-8 pt-32 bg-slate-100">
         <div className="w-full max-w-md">
           {/* Header */}
           <div className="text-left mb-8">
@@ -138,7 +138,7 @@ const Login = () => {
 
           {/* Login Card */}
             <h3 className="text-3xl font-bold  tracking-tight text-gray-900 mb-2">Welcome Back, Student</h3>
-            <p className="text-gray-600 text-sm mb-6">
+            <p className="text-[#64748B] text-sm mb-6">
               Enter your credentials to access your student portal.
             </p>
 
@@ -168,7 +168,7 @@ const Login = () => {
                     value={formData.email}
                     onChange={handleChange}
                     placeholder="e.g. 19/1234 or student@aul.edu.ng"
-                    className={`w-full pl-10 pr-4 py-3 border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#0d7c01] focus:border-transparent transition-all ${
+                    className={`w-full pl-10 pr-4 py-3 border rounded-lg text-sm focus:outline-none focus:ring-2 bg-white focus:ring-[#0d7c01] focus:border-transparent transition-all ${
                       errors.email ? 'border-red-500' : 'border-gray-300'
                     }`}
                   />
@@ -186,7 +186,7 @@ const Login = () => {
                   </label>
                   <Link
                     to="/forgot-password"
-                    className="text-sm text-[#138601] hover:text-[#0a6001] text-semibold text-[lexend] font-medium"
+                    className="text-sm text-[#138601] hover:text-[#0a6001] text-semibold font-medium"
                   >
                     Forgot Password?
                   </Link>
@@ -204,7 +204,7 @@ const Login = () => {
                     value={formData.password}
                     onChange={handleChange}
                     placeholder="Enter your password"
-                    className={`w-full pl-10 pr-12 py-3 border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#0d7c01] focus:border-transparent transition-all ${
+                    className={`w-full pl-10 pr-12 py-3 border rounded-lg text-sm focus:outline-none focus:ring-2 bg-white focus:ring-[#0d7c01] focus:border-transparent transition-all ${
                       errors.password ? 'border-red-500' : 'border-gray-300'
                     }`}
                   />
@@ -225,7 +225,7 @@ const Login = () => {
               <button
                 type="submit"
                 disabled={loginMutation.isPending}
-                className="w-full bg-[#0d7c01] text-white py-3 rounded-lg font-semibold hover:bg-[#0a6001] transition-colors disabled:bg-gray-400 disabled:cursor-not-allowed mt-6"
+                className="w-full bg-[#138601] text-white py-3 rounded-lg font-semibold hover:bg-[#0a6001] transition-colors disabled:bg-gray-400 disabled:cursor-not-allowed mt-6"
               >
                 {loginMutation.isPending ? (
                   <span className="flex items-center justify-center gap-2">
@@ -252,19 +252,21 @@ const Login = () => {
 
               {/* Create Account Link */}
               <div className="text-center">
+              <button className="border border-transparent bg-gray-200 rounded-lg w-full">
                 <Link
                   to="/signup"
                   className="text-sm font-semibold text-gray-900 hover:text-[#0d7c01] transition-colors"
                 >
                   Create New Account
                 </Link>
+                </button>
               </div>
             </form>
 
             {/* Contact Support */}
             <div className="mt-6 text-center text-sm text-gray-600">
               Having trouble logging in?{' '}
-              <Link to="/contact" className="text-[#0d7c01] hover:text-[#0a6001] font-medium">
+              <Link to="/contact" className="text-[#138601] hover:text-[#0a6001] font-medium">
                 Contact Support
               </Link>
             </div>
