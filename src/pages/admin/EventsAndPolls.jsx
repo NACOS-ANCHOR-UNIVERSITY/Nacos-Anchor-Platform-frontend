@@ -4,7 +4,10 @@ import {
   CalendarDays,
   Clock,
   MapPin,
+  Megaphone,
+  MoreVertical,
   Plus,
+  PlusCircle,
   Users,
   Vote,
 } from "lucide-react";
@@ -54,10 +57,29 @@ const EVENTS = [
     location: "University Auditorium",
     people: "156 Registered",
     action: "Manage",
+    avatars: [
+      {
+        label: "AO",
+        bg: "bg-[#16A34A]",
+        avatarSrc: "https://i.pravatar.cc/64?img=11",
+      },
+      {
+        label: "BD",
+        bg: "bg-[#0EA5E9]",
+        avatarSrc: "https://i.pravatar.cc/64?img=12",
+      },
+      {
+        label: "LM",
+        bg: "bg-[#F97316]",
+        avatarSrc: "https://i.pravatar.cc/64?img=13",
+      },
+    ],
+    avatarExtra: "+150",
   },
   {
     id: "evt-2",
     tab: "upcoming",
+    dateVariant: "neutral",
     month: "NOV",
     day: "28",
     badge: "Planning Phase",
@@ -68,6 +90,18 @@ const EVENTS = [
     location: "Main Lab & Hall B",
     people: "Registration Closed",
     action: "Edit",
+    avatars: [
+      {
+        label: "CF",
+        bg: "bg-[#6366F1]",
+        avatarSrc: "https://i.pravatar.cc/64?img=14",
+      },
+      {
+        label: "HN",
+        bg: "bg-[#22C55E]",
+        avatarSrc: "https://i.pravatar.cc/64?img=15",
+      },
+    ],
   },
   {
     id: "evt-3",
@@ -82,6 +116,18 @@ const EVENTS = [
     location: "Google Meet",
     people: "84 Attendees",
     action: "Report",
+    avatars: [
+      {
+        label: "SJ",
+        bg: "bg-[#0EA5E9]",
+        avatarSrc: "https://i.pravatar.cc/64?img=16",
+      },
+      {
+        label: "GP",
+        bg: "bg-[#F97316]",
+        avatarSrc: "https://i.pravatar.cc/64?img=17",
+      },
+    ],
   },
   {
     id: "evt-4",
@@ -96,6 +142,13 @@ const EVENTS = [
     location: "Seminar Room",
     people: "Not Published",
     action: "Edit",
+    avatars: [
+      {
+        label: "KM",
+        bg: "bg-[#22C55E]",
+        avatarSrc: "https://i.pravatar.cc/64?img=18",
+      },
+    ],
   },
 ];
 
@@ -142,7 +195,7 @@ const POLLS = [
 function StatCard(props) {
   const { label, value, Icon, iconBg, iconColor } = props;
   return (
-    <div className="bg-white border border-[#F1F5F9] shadow-sm rounded-3xl p-5 flex items-center gap-4">
+    <div className="bg-white border border-[#E2E8F0] shadow-sm rounded-2xl px-5 py-4 flex items-center gap-4">
       <span
         className={`size-12 rounded-2xl flex items-center justify-center ${iconBg}`}
       >
@@ -161,10 +214,10 @@ function TabButton({ active, onClick, children }) {
     <button
       type="button"
       onClick={onClick}
-      className={`px-3 py-1.5 rounded-full text-xs font-semibold transition-colors ${
+      className={`h-7 px-3 rounded-full text-[11px] font-semibold transition-colors ${
         active
-          ? "bg-[#138601] text-white"
-          : "bg-white border border-[#E2E8F0] text-[#64748B] hover:text-[#0F172A]"
+          ? "bg-white text-[#0F172A] shadow-sm"
+          : "bg-transparent text-[#64748B] hover:text-[#0F172A]"
       }`}
     >
       {children}
@@ -173,41 +226,60 @@ function TabButton({ active, onClick, children }) {
 }
 
 function EventCard({ event }) {
+  const dateBgClass = useMemo(() => {
+    if (event.dateVariant === "neutral") {
+      return "bg-[#F8FAFC] border-[#E2E8F0] text-[#64748B]";
+    }
+
+    switch (event.tab) {
+      case "upcoming":
+        return "bg-[#F0FDF4] border-[#BBF7D0] text-[#166534]";
+      case "past":
+        return "bg-[#F8FAFC] border-[#E2E8F0] text-[#64748B]";
+      case "drafts":
+        return "bg-[#FEF9C3] border-[#FDE68A] text-[#854D0E]";
+      default:
+        return "bg-[#F8FAFC] border-[#E2E8F0] text-[#64748B]";
+    }
+  }, [event.dateVariant, event.tab]);
+
+  function AvatarCircle() {
+    return (
+      <span
+        className="size-7 rounded-full border-2 border-white bg-[#E2E8F0]"
+      >
+      </span>
+    );
+  }
+
   return (
-    <div className="bg-white border border-[#F1F5F9] shadow-sm rounded-3xl p-5">
+    <div className="bg-white border border-[#E2E8F0] shadow-sm rounded-2xl p-4">
       <div className="flex gap-4">
-        <div className="flex flex-col items-center justify-center w-14 shrink-0 rounded-2xl bg-[#F8FAFC] border border-[#E2E8F0] py-3">
-          <p className="text-[10px] font-bold text-[#64748B]">{event.month}</p>
-          <p className="text-xl font-extrabold text-[#0F172A] leading-none">
+        <div
+          className={`flex flex-col items-center justify-center w-16 h-16 shrink-0 rounded-2xl border ${dateBgClass}`}
+        >
+          <p className="text-[11px] font-bold uppercase leading-none">
+            {event.month}
+          </p>
+          <p className="mt-1 text-2xl font-extrabold leading-none">
             {event.day}
           </p>
         </div>
 
         <div className="flex-1 min-w-0">
-          <div className="flex items-start justify-between gap-4">
-            <div className="min-w-0">
-              <span
-                className={`inline-flex items-center px-3 py-1 rounded-full text-[11px] font-semibold ${event.badgeClass}`}
-              >
-                {event.badge}
-              </span>
-              <h3 className="mt-2 text-[#0F172A] font-bold text-base md:text-lg truncate">
-                {event.title}
-              </h3>
-              <p className="mt-1 text-sm text-[#64748B] line-clamp-2">
-                {event.desc}
-              </p>
-            </div>
+          <span
+            className={`inline-flex items-center px-3 py-1 rounded-full text-[11px] font-semibold ${event.badgeClass}`}
+          >
+            {event.badge}
+          </span>
+          <h3 className="mt-2 text-[#0F172A] font-bold text-[15px] md:text-base">
+            {event.title}
+          </h3>
+          <p className="mt-1 text-[13px] text-[#64748B] line-clamp-2">
+            {event.desc}
+          </p>
 
-            <button
-              type="button"
-              className="shrink-0 px-4 py-2 rounded-xl border border-[#E2E8F0] bg-white text-sm font-semibold text-[#334155] hover:bg-[#F8FAFC]"
-            >
-              {event.action}
-            </button>
-          </div>
-
-          <div className="mt-3 flex flex-wrap items-center gap-x-4 gap-y-2 text-xs text-[#64748B]">
+          <div className="mt-3 flex flex-wrap items-center gap-x-4 gap-y-2 text-[11px] text-[#64748B]">
             <span className="inline-flex items-center gap-1">
               <Clock className="w-3.5 h-3.5" />
               {event.time}
@@ -222,6 +294,44 @@ function EventCard({ event }) {
             </span>
           </div>
         </div>
+
+        <div className="shrink-0 flex items-stretch gap-3">
+          <button
+            type="button"
+            className="size-7 rounded-lg border border-[#E2E8F0] bg-white grid place-items-center text-[#64748B] hover:bg-[#F8FAFC] mt-0.5"
+          >
+            <MoreVertical className="w-4 h-4" />
+          </button>
+
+          <div className="flex flex-col justify-between items-end pl-3 border-l border-[#E2E8F0]">
+            <div className="flex items-center gap-2">
+              {event.avatars?.length ? (
+                <div className="flex -space-x-2">
+                  {event.avatars.map((avatar) => (
+                    <AvatarCircle key={avatar.label} />
+                  ))}
+                </div>
+              ) : null}
+
+              {event.avatarExtra ? (
+                <span className="h-7 px-2 rounded-full bg-[#F1F5F9] text-[#64748B] text-[10px] font-bold border border-[#E2E8F0]">
+                  {event.avatarExtra}
+                </span>
+              ) : null}
+            </div>
+
+            <button
+              type="button"
+              className={`h-7 px-3.5 rounded-lg text-[11px] font-semibold transition-colors ${
+                event.action === "Manage"
+                  ? "bg-[#138601] text-white hover:bg-green-700"
+                  : "border border-[#E2E8F0] bg-white text-[#334155] hover:bg-[#F8FAFC]"
+              }`}
+            >
+              {event.action}
+            </button>
+          </div>
+        </div>
       </div>
     </div>
   );
@@ -229,7 +339,7 @@ function EventCard({ event }) {
 
 function PollCard({ poll }) {
   return (
-    <div className="bg-white border border-[#F1F5F9] shadow-sm rounded-3xl p-5">
+    <div className="bg-white border border-[#E2E8F0] shadow-sm rounded-3xl p-5">
       <div className="flex items-start justify-between gap-4">
         <h3 className="text-sm font-bold text-[#0F172A]">{poll.title}</h3>
         <span
@@ -271,21 +381,24 @@ export default function EventsAndPolls() {
   const [question, setQuestion] = useState("");
   const [options, setOptions] = useState(["", ""]);
 
-  const visibleEvents = useMemo(
-    () => EVENTS.filter((evt) => evt.tab === tab),
-    [tab]
-  );
+  const visibleEvents = useMemo(() => {
+    if (tab === "upcoming") {
+      return EVENTS.filter((evt) => evt.tab !== "drafts");
+    }
+
+    return EVENTS.filter((evt) => evt.tab === tab);
+  }, [tab]);
 
   return (
-    <div className="flex flex-col gap-6">
+    <div className="max-w-7xl mx-auto flex flex-col gap-6">
+
       <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-4">
         <span className="flex flex-col gap-1">
           <h1 className="text-[#0F172A] font-bold text-2xl lg:text-3xl">
-            Events &amp; Polls
+            Events & Polls
           </h1>
           <p className="text-sm md:text-base text-[#64748B]">
-            Manage department events, track attendance, and gather student
-            feedback.
+            Manage department events, track attendance, and gather student feedback.
           </p>
         </span>
 
@@ -324,9 +437,12 @@ export default function EventsAndPolls() {
       <div className="grid grid-cols-1 xl:grid-cols-3 gap-6">
         <section className="xl:col-span-2 flex flex-col gap-4">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-            <h2 className="text-[#0F172A] font-bold text-lg">Scheduled Events</h2>
+            <h2 className="text-[#0F172A] font-bold text-lg inline-flex items-center gap-2">
+              <Megaphone className="w-[22px] h-[22px] text-[#138601]" />
+              Scheduled Events
+            </h2>
 
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-1 p-1 rounded-full bg-[#F1F5F9] border border-[#E2E8F0]">
               <TabButton active={tab === "upcoming"} onClick={() => setTab("upcoming")}>
                 Upcoming
               </TabButton>
@@ -347,11 +463,19 @@ export default function EventsAndPolls() {
         </section>
 
         <aside className="xl:col-span-1 flex flex-col gap-6">
-          <section className="bg-white border border-[#F1F5F9] shadow-sm rounded-3xl p-5">
-            <h2 className="text-[#0F172A] font-bold text-lg">Polls &amp; Voting</h2>
+          <section className="flex flex-col gap-6">
+            <h2 className="text-[#0F172A] font-bold text-lg inline-flex items-center gap-2">
+              <span className="size-6 rounded-md border border-[#BBF7D0] bg-[#F0FDF4] grid place-items-center">
+                <BarChart3 className="w-4 h-4 text-[#138601]" />
+              </span>
+              Polls & Voting
+            </h2>
 
-            <div className="mt-4 bg-[#F8FAFC] border border-[#E2E8F0] rounded-3xl p-4">
-              <p className="text-sm font-bold text-[#0F172A]">Quick Poll Creator</p>
+            <div className="mt-4 bg-[#F0FDF4] border border-[#BBF7D0] rounded-2xl p-4">
+              <div className="flex items-center gap-2">
+                <PlusCircle className="w-4 h-4 text-[#166534]" />
+                <p className="text-sm font-bold text-[#166534]">Quick Poll Creator</p>
+              </div>
 
               <div className="mt-3 flex flex-col gap-2">
                 <input
@@ -378,9 +502,10 @@ export default function EventsAndPolls() {
                 <button
                   type="button"
                   onClick={() => setOptions((prev) => [...prev, ""])}
-                  className="w-max text-xs font-semibold text-[#16A34A]"
+                  className="w-max text-xs font-semibold text-[#16A34A] flex items-center gap-1"
                 >
-                  + Add another option
+                  <Plus className="w-3 h-3" />
+                  Add another option
                 </button>
 
                 <div className="mt-1 flex items-center justify-between">
@@ -389,7 +514,7 @@ export default function EventsAndPolls() {
                   </p>
                   <button
                     type="button"
-                    className="px-4 py-2 rounded-xl bg-[#138601] text-white text-xs font-semibold"
+                    className="px-4 py-2 rounded-xl bg-[#138601] text-white text-xs font-semibold shadow-sm"
                   >
                     Launch Poll
                   </button>
@@ -398,9 +523,11 @@ export default function EventsAndPolls() {
             </div>
           </section>
 
-          {POLLS.map((p) => (
-            <PollCard key={p.id} poll={p} />
-          ))}
+          <div className="flex flex-col gap-4">
+            {POLLS.map((p) => (
+              <PollCard key={p.id} poll={p} />
+            ))}
+          </div>
         </aside>
       </div>
     </div>
