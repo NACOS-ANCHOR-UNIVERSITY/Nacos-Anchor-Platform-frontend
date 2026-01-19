@@ -21,6 +21,9 @@ import AdminLayout from "./layouts/AdminLayout";
 import AdminDashboard from "./features/admin/dashboard/AdminDashboard";
 import UploadResourcePage from "./features/library/pages/UploadResourcePage";
 import AdminPaymentsPage from "./pages/admin/Payments";
+import SignupStep1 from "./pages/public/signup/signup.jsx";
+import SignupStep2 from "./pages/public/signup/signup2.jsx";
+
 import UserManagement from "./pages/admin/UserManagement";
 import LibraryPage from "./features/library/pages/LibraryPage";
 import SiwesBoardMgt from "./pages/admin/siwes-board";
@@ -63,8 +66,12 @@ function App() {
           <Route path="/admin/siwes" element={<SiwesBoardMgt />} />
         </Route>
 
-        <Route path="/signup" element={<Signup />} />
+        {/* <Route path="/signup" element={<Signup />} /> */}
         <Route path="/login" element={<Login />} />
+        <Route path="/" element={<Navigate to="/signup" replace />} />
+        <Route path="/signup" element={<SignupStep1 />} />
+        <Route path="/signup/academic-details" element={<SignupStep2 />} />
+        <Route path="*" element={<Navigate to="/signup" replace />} />
       </Routes>
     </>
   );
