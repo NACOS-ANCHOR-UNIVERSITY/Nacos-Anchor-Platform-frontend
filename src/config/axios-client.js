@@ -1,9 +1,10 @@
 import axios from "axios";
 
 const client = axios.create({
-  baseURL: import.meta.env.VITE_API_BASE_URL || "http://localhost:8000/api",
+  baseURL:
+    import.meta.env.VITE_API_BASE_URL ||
+    "https://nacos.nextgenerationones.org/api",
 });
-
 
 client.interceptors.request.use((config) => {
   const token = localStorage.getItem("ACCESS_TOKEN");
@@ -17,12 +18,13 @@ client.interceptors.request.use((config) => {
 client.interceptors.response.use(
   (response) => response,
   (error) => {
-    const {response} = error;
+    const { response } = error;
     if (response && response.status === 401) {
       localStorage.removeItem("ACCESS_TOKEN");
     }
     throw error;
-  }
+  },
 );
 
 export default client;
+
