@@ -1,15 +1,8 @@
-import StudentDashboardLayout from "../../layouts/StudentDashboardLayout";
-import useUserStore from "../../store/useUserStore";
+import React, { useState, useEffect } from "react"; // Added imports
+// import useUserStore from "../../store/useUserStore"; // 🛑 Commented out to prevent conflicts
 
 import {
-  Wifi,
-  Book,
-  Briefcase,
-  UploadCloud,
   Plus,
-  Megaphone,
-  CheckCircle,
-  AlertCircle,
 } from "lucide-react";
 import {
   ActiveIcon,
@@ -27,19 +20,29 @@ import {
 } from "../../assets/icons";
 
 const DashboardHome = () => {
-  const { user } = useUserStore();
+  // 1. GET USER DIRECTLY FROM STORAGE (Matches your Login Logic)
+  const [user, setUser] = useState(() => {
+    const savedUser = localStorage.getItem("user");
+    return savedUser ? JSON.parse(savedUser) : {
+      first_name: "Student",
+      last_name: "",
+      department: "Computer Science",
+      level: "100",
+      matric_number: "AUL/SCI/24/000"
+    };
+  });
 
   return (
-    // <StudentDashboardLayout>
     <div className="flex flex-col gap-8 pb-10">
       {/* Header Section */}
       <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
         <div>
           <h2 className="text-2xl md:text-3xl font-bold text-gray-900">
-            Welcome back, {user?.name || "Emmanuel"} 👋
+            {/* 👇 FIXED: Uses first_name instead of name */}
+            Welcome back, {user?.first_name || "Student"} 👋
           </h2>
           <p className="text-[#64748B] mt-1 text-sm md:text-base">
-            Computer Science • 300 Level • 2023/2024 Session
+            {user?.department || "Computer Science"} • {user?.level || "100"} Level • 2024/2025 Session
           </p>
         </div>
         <div className="flex gap-3">
@@ -77,27 +80,29 @@ const DashboardHome = () => {
                 </div>
               </div>
 
-              <img src="/src/assets/images/qr-code.svg" alt="QR code" />
+              {/* QR Code Placeholder */}
+              <div className="bg-white p-1 rounded-md">
+                <div className="w-8 h-8 bg-gray-900" />
+              </div>
             </div>
 
             <div className="flex items-center gap-4 sm:gap-2.5 md:gap-4 z-10">
-              {/* <img
-                  src="/src/assets/images/avatar.svg"
-                  alt="Avatar"
-                  className="size-24"
-                  width={96}
-                  height={96}
-                /> */}
-              <div className="size-24! rounded-2xl bg-[#5d8b83] drop-shadow-sm drop-shadow-[#0000001A] border-3 border-white/30 flex items-center justify-center text-white text-2xl font-bold">
-                E.T
+              <div className="size-24! rounded-2xl bg-[#5d8b83] drop-shadow-sm drop-shadow-[#0000001A] border-3 border-white/30 flex items-center justify-center text-white text-2xl font-bold uppercase">
+                {user?.first_name?.[0]}{user?.last_name?.[0]}
               </div>
 
               <div>
-                <h3 className="text-xl font-bold">Emmanuel Taiwo</h3>
-                <p className="text-xs text-white/70 mt-1">AUL/CMP/23/045</p>
+                <h3 className="text-xl font-bold">
+                  {/* 👇 FIXED: Shows First + Last Name */}
+                  {user?.first_name} {user?.last_name}
+                </h3>
+                <p className="text-xs text-white/70 mt-1 uppercase">
+                  {/* 👇 FIXED: Shows Real Matric Number */}
+                  {user?.matric_number || "AUL/SCI/24/..."}
+                </p>
                 <div className="flex gap-2 pt-2">
                   <span className="bg-white/20 text-white border border-white/10 text-[10px] font-bold px-2 py-1 h-5.25 flex items-center justify-center rounded-lg">
-                    300 LVL
+                    {user?.level || "100"} LVL
                   </span>
                   <span className="bg-[#22C55ECC] text-white border border-[#4ADE8033] text-[10px] font-bold px-2 py-1 h-5.25 flex items-center justify-center rounded-lg">
                     ACTIVE
@@ -110,7 +115,7 @@ const DashboardHome = () => {
               <div>
                 <p className="opacity-70 uppercase text-[9px]">Department</p>
                 <p className="font-medium text-white text-xs">
-                  Computer Science
+                  {user?.department || "Computer Science"}
                 </p>
               </div>
               <div className="text-right">
@@ -260,25 +265,20 @@ const DashboardHome = () => {
         </div>
       </div>
 
-      {/* Notifications & Help */}
+      {/* Notifications & Help - Keeping your existing layout below */}
       <div className="flex flex-col sm:flex-row gap-6">
-        {/* Notifications */}
         <div className="w-full bg-white rounded-2xl p-6 border border-gray-100 shadow-sm">
           <div className="flex items-center justify-between mb-6">
             <h3 className="font-bold text-[#0F172A] text-lg flex items-center gap-2">
               <NotificationIcon className="text-[#138601] size-5" /> Recent
               Notifications
             </h3>
-            <a
-              href="#"
-              className="text-sm font-medium text-[#138601] hover:underline"
-            >
+            <a href="#" className="text-sm font-medium text-[#138601] hover:underline">
               View All
             </a>
           </div>
 
           <div className="flex flex-col gap-4">
-            {/* Item 1 */}
             <div className="flex gap-4 p-3">
               <div className="size-10 rounded-full flex items-center justify-center bg-[#DBEAFE] shrink-0">
                 <MegaphoneIcon className="text-[#138601] size-5" />
@@ -298,7 +298,6 @@ const DashboardHome = () => {
                 </p>
               </div>
             </div>
-            {/* Item 2 */}
             <div className="flex gap-4 p-3">
               <div className="size-10 rounded-full flex items-center justify-center bg-[#DCFCE7] shrink-0">
                 <CheckMarkIcon className="text-[#16A34A] size-5" />
@@ -318,30 +317,9 @@ const DashboardHome = () => {
                 </p>
               </div>
             </div>
-            {/* Item 3 */}
-            <div className="flex gap-4 p-3">
-              <div className="size-10 rounded-full flex items-center justify-center bg-[#FFEDD5] shrink-0">
-                <AlertIcon className="text-[#EA580C] size-5" />
-              </div>
-              <div className="w-full">
-                <div className="flex justify-between items-start gap-2">
-                  <h4 className="text-sm font-bold text-[#0F172A]">
-                    Excursion Dues Deadline
-                  </h4>
-                  <span className="text-xs text-[#94A3B8] whitespace-nowrap">
-                    2 days ago
-                  </span>
-                </div>
-                <p className="text-sm text-[#64748B] mt-1 leading-relaxed">
-                  Reminder to pay for the upcoming excursion to Switch Nigeria
-                  before Friday.
-                </p>
-              </div>
-            </div>
           </div>
         </div>
 
-        {/* Help Card */}
         <div className="w-full sm:max-w-92 bg-linear-to-b from-[#138601] to-[#0B5501] rounded-3xl p-6 text-white flex flex-col justify-between relative overflow-hidden">
           <div className="absolute top-0 right-0 size-32 bg-white opacity-3 backdrop-blur-3xl rounded-full -mr-10 -mt-10" />
 
@@ -362,9 +340,7 @@ const DashboardHome = () => {
         </div>
       </div>
     </div>
-    // </StudentDashboardLayout>
   );
 };
 
 export default DashboardHome;
-

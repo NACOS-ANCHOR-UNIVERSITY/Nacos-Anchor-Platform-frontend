@@ -1,25 +1,33 @@
 import axios from "axios";
+// 👇 Import your store here so Axios can talk to it
+import useUserStore from "../store/useUserStore";
 
 const client = axios.create({
-  baseURL: import.meta.env.VITE_API_BASE_URL || "http://localhost:8000/api",
+  // ⚠️ Updated to match the API documentation you shared earlier
+  baseURL: "/api",
+  headers: {
+    "Accept": "application/json",
+  },
 });
 
-
 client.interceptors.request.use((config) => {
-  const token = localStorage.getItem("ACCESS_TOKEN");
+  // 👇 CHANGE: Read the token from the Zustand Store directly
+  const token = useUserStore.getState().token;
+
   if (token) {
     config.headers.Authorization = `Bearer ${token}`;
   }
   return config;
 });
 
-//this will automatically log it out when ther's 401 error
 client.interceptors.response.use(
   (response) => response,
   (error) => {
-    const {response} = error;
+    const { response } = error;
     if (response && response.status === 401) {
-      localStorage.removeItem("ACCESS_TOKEN");
+      // 👇 CHANGE: Call the store's logout function
+      // This correctly updates the UI AND clears localStorage at the same time
+      useUserStore.getState().logout();
     }
     throw error;
   }

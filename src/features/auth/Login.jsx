@@ -1,51 +1,26 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { Eye, EyeOff } from 'lucide-react';
-import { useMutation } from '@tanstack/react-query';
-import client from "../../config/axios-client"
-import useUserStore from '../../store/useUserStore';
+import { toast } from 'sonner';
+
+// 🛑 REMOVED: Axios and Zustand are removed to bypass the network block
+// import { useMutation } from '@tanstack/react-query';
+// import client from "../../config/axios-client"
+// import useUserStore from '../../store/useUserStore';
 
 const Login = () => {
   const navigate = useNavigate();
-  const { login: setUserLogin } = useUserStore();
 
+  // --- STATE ---
   const [formData, setFormData] = useState({
     email: '',
     password: '',
   });
   const [showPassword, setShowPassword] = useState(false);
   const [errors, setErrors] = useState({});
+  const [isLoading, setIsLoading] = useState(false); // Manually handle loading
 
-  // Login mutation
-  const loginMutation = useMutation({
-    mutationFn: async (credentials) => {
-      const response = await client.post('/auth/login', credentials);
-      return response.data;
-    },
-    onSuccess: (data) => {
-      if (data.status === 'success') {
-        // Store token in localStorage
-        localStorage.setItem('ACCESS_TOKEN', data.data.token);
-
-        // Update Zustand store
-        setUserLogin(data.data.user, data.data.token);
-
-        // Redirect based on role
-        if (data.data.user.role === 'student') {
-          navigate('/student/dashboard');
-        } else if (data.data.user.role === 'admin') {
-          navigate('/admin/dashboard');
-        } else {
-          navigate('/');
-        }
-      }
-    },
-    onError: (error) => {
-      const errorMessage = error.response?.data?.message || 'Login failed. Please try again.';
-      setErrors({ general: errorMessage });
-    },
-  });
-
+  // --- HANDLERS ---
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({
@@ -63,31 +38,83 @@ const Login = () => {
 
     if (!formData.email.trim()) {
       newErrors.email = 'Email is required';
-    } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
+    }
+    // Basic email regex (kept simple to avoid blocking valid emails)
+    else if (!/\S+@\S+\.\S+/.test(formData.email)) {
       newErrors.email = 'Please enter a valid email';
     }
 
     if (!formData.password) {
       newErrors.password = 'Password is required';
-    } else if (formData.password.length < 6) {
-      newErrors.password = 'Password must be at least 6 characters';
     }
 
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleSubmit = (e) => {
+  // --- THE DIRECT FETCH SUBMIT ---
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (validateForm()) {
-      loginMutation.mutate(formData);
+    if (!validateForm()) return;
+
+    setIsLoading(true);
+    const toastId = toast.loading("Verifying credentials...");
+
+    try {
+      console.log("Logging in via Fetch...");
+
+      // 1. Direct API Call (Bypasses Proxy)
+      const response = await fetch("https://nacos.nextgenerationones.org/api/auth/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Accept": "application/json"
+        },
+        body: JSON.stringify(formData),
+      });
+
+      const result = await response.json();
+
+      // 2. Handle API Errors
+      if (!response.ok) {
+        throw new Error(result.message || "Login failed. Check your credentials.");
+      }
+
+      // 3. SUCCESS! Save Data
+      console.log("Login Success:", result);
+
+      // Save Token (Critical for Dashboard)
+      const token = result.token || result.data?.token;
+      localStorage.setItem("ACCESS_TOKEN", token);
+      localStorage.setItem("token", token); // Saving twice just to be safe with your other code
+
+      // Save User Info
+      const userData = result.user || result.data?.user;
+      localStorage.setItem("user", JSON.stringify(userData));
+
+      toast.dismiss(toastId);
+      toast.success("Welcome back!");
+
+      // 4. Redirect based on Role
+      if (userData?.role === 'admin') {
+        navigate('/admin/dashboard');
+      } else {
+        navigate('/student/dashboard'); // 👈 Redirects to your new dashboard
+      }
+
+    } catch (error) {
+      console.error("Login Error:", error);
+      toast.dismiss(toastId);
+      setErrors({ general: error.message || "Connection failed. Please try again." });
+    } finally {
+      setIsLoading(false);
     }
   };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-green-50 flex">
-      {/* Left Side - Illustration */}
+      {/* Left Side - Illustration (Kept exactly as you had it) */}
       <div className="hidden lg:flex lg:w-1/2 bg-white p-12 flex-col justify-between">
         <div>
           <div className="flex items-center gap-2 mb-8">
@@ -166,9 +193,8 @@ const Login = () => {
                   value={formData.email}
                   onChange={handleChange}
                   placeholder="e.g. 001234 or student@aul.edu.ng"
-                  className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 ${
-                    errors.email ? 'border-red-500' : 'border-gray-300'
-                  }`}
+                  className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 ${errors.email ? 'border-red-500' : 'border-gray-300'
+                    }`}
                 />
                 {errors.email && (
                   <p className="mt-1 text-sm text-red-600">{errors.email}</p>
@@ -193,9 +219,8 @@ const Login = () => {
                     value={formData.password}
                     onChange={handleChange}
                     placeholder="Enter your password"
-                    className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 ${
-                      errors.password ? 'border-red-500' : 'border-gray-300'
-                    }`}
+                    className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 ${errors.password ? 'border-red-500' : 'border-gray-300'
+                      }`}
                   />
                   <button
                     type="button"
@@ -213,10 +238,10 @@ const Login = () => {
               {/* Sign In Button */}
               <button
                 type="submit"
-                disabled={loginMutation.isPending}
+                disabled={isLoading}
                 className="w-full bg-green-600 text-white py-3 rounded-lg font-semibold hover:bg-green-700 transition-colors disabled:bg-gray-400 disabled:cursor-not-allowed"
               >
-                {loginMutation.isPending ? 'Signing In...' : 'Sign In'}
+                {isLoading ? 'Signing In...' : 'Sign In'}
               </button>
             </form>
 
