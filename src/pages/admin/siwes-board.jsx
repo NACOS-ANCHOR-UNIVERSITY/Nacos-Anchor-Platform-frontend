@@ -8,11 +8,42 @@ import {
   SettingsIcon,
 } from "../../assets/icons";
 import { Link } from "react-router-dom";
+
 import ManageListings from "@/components/admin/siwes-board/ManageListing";
 import PostNewOpportunity from "@/components/admin/siwes-board/PostNewOpportunity";
 import ModerationQueue from "@/components/admin/siwes-board/ModerationQueue";
+import { useEffect, useState } from "react";
+import { getSiwesBoardData } from "@/features/admin/siwes/api";
+import Spinner from "@/components/ui/Spinner";
+import Skeleton from "@/components/ui/Skeleton";
 
 const SiwesBoardMgt = () => {
+  const [loading, setLoading] = useState(true);
+  const [metrics, setMetrics] = useState({
+    active_opportunities: 0,
+    pending_logs: 0,
+    placed_students: 0,
+  });
+  const [moderationQueue, setModerationQueue] = useState([]);
+  const [listings, setListings] = useState([]);
+
+  const fetchBoardData = () => {
+    setLoading(true);
+    getSiwesBoardData()
+      .then((res) => {
+        if (res?.status === "success" && res.data) {
+          setMetrics(res.data.metrics || {});
+          setModerationQueue(res.data.moderation_queue || []);
+          setListings(res.data.listings || []);
+        }
+      })
+      .finally(() => setLoading(false));
+  };
+
+  useEffect(() => {
+    fetchBoardData();
+  }, []);
+
   return (
     <div className="flex flex-col gap-6">
       {/* header */}
@@ -46,7 +77,13 @@ const SiwesBoardMgt = () => {
             <p className="text-[#64748B] font-bold uppercase">
               Active Opportunities
             </p>
-            <p className="text-[#0F172A] text-2xl font-bold">12</p>
+            <p className="text-[#0F172A] text-2xl font-bold">
+              {loading ? (
+                <Skeleton className="h-7 w-10" />
+              ) : (
+                metrics.active_opportunities
+              )}
+            </p>
           </span>
         </div>
         <div className="bg-white border border-[#F1F5F9] drop-shadow-sm hover:drop-shadow-none transition-all duration-100 flex items-center gap-4 p-6 rounded-3xl">
@@ -55,7 +92,13 @@ const SiwesBoardMgt = () => {
           </span>
           <span>
             <p className="text-[#64748B] font-bold uppercase">Pending Logs</p>
-            <p className="text-[#0F172A] text-2xl font-bold">45</p>
+            <p className="text-[#0F172A] text-2xl font-bold">
+              {loading ? (
+                <Skeleton className="h-7 w-10" />
+              ) : (
+                metrics.pending_logs
+              )}
+            </p>
           </span>
         </div>
         <div className="bg-white border border-[#F1F5F9] drop-shadow-sm hover:drop-shadow-none transition-all duration-100 flex items-center gap-4 p-6 rounded-3xl">
@@ -66,7 +109,13 @@ const SiwesBoardMgt = () => {
             <p className="text-[#64748B] font-bold uppercase">
               Placed Students
             </p>
-            <p className="text-[#0F172A] text-2xl font-bold">128</p>
+            <p className="text-[#0F172A] text-2xl font-bold">
+              {loading ? (
+                <Skeleton className="h-7 w-10" />
+              ) : (
+                metrics.placed_students
+              )}
+            </p>
           </span>
         </div>
       </div>
@@ -76,16 +125,15 @@ const SiwesBoardMgt = () => {
         {/* column 1 */}
         <div className="flex-1 w-full flex flex-col gap-6">
           {/* post new opportunity */}
-          <PostNewOpportunity />
-
+          <PostNewOpportunity onSuccess={fetchBoardData} />
           {/* manage listing */}
-          <ManageListings />
+          <ManageListings listings={listings} loading={loading} />
         </div>
 
         {/* column 2 */}
         <div className="flex-none w-full xl:max-w-102.5 flex flex-col md:flex-row xl:flex-col gap-6">
           {/* moderation */}
-          <ModerationQueue />
+          <ModerationQueue queue={moderationQueue} loading={loading} />
 
           {/* quick actions */}
           <div className="w-full rounded-3xl drop-shadow-sm bg-white p-5 border border-[#F1F5F9] flex flex-col gap-4">
