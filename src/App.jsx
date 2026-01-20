@@ -25,6 +25,7 @@ import AdminPaymentsPage from "./pages/admin/Payments";
 import UserManagement from "./pages/admin/UserManagement";
 import LibraryPage from "./features/library/pages/LibraryPage";
 import SiwesBoardMgt from "./pages/admin/siwes-board";
+import NotFound from "./pages/public/NotFound";
 
 function App() {
   return (
@@ -68,6 +69,7 @@ function App() {
         <Route path="/signup" element={<Signup />} />
         <Route path="/login" element={<Login />} />
 
+        <Route path="*" element={<NotFound />} />
       </Routes>
     </>
   );

@@ -3,16 +3,15 @@ import axios from "axios";
 import useUserStore from "../store/useUserStore";
 
 const client = axios.create({
-  // ⚠️ Updated to match the API documentation you shared earlier
-  baseURL: "/api",
-  headers: {
-    "Accept": "application/json",
-  },
+  baseURL:
+    import.meta.env.VITE_API_BASE_URL ||
+    "https://nacos.nextgenerationones.org/api",
 });
 
 client.interceptors.request.use((config) => {
-  // 👇 CHANGE: Read the token from the Zustand Store directly
-  const token = useUserStore.getState().token;
+  const token = localStorage.getItem("ACCESS_TOKEN");
+
+  //const token = useUserStore.getState().token;
 
   if (token) {
     config.headers.Authorization = `Bearer ${token}`;
@@ -25,12 +24,12 @@ client.interceptors.response.use(
   (error) => {
     const { response } = error;
     if (response && response.status === 401) {
-      // 👇 CHANGE: Call the store's logout function
-      // This correctly updates the UI AND clears localStorage at the same time
+
       useUserStore.getState().logout();
     }
     throw error;
-  }
+  },
 );
 
 export default client;
+

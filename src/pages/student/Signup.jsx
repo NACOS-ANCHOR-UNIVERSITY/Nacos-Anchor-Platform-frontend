@@ -9,6 +9,7 @@ import namee from "../../assets/images/name.png";
 import mail from "../../assets/images/mail.png";
 import phone from "../../assets/images/phone.png";
 import React from "react";
+import { Link } from "react-router-dom";
 
 const Signup = () => {
   return (
@@ -174,9 +175,12 @@ const Signup = () => {
             </div>
             <div className="font-normal text-[14px] text-[#4C739A] text-center">
               Already have an account?{" "}
-              <span className="font-semibold text-[14px] text-[#138601]">
+              <Link
+                to="/login"
+                className="font-semibold text-sm text-[#138601] hover:underline"
+              >
                 Log in
-              </span>
+              </Link>
             </div>
           </form>
         </div>
@@ -186,3 +190,4 @@ const Signup = () => {
 };
 
 export default Signup;
+
