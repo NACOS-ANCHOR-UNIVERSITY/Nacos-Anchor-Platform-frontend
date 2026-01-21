@@ -351,7 +351,7 @@ const Events = () => {
             setLoading(true);
             setError("");
             try {
-                const response = await fetch("https://nacos.nextgenerationones.org/api/contact/events-list");
+                const response = await fetch("https://nacos.nextgenerationones.org/api/events-list");
                 const data = await response.json();
 
                 if (data.status === "success") {
