@@ -3,10 +3,7 @@ import { useNavigate, Link } from 'react-router-dom';
 import { Eye, EyeOff } from 'lucide-react';
 import { toast } from 'sonner';
 
-// 🛑 REMOVED: Axios and Zustand are removed to bypass the network block
-// import { useMutation } from '@tanstack/react-query';
-// import client from "../../config/axios-client"
-// import useUserStore from '../../store/useUserStore';
+
 
 const Login = () => {
   const navigate = useNavigate();
@@ -100,7 +97,7 @@ const Login = () => {
       if (userData?.role === 'admin') {
         navigate('/admin/dashboard');
       } else {
-        navigate('/student/dashboard'); // 👈 Redirects to your new dashboard
+        navigate('/student/dashboard');
       }
 
     } catch (error) {

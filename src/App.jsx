@@ -66,9 +66,11 @@ function App() {
           <Route path="/admin/siwes" element={<SiwesBoardMgt />} />
         </Route>
 
+        {/* public */}
         <Route path="/signup" element={<Signup />} />
         <Route path="/login" element={<Login />} />
 
+        {/* 404 */}
         <Route path="*" element={<NotFound />} />
       </Routes>
     </>
