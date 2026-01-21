@@ -1,14 +1,15 @@
 import Navbar from "./components/shared/navbar/Navbar";
 import Footer from "./components/shared/footer/Footer";
 import "./index.css";
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, Navigate } from "react-router-dom";
+import { Toaster } from "sonner";
 import Landing from "./pages/public/Landing";
 import AboutUs from "./pages/public/AboutUs";
 import Executivepage from "./pages/public/Executivepage";
 import Contact from "./pages/public/Contact";
 import Events from "./pages/public/Events";
 import Login from "./features/auth/Login";
-import Signup from "./pages/student/Signup";
+import Signup from "./pages/public/signup/signUp";
 import PublicLayout from "./layouts/PublicLayout";
 import StudentDashboardLayout from "./layouts/StudentDashboardLayout";
 import DashboardHome from "./pages/student/dashboard-home";
@@ -29,6 +30,7 @@ import NotFound from "./pages/public/NotFound";
 function App() {
   return (
     <>
+      <Toaster position="top-center" richColors />
       <Routes>
         {/* public layout for the landing page and the navbar links */}
         <Route element={<PublicLayout />}>
@@ -64,8 +66,11 @@ function App() {
           <Route path="/admin/siwes" element={<SiwesBoardMgt />} />
         </Route>
 
+        {/* public */}
         <Route path="/signup" element={<Signup />} />
         <Route path="/login" element={<Login />} />
+
+        {/* 404 */}
         <Route path="*" element={<NotFound />} />
       </Routes>
     </>

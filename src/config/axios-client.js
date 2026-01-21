@@ -1,4 +1,6 @@
 import axios from "axios";
+// 👇 Import your store here so Axios can talk to it
+import useUserStore from "../store/useUserStore";
 
 const client = axios.create({
   baseURL:
@@ -8,19 +10,22 @@ const client = axios.create({
 
 client.interceptors.request.use((config) => {
   const token = localStorage.getItem("ACCESS_TOKEN");
+
+  //const token = useUserStore.getState().token;
+
   if (token) {
     config.headers.Authorization = `Bearer ${token}`;
   }
   return config;
 });
 
-//this will automatically log it out when ther's 401 error
 client.interceptors.response.use(
   (response) => response,
   (error) => {
     const { response } = error;
     if (response && response.status === 401) {
-      localStorage.removeItem("ACCESS_TOKEN");
+
+      useUserStore.getState().logout();
     }
     throw error;
   },
