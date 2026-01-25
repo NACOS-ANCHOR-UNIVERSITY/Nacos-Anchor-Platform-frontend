@@ -14,7 +14,7 @@ import {
   SearchIcon,
   NotificationIcon,
   BookIcon,
-} from "../../assets/icons";
+} from "../assets/icons";
 
 const StudentDashboardLayout = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -30,7 +30,7 @@ const StudentDashboardLayout = () => {
     { name: "Academic Library", icon: BookIcon, href: "/student/library" },
     { name: "SIWES", icon: BriefcaseIcon, href: "/student/siwes" },
     { name: "Payments", icon: CashIcon, href: "/student/payments" },
-    { name: "Resources", icon: CloudIcon, href: "/student/resources" },
+    { name: "Resources", icon: CloudIcon, href: "/student/resources/upload" },
     { name: "Profile", icon: IDCardIcon, href: "/student/profile" },
     { name: "Settings", icon: SettingsIcon, href: "/student/settings" },
   ];

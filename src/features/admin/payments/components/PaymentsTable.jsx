@@ -1,14 +1,13 @@
 import { useMemo, useState } from "react";
-import { CheckCircle2} from "lucide-react";
+import { CheckCircle2 } from "lucide-react";
 import TableToolbar from "./TableToolbar";
 import checkMark from "../assets/table/Checkmark.png";
-import eyeIcon from "../assets/table/eye.png";
-
+// import eyeIcon from "../assets/table/eye.png";
 
 function StatusPill({ status }) {
   const styles = useMemo(() => {
     switch (status) {
-     case "Approved":
+      case "Approved":
         return "bg-[color-mix(in_srgb,var(--color-brand-primary)_10%,white)] text-[var(--color-brand-primary)]";
 
       case "Rejected":
@@ -19,7 +18,9 @@ function StatusPill({ status }) {
   }, [status]);
 
   return (
-    <span className={`rounded-md px-2 py-1 text-[11px] font-semibold ${styles}`}>
+    <span
+      className={`rounded-md px-2 py-1 text-[11px] font-semibold ${styles}`}
+    >
       {status}
     </span>
   );
@@ -28,11 +29,7 @@ function StatusPill({ status }) {
 function Avatar({ src, initials, tone }) {
   if (src) {
     return (
-      <img
-        src={src}
-        alt=""
-        className="h-7 w-7 rounded-full object-cover"
-      />
+      <img src={src} alt="" className="h-7 w-7 rounded-full object-cover" />
     );
   }
 
@@ -53,8 +50,6 @@ function Avatar({ src, initials, tone }) {
     </div>
   );
 }
-
-
 
 export default function PaymentsTable({ rows = [] }) {
   const [selected, setSelected] = useState(() => new Set());
@@ -119,7 +114,7 @@ export default function PaymentsTable({ rows = [] }) {
                       initials={r.initials}
                       tone={r.avatarTone}
                     />
-                    
+
                     <div>
                       <div className="text-sm font-semibold text-slate-900">
                         {r.name}
@@ -149,11 +144,17 @@ export default function PaymentsTable({ rows = [] }) {
 
                 <td className="px-5 py-4">
                   <div className="flex items-center justify-end gap-3">
-                    <button className="text-slate-500 hover:text-slate-700" title="View">
-                      <img src={eyeIcon} className="h-4 w-4" alt="" />
+                    <button
+                      className="text-slate-500 hover:text-slate-700"
+                      title="View"
+                    >
+                      {/* <img src={eyeIcon} className="h-4 w-4" alt="" /> */}
                       <img src={checkMark} className="h-4 w-4" alt="" />
                     </button>
-                    <button className="text-[var(--color-brand-primary)] hover:opacity-90" title="Approve">
+                    <button
+                      className="text-brand-primary hover:opacity-90"
+                      title="Approve"
+                    >
                       <CheckCircle2 className="h-4 w-4" />
                     </button>
                   </div>
@@ -170,14 +171,19 @@ export default function PaymentsTable({ rows = [] }) {
 
         <div className="flex items-center gap-2">
           <button className="rounded-md px-2 py-1 hover:bg-slate-100">‹</button>
-          <button className="rounded-md bg-[var(--color-brand-primary)] px-3 py-1 text-white">1</button>
+          <button className="rounded-md bg-[var(--color-brand-primary)] px-3 py-1 text-white">
+            1
+          </button>
           <button className="rounded-md px-3 py-1 hover:bg-slate-100">2</button>
           <button className="rounded-md px-3 py-1 hover:bg-slate-100">3</button>
           <span className="px-2">…</span>
-          <button className="rounded-md px-3 py-1 hover:bg-slate-100">10</button>
+          <button className="rounded-md px-3 py-1 hover:bg-slate-100">
+            10
+          </button>
           <button className="rounded-md px-2 py-1 hover:bg-slate-100">›</button>
         </div>
       </div>
     </div>
   );
 }
+

@@ -1,5 +1,5 @@
 import { useMemo, useRef, useState } from "react";
-import { Linkedin, X} from "lucide-react";
+import { Linkedin, X } from "lucide-react";
 import projectLibraryImg from "../../assets/icons/Project-Library.png";
 import projectScraperImg from "../../assets/icons/Project-Scrapper.png";
 import addProjectIcon from "../../assets/icons/add-project-icon.svg";
@@ -9,7 +9,6 @@ import gitHub from "../../assets/icons/Git-hub.svg";
 import globeIcon from "../../assets/icons/Portfolio.svg";
 import eye from "../../assets/icons/Eye.svg";
 import pencil from "../../assets/icons/Pencil.svg";
-
 
 function Card({ title, right, children }) {
   return (
@@ -72,7 +71,8 @@ export default function Portfolio() {
 
   // avatar
   const avatarInputRef = useRef(null);
-  const DEFAULT_AVATAR = "https://api.dicebear.com/7.x/avataaars/svg?seed=portfolio";
+  const DEFAULT_AVATAR =
+    "https://api.dicebear.com/7.x/avataaars/svg?seed=portfolio";
   const [avatarUrl, setAvatarUrl] = useState(DEFAULT_AVATAR);
 
   function pickAvatar() {
@@ -88,7 +88,6 @@ export default function Portfolio() {
   // public visibility
   const [isPublic, setIsPublic] = useState(true);
 
-  
   // about me editing
   const [about, setAbout] = useState(
     "I am a passionate Computer Science student with a strong focus on Full Stack Development and Artificial Intelligence. I love building tools that solve real-world problems. Currently serving as the General Secretary for NACOS Anchor University Chapter. Always eager to learn new technologies and collaborate on open-source projects."
@@ -143,36 +142,33 @@ export default function Portfolio() {
 
   // projects (mock)
   const projects = [
-  {
-    id: 1,
-    title: "University Library App",
-    desc: "A comprehensive MERN stack application designed to digitize the university library...",
-    tags: ["REACT", "MONGODB"],
-    image: projectLibraryImg,
-  },
-  {
-    id: 2,
-    title: "Python Data Scraper",
-    desc: "Automated tool built with Beautiful Soup and Selenium to collect real-time housing data for...",
-    tags: ["PYTHON", "SELENIUM"],
-    image: projectScraperImg,
-  },
-];
-
+    {
+      id: 1,
+      title: "University Library App",
+      desc: "A comprehensive MERN stack application designed to digitize the university library...",
+      tags: ["REACT", "MONGODB"],
+      image: projectLibraryImg,
+    },
+    {
+      id: 2,
+      title: "Python Data Scraper",
+      desc: "Automated tool built with Beautiful Soup and Selenium to collect real-time housing data for...",
+      tags: ["PYTHON", "SELENIUM"],
+      image: projectScraperImg,
+    },
+  ];
 
   return (
     <div className="max-w-6xl">
       {/* Header */}
       <div className="mb-6 flex items-start justify-between">
         <div>
-          <div className="text-xs text-slate-500">
-            Dashboard <span className="mx-1">/</span>{" "}
-            <span className="font-medium text-[var(--color-brand-primary)]">My Portfolio</span>
-            <span className="font-medium text-[var(--color-brand-primary)]">My Portfolio</span>
-          </div>
-          <h1 className="mt-2 text-3xl font-bold text-slate-900">My Portfolio</h1>
+          <h1 className="mt-2 text-3xl font-bold text-slate-900">
+            My Portfolio
+          </h1>
           <p className="mt-1 text-sm text-slate-600">
-            Manage your profile visibility, skills, and showcase your best projects.
+            Manage your profile visibility, skills, and showcase your best
+            projects.
           </p>
         </div>
 
@@ -221,11 +217,15 @@ export default function Portfolio() {
               </div>
 
               <div className="mt-4">
-                <div className="text-base font-bold text-slate-900">{user.fullName}</div>
+                <div className="text-base font-bold text-slate-900">
+                  {user.fullName}
+                </div>
                 <div className="text-xs font-semibold text-[var(--color-brand-primary)]">
                   {user.deptLevel}
                 </div>
-                <div className="mt-1 text-xs text-slate-500">Matric No: {user.matric}</div>
+                <div className="mt-1 text-xs text-slate-500">
+                  Matric No: {user.matric}
+                </div>
               </div>
             </div>
 
@@ -233,8 +233,12 @@ export default function Portfolio() {
             <div className="mt-5 rounded-lg border border-slate-200 bg-slate-50 p-3">
               <div className="flex items-center justify-between">
                 <div>
-                  <div className="text-xs font-semibold text-slate-800">Public Visibility</div>
-                  <div className="text-[11px] text-slate-500">Visible to employers</div>
+                  <div className="text-xs font-semibold text-slate-800">
+                    Public Visibility
+                  </div>
+                  <div className="text-[11px] text-slate-500">
+                    Visible to employers
+                  </div>
                 </div>
                 <Toggle checked={isPublic} onChange={setIsPublic} />
               </div>
@@ -245,7 +249,10 @@ export default function Portfolio() {
           <Card
             title="Social Presence"
             right={
-              <button type="button" className="text-xs font-semibold text-[var(--color-brand-primary)]">
+              <button
+                type="button"
+                className="text-xs font-semibold text-[var(--color-brand-primary)]"
+              >
                 Save
               </button>
             }
@@ -255,7 +262,9 @@ export default function Portfolio() {
                 <img src={gitHub} alt="" className="h-4 w-4" />
                 <input
                   value={social.github}
-                  onChange={(e) => setSocial((p) => ({ ...p, github: e.target.value }))}
+                  onChange={(e) =>
+                    setSocial((p) => ({ ...p, github: e.target.value }))
+                  }
                   className="w-full bg-transparent text-sm outline-none"
                   placeholder="github.com/username"
                 />
@@ -265,17 +274,25 @@ export default function Portfolio() {
                 <Linkedin className="h-4 w-4 text-slate-600" />
                 <input
                   value={social.linkedin}
-                  onChange={(e) => setSocial((p) => ({ ...p, linkedin: e.target.value }))}
+                  onChange={(e) =>
+                    setSocial((p) => ({ ...p, linkedin: e.target.value }))
+                  }
                   className="w-full bg-transparent text-sm outline-none"
                   placeholder="LinkedIn URL"
                 />
               </div>
 
               <div className="flex items-center gap-2 rounded-lg border border-slate-200 bg-white px-3 py-2">
-                <img src={globeIcon} alt="" className="h-4 w-4 text-slate-600" />
+                <img
+                  src={globeIcon}
+                  alt=""
+                  className="h-4 w-4 text-slate-600"
+                />
                 <input
                   value={social.portfolio}
-                  onChange={(e) => setSocial((p) => ({ ...p, portfolio: e.target.value }))}
+                  onChange={(e) =>
+                    setSocial((p) => ({ ...p, portfolio: e.target.value }))
+                  }
                   className="w-full bg-transparent text-sm outline-none"
                   placeholder="Portfolio Website"
                 />
@@ -285,7 +302,9 @@ export default function Portfolio() {
 
           {/* Resume / CV */}
           <Card title="Resume / CV">
-            <p className="text-xs text-slate-600">Upload a PDF version of your resume.</p>
+            <p className="text-xs text-slate-600">
+              Upload a PDF version of your resume.
+            </p>
 
             <div className="mt-3 rounded-xl border border-dashed border-slate-300 bg-white p-5">
               <div className="flex flex-col items-center text-center">
@@ -320,7 +339,9 @@ export default function Portfolio() {
               <div className="mt-3 flex items-center justify-between rounded-lg border border-slate-200 bg-white px-3 py-2">
                 <div className="flex items-center gap-2">
                   <img src={pdf} alt="PDF" className="h-6 w-5" />
-                  <div className="text-xs font-semibold text-slate-800">{resume.name}</div>
+                  <div className="text-xs font-semibold text-slate-800">
+                    {resume.name}
+                  </div>
                 </div>
                 <button
                   type="button"
@@ -335,7 +356,7 @@ export default function Portfolio() {
           </Card>
         </div>
 
-              {/* Right column */}
+        {/* Right column */}
         <div className="space-y-6 lg:col-span-2">
           {/* About Me */}
           <Card
@@ -425,7 +446,9 @@ export default function Portfolio() {
 
           {/* Featured Projects */}
           <div>
-            <div className="mb-3 text-sm font-semibold text-slate-800">Featured Projects</div>
+            <div className="mb-3 text-sm font-semibold text-slate-800">
+              Featured Projects
+            </div>
 
             <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
               {projects.map((p) => (
@@ -443,8 +466,12 @@ export default function Portfolio() {
                   <div className="p-4">
                     <div className="flex items-start justify-between gap-3">
                       <div>
-                        <div className="text-sm font-semibold text-slate-900">{p.title}</div>
-                        <div className="mt-1 text-xs text-slate-600">{p.desc}</div>
+                        <div className="text-sm font-semibold text-slate-900">
+                          {p.title}
+                        </div>
+                        <div className="mt-1 text-xs text-slate-600">
+                          {p.desc}
+                        </div>
                       </div>
                       <button className="text-xs font-semibold text-[var(--color-brand-primary)] hover:opacity-90">
                         View Project →
@@ -479,8 +506,12 @@ export default function Portfolio() {
                   />
                 </div>
 
-                <div className="mt-3 text-sm font-semibold text-slate-900">Add New Project</div>
-                <div className="mt-1 text-xs text-slate-500">Showcase your latest work</div>
+                <div className="mt-3 text-sm font-semibold text-slate-900">
+                  Add New Project
+                </div>
+                <div className="mt-1 text-xs text-slate-500">
+                  Showcase your latest work
+                </div>
               </button>
             </div>
           </div>
@@ -493,3 +524,4 @@ export default function Portfolio() {
     </div>
   );
 }
+

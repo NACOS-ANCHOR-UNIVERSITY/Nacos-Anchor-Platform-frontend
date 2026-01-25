@@ -1,5 +1,5 @@
-import adebayoJohn from "../assets/table/adebayo-john.png";
-import emmanuelDavis from "../assets/table/emmanuel-davis.png";
+// import adebayoJohn from "../assets/table/adebayo-john.png";
+// import emmanuelDavis from "../assets/table/emmanuel-davis.png";
 
 export const mockStats = [
   {
@@ -37,7 +37,7 @@ export const mockPayments = [
     id: "p1",
     name: "Adebayo John",
     matric: "19/2023/044",
-    avatar: adebayoJohn,
+    // avatar: adebayoJohn,
     transaction: "Departmental Dues",
     ref: "NCS-2023-884",
     date: "Oct 24, 2023",
@@ -61,7 +61,7 @@ export const mockPayments = [
     id: "p3",
     name: "Emmanuel Davis",
     matric: "19/2023/012",
-    avatar: emmanuelDavis,
+    // avatar: emmanuelDavis,
     transaction: "Dinner Ticket",
     ref: "NCS-2023-879",
     date: "Oct 22, 2023",
@@ -94,3 +94,4 @@ export const mockPayments = [
     avatarTone: "blue",
   },
 ];
+
