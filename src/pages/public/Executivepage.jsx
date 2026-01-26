@@ -9,8 +9,8 @@ import Footer from '@/components/shared/Footer';
 const mockExecutives = {
   president: {
     name: "OMOSIGHO GODSWILL",
-    image: "/president_image.png",
-    bio: "Leading the vision for a digital transformation in the department. Committed to serving every student's interest and bridging the gap between students and the faculty management.",
+    image: "src/assets/images/president_image.jpeg",
+    bio: "A visionary leader committed to growth, innovation and excellence. Focused on empowering members, strengthening collaboration and driving the department toward greater heights through strategic leadership and collective effort.",
     email: "president@nacos.edu",
     linkedin: "https://linkedin.com",
   },
@@ -28,27 +28,27 @@ const mockExecutives = {
     {
       name: "EZIRIM KINGDOM",
       position: "Software Director",
-      image: "/software_director_image.png",
+      image: "src/assets/images/software_director_image.png",
       icon:"/software_director_icon.svg",
-      bio: "Managing communications and documentation for the executive council.",
+      bio: "Ezirim Chukwuebuka Kingdom is a full-stack software developer and tech leader, currently serving as Software Director of NACOS, Anchor University Lagos. He is the Face of Rivers Tech Award recipient and a Top 4 finalist at the NCS Tertiary Institutions Competition. Kingdom is passionate about building industry-ready students through hands-on projects, mentorship, and real-world exposure.",
       email: "secretary@nacos.edu",
       linkedin: "https://linkedin.com"
     },
     {
       name: "RAPHEAL FULFILLED",
       position: "General Secretary",
-      image: "/general_secretary_image.png",
+      image: "src/assets/images/general_secretary_image.png",
       icon:"/general_secretary_icon.svg",
-      bio: "Overseeing financial operations and ensuring transparency in all transactions.",
+      bio: "Driven by efficiency and precision. Responsible for the administrative backbone of the department, ensuring that every decision is documented and every plan is executed with clarity and speed. Promoting a culture of transparency and organized leadership.",
       email: "general@nacos.edu",
       linkedin:"https://linkedin.com"
     },
     {
       name: "IYANDA JERRIE",
       position: "Financial Secretary",
-      image: "/financial_secretary_image.png",
+      image: "src/assets/images/financial_secretary_image.jpeg",
       icon:"/financial_secretary_icon.svg",
-      bio: "Managing the association's funds and financial planning.",
+      bio: "I'm just that guy that loves money, loves making money bend to my desires - particularly helping the department manage funds in a fun, yet impactful way. On a deeper level, I'm a UI/UX designer and an aspiring automated AI/Cloud Engineer.",
       email: "finance@nacos.edu",
       linkedin: "https://linkedin.com"
     },
@@ -64,9 +64,9 @@ const mockExecutives = {
     {
       name: "NORUWA CALEB",
       position: "Director of Sports",
-      image: "/director_sports_image.png",
+      image: "src/assets/images/director_sports_image.jpeg",
       icon:"/director_sports_icon.svg",
-      bio: "Organizing social events and fostering community engagement.",
+      bio: "A 400-level Information Technology student in the Computing Department at Anchor University, Lagos. I currently serve as the department\’s Social and Sports Director. My interests include football, chess, student engagement, recreational activities, and fostering positive interaction within the department.",
       email: "sports@nacos.edu"
     },
     {
@@ -260,7 +260,7 @@ const Executivepage = () => {
                     {member.position}
                   </p>
                   {member.bio && (
-                    <p className="text-gray-600 text-sm text-center mb-4 line-clamp-3 leading-relaxed">
+                    <p className="text-gray-600 text-sm text-center mb-4  leading-relaxed">
                       {member.bio}
                     </p>
                   )}
