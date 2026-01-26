@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
-import { Mail, CheckCircle, Users, Linkedin, Twitter, MessageCircle } from 'lucide-react';
+import { Mail, CheckCircle, Users, Linkedin, Twitter, MessageCircle, X } from 'lucide-react';
 import Navbar from '@/components/shared/Navbar';
 import Footer from '@/components/shared/Footer';
 // import client from '@/config/axios-client'; // Uncomment when API is ready
@@ -103,10 +103,20 @@ const fetchExecutives = async () => {
 };
 
 const Executivepage = () => {
+  const [selectedExecutive, setSelectedExecutive] = useState(null);
+
   const { data: executives, isLoading, error } = useQuery({
     queryKey: ['executives'],
     queryFn: fetchExecutives,
   });
+
+  const openModal = (executive) => {
+    setSelectedExecutive(executive);
+  };
+
+  const closeModal = () => {
+    setSelectedExecutive(null);
+  };
 
   return (
     <div className="min-h-screen bg-[#f8f9f7]">
@@ -163,7 +173,7 @@ const Executivepage = () => {
                     <img
                       src={executives.president.image}
                       alt={executives.president.name}
-                      className="w-full h-full object-cover"
+                      className="w-md h-full object-cover object-top"
                     />
                   </div>
                 </div>
@@ -176,7 +186,11 @@ const Executivepage = () => {
                   <img
                   src="/president_icon.jpg"
                   className="mb-5"/>
-                  <p className="text-gray-600 leading-relaxed mb-6 text-base">
+                  <p 
+                    className="text-gray-600 leading-relaxed mb-6 text-base cursor-pointer hover:text-gray-800 transition-colors line-clamp-3"
+                    onClick={() => openModal({ ...executives.president, position: 'President' })}
+                    title="Click to read full bio"
+                  >
                     {executives.president.bio || 'Leading the NACOS community with a vision for academic excellence and student empowerment.'}
                   </p>
                   <div className="flex gap-3">
@@ -260,7 +274,11 @@ const Executivepage = () => {
                     {member.position}
                   </p>
                   {member.bio && (
-                    <p className="text-gray-600 text-sm text-center mb-4  leading-relaxed">
+                    <p 
+                      className="text-gray-600 text-sm text-center mb-4 leading-relaxed line-clamp-3 cursor-pointer hover:text-gray-800 transition-colors"
+                      onClick={() => openModal(member)}
+                      title="Click to read full bio"
+                    >
                       {member.bio}
                     </p>
                   )}
@@ -306,6 +324,100 @@ const Executivepage = () => {
         )}
       </div>
       <Footer />
+
+      {/* Executive Bio Modal */}
+      {selectedExecutive && (
+        <div 
+          className="fixed inset-0 z-50 flex items-center justify-center p-4"
+          onClick={closeModal}
+        >
+          {/* Backdrop with blur */}
+          <div className="absolute inset-0 bg-black/40 backdrop-blur-sm" />
+          
+          {/* Modal Content */}
+          <div 
+            className="relative bg-white rounded-2xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto z-10"
+            onClick={(e) => e.stopPropagation()}
+          >
+            {/* Close Button */}
+            <button
+              onClick={closeModal}
+              className="absolute top-4 right-4 w-10 h-10 flex items-center justify-center rounded-full bg-gray-100 hover:bg-gray-200 transition-colors z-20"
+              aria-label="Close modal"
+            >
+              <X className="w-5 h-5 text-gray-600" />
+            </button>
+
+            <div className="p-8">
+              {/* Executive Image */}
+              <div className="flex flex-col md:flex-row gap-6 items-start">
+                <div className="w-48 h-48 rounded-2xl overflow-hidden bg-gradient-to-br from-gray-100 to-gray-200 flex-shrink-0 mx-auto md:mx-0">
+                  <img
+                    src={selectedExecutive.image}
+                    alt={selectedExecutive.name}
+                    className="w-full h-full object-cover object-top"
+                  />
+                </div>
+
+                <div className="flex-1 text-center md:text-left">
+                  <h3 className="text-2xl font-bold text-gray-900 mb-2">
+                    {selectedExecutive.name}
+                  </h3>
+                  <span className="inline-block bg-[#128401] text-white text-sm font-semibold px-4 py-1 rounded-full mb-4">
+                    {selectedExecutive.position}
+                  </span>
+                </div>
+              </div>
+
+              {/* Full Bio */}
+              <div className="mt-6">
+                <h4 className="text-lg font-semibold text-gray-900 mb-3">About</h4>
+                <p className="text-gray-600 leading-relaxed text-base">
+                  {selectedExecutive.bio}
+                </p>
+              </div>
+
+              {/* Social Links */}
+              <div className="mt-6 pt-6 border-t border-gray-100">
+                <h4 className="text-sm font-semibold text-gray-500 mb-3">Connect</h4>
+                <div className="flex gap-3">
+                  {selectedExecutive.email && (
+                    <a
+                      href={`mailto:${selectedExecutive.email}`}
+                      className="w-10 h-10 flex items-center justify-center rounded-full bg-[#128401] text-white hover:bg-[#0f6b01] transition-colors shadow-md"
+                      title="Email"
+                    >
+                      <Mail className="w-5 h-5" />
+                    </a>
+                  )}
+                  {selectedExecutive.linkedin && (
+                    <a
+                      href={selectedExecutive.linkedin}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="w-10 h-10 flex items-center justify-center rounded-full bg-[#128401] text-white hover:bg-[#0f6b01] transition-colors shadow-md"
+                      title="LinkedIn"
+                    >
+                      <Linkedin className="w-5 h-5" />
+                    </a>
+                  )}
+                  {selectedExecutive.twitter && (
+                    <a
+                      href={selectedExecutive.twitter}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="w-10 h-10 flex items-center justify-center rounded-full bg-[#128401] text-white hover:bg-[#0f6b01] transition-colors shadow-md"
+                      title="Twitter"
+                    >
+                      <Twitter className="w-5 h-5" />
+                    </a>
+                  )}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
