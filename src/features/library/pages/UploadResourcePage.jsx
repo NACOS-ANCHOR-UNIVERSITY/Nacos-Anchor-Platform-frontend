@@ -71,7 +71,7 @@ export default function UploadResourcePage() {
       formData.append("title", data.title);
       formData.append("description", data.description);
 
-      // ✅ CRITICAL: Append the actual file object
+
       formData.append("resource_file", data.file[0]);
 
       console.log("Uploading file via Fetch...");
@@ -82,8 +82,6 @@ export default function UploadResourcePage() {
         headers: {
           "Authorization": `Bearer ${token}`,
           "Accept": "application/json",
-          // 🛑 NEVER set Content-Type for file uploads manually!
-          // The browser sets it to 'multipart/form-data; boundary=...' automatically.
         },
         body: formData,
       });
