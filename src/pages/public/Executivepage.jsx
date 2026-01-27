@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
-import { Mail, CheckCircle, Users, Linkedin, Twitter, MessageCircle } from 'lucide-react';
+import { Mail, CheckCircle, Users, Linkedin, Twitter, MessageCircle, X } from 'lucide-react';
 import Navbar from '@/components/shared/Navbar';
 import Footer from '@/components/shared/Footer';
 // import client from '@/config/axios-client'; // Uncomment when API is ready
@@ -9,8 +9,8 @@ import Footer from '@/components/shared/Footer';
 const mockExecutives = {
   president: {
     name: "OMOSIGHO GODSWILL",
-    image: "/president_image.png",
-    bio: "Leading the vision for a digital transformation in the department. Committed to serving every student's interest and bridging the gap between students and the faculty management.",
+    image: "src/assets/images/president_image.jpeg",
+    bio: "A visionary leader committed to growth, innovation and excellence. Focused on empowering members, strengthening collaboration and driving the department toward greater heights through strategic leadership and collective effort.",
     email: "president@nacos.edu",
     linkedin: "https://linkedin.com",
   },
@@ -19,36 +19,36 @@ const mockExecutives = {
       name: "JULIA FRANCES",
       position: "Vice President",
       image: "/vice_president_image.png",
-      icon:"/vice_president_icon.svg",
+      icon: "/vice_president_icon.svg",
       bio: "Ensuring smooth operations and suppodting welfare initiatives across all levels.",
       email: "vp@nacos.edu",
       linkedin: "https://linkedin.com",
-      
+
     },
     {
       name: "EZIRIM KINGDOM",
       position: "Software Director",
-      image: "/software_director_image.png",
-      icon:"/software_director_icon.svg",
-      bio: "Managing communications and documentation for the executive council.",
+      image: "src/assets/images/software_director_image.png",
+      icon: "/software_director_icon.svg",
+      bio: "Ezirim Chukwuebuka Kingdom is a full-stack software developer and tech leader, currently serving as Software Director of NACOS, Anchor University Lagos. He is the Face of Rivers Tech Award recipient and a Top 4 finalist at the NCS Tertiary Institutions Competition. Kingdom is passionate about building industry-ready students through hands-on projects, mentorship, and real-world exposure.",
       email: "secretary@nacos.edu",
       linkedin: "https://linkedin.com"
     },
     {
       name: "RAPHEAL FULFILLED",
       position: "General Secretary",
-      image: "/general_secretary_image.png",
-      icon:"/general_secretary_icon.svg",
-      bio: "Overseeing financial operations and ensuring transparency in all transactions.",
+      image: "src/assets/images/general_secretary_image.png",
+      icon: "/general_secretary_icon.svg",
+      bio: "Driven by efficiency and precision. Responsible for the administrative backbone of the department, ensuring that every decision is documented and every plan is executed with clarity and speed. Promoting a culture of transparency and organized leadership.",
       email: "general@nacos.edu",
-      linkedin:"https://linkedin.com"
+      linkedin: "https://linkedin.com"
     },
     {
       name: "IYANDA JERRIE",
       position: "Financial Secretary",
-      image: "/financial_secretary_image.png",
-      icon:"/financial_secretary_icon.svg",
-      bio: "Managing the association's funds and financial planning.",
+      image: "src/assets/images/financial_secretary_image.jpeg",
+      icon: "/financial_secretary_icon.svg",
+      bio: "I'm just that guy that loves money, loves making money bend to my desires - particularly helping the department manage funds in a fun, yet impactful way. On a deeper level, I'm a UI/UX designer and an aspiring automated AI/Cloud Engineer.",
       email: "finance@nacos.edu",
       linkedin: "https://linkedin.com"
     },
@@ -56,7 +56,7 @@ const mockExecutives = {
       name: "FAITHFUL",
       position: "Legislative Officer I",
       image: "/legislative_officer_image.png",
-      icon:"/legislative_officer_icon.svg",
+      icon: "/legislative_officer_icon.svg",
       bio: "Public Relations Officer handling media and external communications.",
       email: "legislative@nacos.edu",
       twitter: "https://twitter.com"
@@ -64,16 +64,16 @@ const mockExecutives = {
     {
       name: "NORUWA CALEB",
       position: "Director of Sports",
-      image: "/director_sports_image.png",
-      icon:"/director_sports_icon.svg",
-      bio: "Organizing social events and fostering community engagement.",
+      image: "src/assets/images/director_sports_image.jpeg",
+      icon: "/director_sports_icon.svg",
+      bio: "A 400-level Information Technology student in the Computing Department at Anchor University, Lagos. I currently serve as the department\’s Social and Sports Director. My interests include football, chess, student engagement, recreational activities, and fostering positive interaction within the department.",
       email: "sports@nacos.edu"
     },
     {
       name: "OKEOGHENE",
       position: "Welfare Director",
       image: "/welfare_director_image.png",
-      icon:"/welfare_director_icon.svg",
+      icon: "/welfare_director_icon.svg",
       bio: "Ensuring the wellbeing and welfare of all NACOS members.",
       email: "welfare@nacos.edu",
       linkedin: "https://linkedin.com"
@@ -82,7 +82,7 @@ const mockExecutives = {
       name: "TREASURE",
       position: "Treasurer",
       image: "/treasurer_image.png",
-      icon:"/treasurer_icon.svg",
+      icon: "/treasurer_icon.svg",
       bio: "Coordinating sports activities and inter-departmental competitions.",
       email: "treasure@nacos.edu",
       linkedin: "https://linkedin.com"
@@ -103,10 +103,20 @@ const fetchExecutives = async () => {
 };
 
 const Executivepage = () => {
+  const [selectedExecutive, setSelectedExecutive] = useState(null);
+
   const { data: executives, isLoading, error } = useQuery({
     queryKey: ['executives'],
     queryFn: fetchExecutives,
   });
+
+  const openModal = (executive) => {
+    setSelectedExecutive(executive);
+  };
+
+  const closeModal = () => {
+    setSelectedExecutive(null);
+  };
 
   return (
     <div className="min-h-screen bg-[#f8f9f7]">
@@ -148,8 +158,8 @@ const Executivepage = () => {
         {executives?.president && (
           <section className="mb-16 mr-5 pr-9">
             <div className="flex items-center gap-3 mb-8">
-              <img 
-              src="/president.svg"/>
+              <img
+                src="/president.svg" />
               <h2 className="text-2xl font-bold text-gray-900">The President</h2>
             </div>
 
@@ -161,7 +171,7 @@ const Executivepage = () => {
                     <img
                       src={executives.president.image}
                       alt={executives.president.name}
-                      className="w-full h-full object-cover"
+                      className="w-md h-full object-cover object-top"
                     />
                   </div>
                 </div>
@@ -172,9 +182,13 @@ const Executivepage = () => {
                     {executives.president.name}
                   </h3>
                   <img
-                  src="/president_icon.jpg"
-                  className="mb-5"/>
-                  <p className="text-gray-600 leading-relaxed mb-6 text-base">
+                    src="/president_icon.jpg"
+                    className="mb-5" />
+                  <p
+                    className="text-gray-600 leading-relaxed mb-6 text-base cursor-pointer hover:text-gray-800 transition-colors line-clamp-3"
+                    onClick={() => openModal({ ...executives.president, position: 'President' })}
+                    title="Click to read full bio"
+                  >
                     {executives.president.bio || 'Leading the NACOS community with a vision for academic excellence and student empowerment.'}
                   </p>
                   <div className="flex gap-3">
@@ -185,7 +199,7 @@ const Executivepage = () => {
                         title="Email"
                       >
                         <img
-                        src="/email.svg"
+                          src="/email.svg"
                         />
                       </a>
                     )}
@@ -198,7 +212,7 @@ const Executivepage = () => {
                         title="LinkedIn"
                       >
                         <img
-                        src="/Link.svg"/>
+                          src="/Link.svg" />
                       </a>
                     )}
                   </div>
@@ -213,17 +227,17 @@ const Executivepage = () => {
           <section>
             <div className="flex items-center justify-between mb-8">
               <div className="flex items-center gap-3">
-                <img 
-                src="/executive.svg"/>
+                <img
+                  src="/executive.svg" />
                 <h2 className="text-2xl font-bold text-gray-900">Executive Council</h2>
               </div>
               <div className="">
-              <span className="text-sm text-gray-500 flex-items-center gap-2 font-medium">
-                View All Roles 
-                <img
-                src="/up_arrow.svg"
-                />
-              </span>
+                <span className="text-sm text-gray-500 flex-items-center gap-2 font-medium">
+                  View All Roles
+                  <img
+                    src="/up_arrow.svg"
+                  />
+                </span>
               </div>
             </div>
 
@@ -243,10 +257,10 @@ const Executivepage = () => {
                       />
                     </div>
                     {/* Online Status Indicator */}
-                   
+
                     <div className="absolute bottom-2 right-1/2 transform translate-x-12 w-8 h-8 rounded-full border-4 flex items-center justify-center">
-                     <img
-                    src={member.icon}/>
+                      <img
+                        src={member.icon} />
                     </div>
                   </div>
 
@@ -258,7 +272,11 @@ const Executivepage = () => {
                     {member.position}
                   </p>
                   {member.bio && (
-                    <p className="text-gray-600 text-sm text-center mb-4 line-clamp-3 leading-relaxed">
+                    <p
+                      className="text-gray-600 text-sm text-center mb-4 leading-relaxed line-clamp-3 cursor-pointer hover:text-gray-800 transition-colors"
+                      onClick={() => openModal(member)}
+                      title="Click to read full bio"
+                    >
                       {member.bio}
                     </p>
                   )}
