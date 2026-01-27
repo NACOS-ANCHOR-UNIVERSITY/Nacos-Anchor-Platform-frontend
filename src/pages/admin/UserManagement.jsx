@@ -6,7 +6,7 @@ import Wallet from "../../assets/icons/Wallet.svg";
 import Date from "../../assets/icons/date.svg";
 import MarkDone from "../../assets/icons/mark_done.svg";
 import Reject from "../../assets/icons/cancel.svg";
-import View from "../../assets/icons/eye.svg";
+import View from "../../assets/icons/Eye.svg";
 import Edit from "../../assets/icons/edit.svg";
 import Recent from "../../assets/icons/recent.svg";
 import Filter from "../../assets/icons/filter.svg";
@@ -383,11 +383,10 @@ const UserManagement = () => {
                 {selectedCount} selected
               </span>
               <button
-                className={`bg-[#F3F4F6] text-[#374151] px-4 py-2 rounded-md text-sm font-medium transition ${
-                  selectedCount === 0
+                className={`bg-[#F3F4F6] text-[#374151] px-4 py-2 rounded-md text-sm font-medium transition ${selectedCount === 0
                     ? " opacity-50 cursor-not-allowed"
                     : " hover:bg-gray-200 cursor-pointer"
-                }`}
+                  }`}
                 onClick={bulkApprover}
                 disabled={selectedCount === 0}
               >
@@ -422,9 +421,8 @@ const UserManagement = () => {
                 {currentUsers.map((user) => (
                   <tr
                     key={user.id}
-                    className={`border-b border-gray-50 hover:bg-gray-50 transition ${
-                      user.selected ? "bg-green-50" : ""
-                    }`}
+                    className={`border-b border-gray-50 hover:bg-gray-50 transition ${user.selected ? "bg-green-50" : ""
+                      }`}
                   >
                     <td className="p-4">
                       {/* INDIVIDUAL ROW CHECKBOX */}
@@ -463,24 +461,22 @@ const UserManagement = () => {
                     </td>
                     <td className="p-4">
                       <span
-                        className={`px-3 py-1 rounded-full text-[12px] font-semibold ${
-                          user.role === "Class Rep"
+                        className={`px-3 py-1 rounded-full text-[12px] font-semibold ${user.role === "Class Rep"
                             ? "bg-[#F3E8FF] text-[#6B21A8]"
                             : "bg-[#F3F4F6] text-[#4B5563]"
-                        }`}
+                          }`}
                       >
                         {user.role}
                       </span>
                     </td>
                     <td className="p-4">
                       <span
-                        className={`px-3 py-1 rounded-full text-xs font-semibold ${
-                          user.status === "Active"
+                        className={`px-3 py-1 rounded-full text-xs font-semibold ${user.status === "Active"
                             ? "bg-[#DCFCE7] text-[#166534]"
                             : user.status === "Rejected"
-                            ? "bg-red-200 text-red-600"
-                            : "bg-[#FEF9C3] text-[#854D0E]"
-                        }`}
+                              ? "bg-red-200 text-red-600"
+                              : "bg-[#FEF9C3] text-[#854D0E]"
+                          }`}
                       >
                         {user.status}
                       </span>
@@ -550,11 +546,10 @@ const UserManagement = () => {
               <button
                 onClick={() => paginate(currentPage - 1)}
                 disabled={currentPage === 1}
-                className={`w-8 h-8 flex items-center justify-center border border-[#E5E7EB] rounded ${
-                  currentPage === 1
+                className={`w-8 h-8 flex items-center justify-center border border-[#E5E7EB] rounded ${currentPage === 1
                     ? "opacity-50 cursor-not-allowed"
                     : "hover:bg-gray-50 cursor-pointer"
-                }`}
+                  }`}
               >
                 &lt;
               </button>
@@ -564,11 +559,10 @@ const UserManagement = () => {
                 <button
                   key={i + 1}
                   onClick={() => paginate(i + 1)}
-                  className={`w-8 h-8 flex items-center justify-center rounded font-medium transition ${
-                    currentPage === i + 1
+                  className={`w-8 h-8 flex items-center justify-center rounded font-medium transition ${currentPage === i + 1
                       ? "bg-[#138601] text-white"
                       : "border border-[#E5E7EB] hover:bg-gray-50"
-                  }`}
+                    }`}
                 >
                   {i + 1}
                 </button>
@@ -578,11 +572,10 @@ const UserManagement = () => {
               <button
                 onClick={() => paginate(currentPage + 1)}
                 disabled={currentPage === totalPages}
-                className={`w-8 h-8 flex items-center justify-center border border-gray-200 rounded ${
-                  currentPage === totalPages
+                className={`w-8 h-8 flex items-center justify-center border border-gray-200 rounded ${currentPage === totalPages
                     ? "opacity-50 cursor-not-allowed"
                     : "hover:bg-gray-50 cursor-pointer"
-                }`}
+                  }`}
               >
                 &gt;
               </button>
