@@ -9,6 +9,7 @@ import gitHub from "../../assets/icons/Git-hub.svg";
 import globeIcon from "../../assets/icons/Portfolio.svg";
 import eye from "../../assets/icons/Eye.svg";
 import pencil from "../../assets/icons/Pencil.svg";
+import { getPortfolioData } from "@/features/student/portfolio/api";
 
 function Card({ title, right, children }) {
   return (
@@ -30,12 +31,12 @@ function Toggle({ checked, onChange }) {
       type="button"
       onClick={() => onChange(!checked)}
       className={`relative inline-flex h-6 w-11 items-center rounded-full transition ${
-        checked ? "bg-[var(--color-brand-primary)]" : "bg-slate-300"
+        checked ? "bg-brand-primary" : "bg-slate-300"
       }`}
       aria-pressed={checked}
     >
       <span
-        className={`inline-block h-5 w-5 transform rounded-full bg-white transition ${
+        className={`inline-block size-5 transform rounded-full bg-white transition ${
           checked ? "translate-x-5" : "translate-x-1"
         }`}
       />
@@ -45,7 +46,7 @@ function Toggle({ checked, onChange }) {
 
 function SkillPill({ label, onRemove }) {
   return (
-    <span className="inline-flex items-center gap-2 rounded-full border border-[color-mix(in_srgb,var(--color-brand-primary)_25%,white)] bg-[color-mix(in_srgb,var(--color-brand-primary)_10%,white)] px-3 py-1 text-xs font-medium text-[var(--color-brand-primary)]">
+    <span className="inline-flex items-center gap-2 rounded-full border border-[color-mix(in_srgb,var(--color-brand-primary)_25%,white)] bg-[color-mix(in_srgb,var(--color-brand-primary)_10%,white)] px-3 py-1 text-xs font-medium text-brand-primary">
       {label}
       <button
         type="button"
@@ -66,7 +67,7 @@ export default function Portfolio() {
       deptLevel: "Computer Science | 400 Level",
       matric: "AUL/CPM/22/003",
     }),
-    []
+    [],
   );
 
   // avatar
@@ -90,7 +91,7 @@ export default function Portfolio() {
 
   // about me editing
   const [about, setAbout] = useState(
-    "I am a passionate Computer Science student with a strong focus on Full Stack Development and Artificial Intelligence. I love building tools that solve real-world problems. Currently serving as the General Secretary for NACOS Anchor University Chapter. Always eager to learn new technologies and collaborate on open-source projects."
+    "I am a passionate Computer Science student with a strong focus on Full Stack Development and Artificial Intelligence. I love building tools that solve real-world problems. Currently serving as the General Secretary for NACOS Anchor University Chapter. Always eager to learn new technologies and collaborate on open-source projects.",
   );
   const [isEditingAbout, setIsEditingAbout] = useState(false);
   const [aboutDraft, setAboutDraft] = useState(about);
@@ -174,9 +175,9 @@ export default function Portfolio() {
 
         <button
           type="button"
-          className="inline-flex items-center gap-2 rounded-lg bg-[var(--color-brand-primary)] px-4 py-2 text-sm font-semibold text-white shadow-sm hover:opacity-95"
+          className="inline-flex items-center gap-2 rounded-lg bg-brand-primary px-4 py-2 text-sm font-semibold text-white shadow-sm hover:opacity-95"
         >
-          <img src={eye} alt="Eye" className="h-4 w-4" />
+          <img src={eye} alt="Eye" className="size-4" />
           Preview Public Profile
         </button>
       </div>
@@ -189,7 +190,7 @@ export default function Portfolio() {
           <Card>
             <div className="flex flex-col items-center text-center">
               <div className="relative">
-                <div className="h-20 w-20 overflow-hidden rounded-full border border-slate-200 bg-slate-100">
+                <div className="size-20 overflow-hidden rounded-full border border-slate-200 bg-slate-100">
                   <img
                     src={avatarUrl}
                     alt="profile avatar"
@@ -201,10 +202,10 @@ export default function Portfolio() {
                 <button
                   type="button"
                   onClick={pickAvatar}
-                  className="absolute -bottom-1 -right-1 grid h-7 w-7 place-items-center rounded-full bg-[var(--color-brand-primary)] text-white shadow hover:opacity-95"
+                  className="absolute -bottom-1 -right-1 grid size-7 place-items-center rounded-full bg-brand-primary text-white shadow hover:opacity-95"
                   title="Edit photo"
                 >
-                  <img src={pencil} alt="Pencil" className="h-4 w-4" />
+                  <img src={pencil} alt="Pencil" className="size-4" />
                 </button>
 
                 <input
@@ -220,7 +221,7 @@ export default function Portfolio() {
                 <div className="text-base font-bold text-slate-900">
                   {user.fullName}
                 </div>
-                <div className="text-xs font-semibold text-[var(--color-brand-primary)]">
+                <div className="text-xs font-semibold text-brand-primary">
                   {user.deptLevel}
                 </div>
                 <div className="mt-1 text-xs text-slate-500">
@@ -251,7 +252,7 @@ export default function Portfolio() {
             right={
               <button
                 type="button"
-                className="text-xs font-semibold text-[var(--color-brand-primary)]"
+                className="text-xs font-semibold text-brand-primary"
               >
                 Save
               </button>
@@ -259,7 +260,7 @@ export default function Portfolio() {
           >
             <div className="space-y-3">
               <div className="flex items-center gap-2 rounded-lg border border-slate-200 bg-white px-3 py-2">
-                <img src={gitHub} alt="" className="h-4 w-4" />
+                <img src={gitHub} alt="" className="size-4" />
                 <input
                   value={social.github}
                   onChange={(e) =>
@@ -271,7 +272,7 @@ export default function Portfolio() {
               </div>
 
               <div className="flex items-center gap-2 rounded-lg border border-slate-200 bg-white px-3 py-2">
-                <Linkedin className="h-4 w-4 text-slate-600" />
+                <Linkedin className="size-4 text-slate-600" />
                 <input
                   value={social.linkedin}
                   onChange={(e) =>
@@ -283,11 +284,7 @@ export default function Portfolio() {
               </div>
 
               <div className="flex items-center gap-2 rounded-lg border border-slate-200 bg-white px-3 py-2">
-                <img
-                  src={globeIcon}
-                  alt=""
-                  className="h-4 w-4 text-slate-600"
-                />
+                <img src={globeIcon} alt="" className="size-4 text-slate-600" />
                 <input
                   value={social.portfolio}
                   onChange={(e) =>
@@ -311,7 +308,7 @@ export default function Portfolio() {
                 <button
                   type="button"
                   onClick={pickResume}
-                  className="grid h-10 w-10 place-items-center rounded-full border border-slate-200 bg-slate-50 text-slate-700 hover:bg-white"
+                  className="grid size-10 place-items-center rounded-full border border-slate-200 bg-slate-50 text-slate-700 hover:bg-white"
                 >
                   <img src={uploadFile} alt="" className="h-6 w-5" />
                 </button>
@@ -349,7 +346,7 @@ export default function Portfolio() {
                   className="rounded-md p-1 text-slate-500 hover:bg-slate-100"
                   aria-label="remove resume"
                 >
-                  <X className="h-4 w-4" />
+                  <X className="size-4" />
                 </button>
               </div>
             ) : null}
@@ -371,7 +368,7 @@ export default function Portfolio() {
                 className="rounded-md p-2 text-slate-500 hover:bg-slate-100"
                 aria-label="edit about"
               >
-                <img src={pencil} alt="Pencil" className="h-4 w-4" />
+                <img src={pencil} alt="Pencil" className="size-4" />
               </button>
             }
           >
@@ -382,7 +379,7 @@ export default function Portfolio() {
                 <textarea
                   value={aboutDraft}
                   onChange={(e) => setAboutDraft(e.target.value)}
-                  className="min-h-[110px] w-full rounded-lg border border-slate-200 bg-white p-3 text-sm outline-none focus:border-[var(--color-brand-primary)]"
+                  className="min-h-27.5 w-full rounded-lg border border-slate-200 bg-white p-3 text-sm outline-none focus:border-brand-primary"
                 />
                 <div className="flex justify-end gap-2">
                   <button
@@ -398,7 +395,7 @@ export default function Portfolio() {
                       setAbout(aboutDraft);
                       setIsEditingAbout(false);
                     }}
-                    className="rounded-lg bg-[var(--color-brand-primary)] px-3 py-2 text-sm font-semibold text-white hover:opacity-95"
+                    className="rounded-lg bg-brand-primary px-3 py-2 text-sm font-semibold text-white hover:opacity-95"
                   >
                     Save
                   </button>
@@ -414,7 +411,7 @@ export default function Portfolio() {
               <button
                 type="button"
                 onClick={addSkill}
-                className="text-xs font-semibold text-[var(--color-brand-primary)] hover:opacity-90"
+                className="text-xs font-semibold text-brand-primary hover:opacity-90"
               >
                 + Add Skill
               </button>
@@ -439,7 +436,7 @@ export default function Portfolio() {
                   addSkill();
                 }
               }}
-              className="mt-3 w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm outline-none focus:border-[var(--color-brand-primary)]"
+              className="mt-3 w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm outline-none focus:border-brand-primary"
               placeholder="Type a skill..."
             />
           </Card>
@@ -473,7 +470,7 @@ export default function Portfolio() {
                           {p.desc}
                         </div>
                       </div>
-                      <button className="text-xs font-semibold text-[var(--color-brand-primary)] hover:opacity-90">
+                      <button className="text-xs font-semibold text-brand-primary hover:opacity-90">
                         View Project →
                       </button>
                     </div>
@@ -495,13 +492,13 @@ export default function Portfolio() {
               {/* Add New Project */}
               <button
                 type="button"
-                className="flex min-h-[220px] flex-col items-center justify-center rounded-xl border border-dashed border-slate-300 bg-slate-50 text-center hover:bg-slate-100"
+                className="flex min-h-55 flex-col items-center justify-center rounded-xl border border-dashed border-slate-300 bg-slate-50 text-center hover:bg-slate-100"
               >
-                <div className="grid h-12 w-12 place-items-center rounded-full border border-slate-200 bg-slate-60">
+                <div className="grid size-12 place-items-center rounded-full border border-slate-200 bg-slate-60">
                   <img
                     src={addProjectIcon}
                     alt="Add project"
-                    className="h-5 w-5"
+                    className="size-5"
                     draggable="false"
                   />
                 </div>
