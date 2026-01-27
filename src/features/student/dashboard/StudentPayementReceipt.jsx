@@ -16,6 +16,7 @@ export default function StudentPaymentReceipt() {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
   const token = localStorage.getItem("token")
+  console.log(financeData)
 
   const fetchFinanceData = async () => {
     setIsLoading(true);

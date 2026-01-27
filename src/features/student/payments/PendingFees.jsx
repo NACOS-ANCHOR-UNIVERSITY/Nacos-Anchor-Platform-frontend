@@ -24,7 +24,6 @@ const getFeeIcon = (title, type) => {
   if (titleLower.includes("book") || titleLower.includes("material")) {
     return { icon: <BookOpen className="w-6 h-6 text-indigo-600" />, bg: "bg-indigo-100" };
   }
-  // Default icon
   return { icon: <CreditCard className="w-6 h-6 text-gray-600" />, bg: "bg-gray-100" };
 };
 
@@ -53,18 +52,15 @@ const getBadgeStyle = (status) => {
  * Pending Fees Component
  */
 export default function PendingFees({ fees = [] }) {
-  // 1. Get User Email (Required for Paystack)
   const user = JSON.parse(localStorage.getItem("user") || "{}");
   const userEmail = user.email || "student@aul.edu.ng";
 
-  // Format amount with currency
   const formatAmount = (amount, currency = "₦") => {
     if (!amount) return `${currency}0`;
     const numAmount = typeof amount === "string" ? parseFloat(amount.replace(/,/g, "")) : amount;
     return `${currency}${numAmount.toLocaleString()}`;
   };
 
-  // Determine button text and style based on fee type
   const getButtonProps = (fee) => {
     const type = (fee.type || "").toLowerCase();
     const buttonText = fee.button_text || "Pay Now";
@@ -72,34 +68,26 @@ export default function PendingFees({ fees = [] }) {
     if (type === "compulsory" || type === "required") {
       return {
         text: buttonText,
-        // Your exact green button styles
         className: "min-w-[5rem] bg-[#138601] hover:bg-[#0e6001] shadow-[0px_2px_4px_-2px_#138601] hover:shadow-[0px_4px_6px_-1px_#138601] transition text-white py-2.5 px-4 rounded-lg text-sm font-medium cursor-pointer"
       };
     }
     return {
       text: buttonText,
-      // Your exact secondary button styles
       className: "min-w-[5rem] border border-gray-300 hover:bg-gray-50 transition py-2.5 px-4 rounded-lg text-sm font-medium cursor-pointer"
     };
   };
 
   const handlePaymentSuccess = async (reference, feeItem) => {
-    // 1. Show immediate success to the user
     toast.success(`Payment Successful! Verifying...`);
     console.log("Paystack Reference:", reference);
 
     try {
-      // 2. Tell the backend the payment happened
-      // Replace '/api/payments/verify' with your ACTUAL backend endpoint
       const response = await fetch("https://nacos.nextgenerationones.org/api/payments/verify", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          "Authorization": `Bearer ${localStorage.getItem("ACCESS_TOKEN")}` // Send their login token
         },
         body: JSON.stringify({
-          reference: reference.reference, // The code Paystack gave us (e.g. T39450320)
-          fee_id: feeItem.id,             // The ID of the fee they paid for
           amount: feeItem.amount
         }),
       });
@@ -108,8 +96,6 @@ export default function PendingFees({ fees = [] }) {
 
       if (response.ok) {
         toast.success("Database Updated: Payment Recorded!");
-        // Optional: Refresh the page so the fee disappears from the list
-        // window.location.reload(); 
       } else {
         toast.error("Payment received, but database update failed. Contact Admin.");
         console.error("Verification failed:", data);
@@ -120,7 +106,6 @@ export default function PendingFees({ fees = [] }) {
     }
   };
 
-  // Show empty state if no fees
   if (!fees || fees.length === 0) {
     return (
       <div className="mb-8">
@@ -184,7 +169,6 @@ export default function PendingFees({ fees = [] }) {
                   email={userEmail}
                   purpose={fee.title}
                   btnText={buttonProps.text}
-                  className={buttonProps.className} // Passes your exact design classes
                   onSuccess={(ref) => handlePaymentSuccess(ref, fee)}
                 />
               </div>
