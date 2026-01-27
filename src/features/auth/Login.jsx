@@ -3,6 +3,8 @@ import { useNavigate, Link } from 'react-router-dom';
 import { Eye, EyeOff } from 'lucide-react';
 import { toast } from 'sonner';
 
+const BASE_URL = "https://nacos.nextgenerationones.org/api";
+
 const Login = () => {
   const navigate = useNavigate();
 
@@ -26,47 +28,80 @@ const Login = () => {
 
   const validateForm = () => {
     const newErrors = {};
-    if (!formData.email.trim()) newErrors.email = 'Email is required';
-    else if (!/\S+@\S+\.\S+/.test(formData.email)) newErrors.email = 'Please enter a valid email';
-    if (!formData.password) newErrors.password = 'Password is required';
+    if (!formData.email.trim()) {
+      newErrors.email = 'Email is required';
+    } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
+      newErrors.email = 'Please enter a valid email';
+    }
+    if (!formData.password) {
+      newErrors.password = 'Password is required';
+    }
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    
     if (!validateForm()) return;
 
     setIsLoading(true);
     const toastId = toast.loading("Verifying credentials...");
 
     try {
-      const response = await fetch("https://nacos.nextgenerationones.org/api/auth/login", {
+      const response = await fetch(`${BASE_URL}/auth/login`, {
         method: "POST",
-        headers: { "Content-Type": "application/json", "Accept": "application/json" },
-        body: JSON.stringify(formData),
+        headers: { 
+          "Content-Type": "application/json", 
+          "Accept": "application/json" 
+        },
+        body: JSON.stringify({
+          email: formData.email,
+          password: formData.password,
+        }),
       });
 
       const result = await response.json();
 
-      if (!response.ok) throw new Error(result.message || "Login failed.");
+      // Handle error responses
+      if (!response.ok || result.status === "error") {
+        throw new Error(result.message || "Login failed. Please check your credentials.");
+      }
 
-      // Save Data
-      localStorage.setItem("ACCESS_TOKEN", result.token || result.data?.token);
-      localStorage.setItem("token", result.token || result.data?.token);
-      const userData = result.user || result.data?.user;
-      localStorage.setItem("user", JSON.stringify(userData));
+      // Check if login was successful
+      if (result.status === "success" && result.data) {
+        // Store the token - API returns it in result.data.token
+        const token = result.data.token;
+        const user = result.data.user;
 
-      toast.dismiss(toastId);
-      toast.success("Welcome back!");
+        if (!token) {
+          throw new Error("No token received from server");
+        }
 
-      if (userData?.role === 'admin') navigate('/admin/dashboard');
-      else navigate('/student/dashboard');
+        // Store token in localStorage
+        localStorage.setItem("token", token);
+        
+        // Store user data
+        localStorage.setItem("user", JSON.stringify(user));
+
+        toast.dismiss(toastId);
+        toast.success(`Welcome back, ${user.first_name}!`);
+
+        // Navigate based on user role
+        if (user.role === 'admin') {
+          navigate('/admin/dashboard');
+        } else {
+          navigate('/student/dashboard');
+        }
+      } else {
+        throw new Error("Invalid response format from server");
+      }
 
     } catch (error) {
       console.error("Login Error:", error);
       toast.dismiss(toastId);
-      setErrors({ general: error.message || "Connection failed." });
+      toast.error(error.message || "Login failed. Please try again.");
+      setErrors({ general: error.message || "Connection failed. Please try again." });
     } finally {
       setIsLoading(false);
     }
@@ -76,7 +111,6 @@ const Login = () => {
     <div className="min-h-screen bg-[#F6F7F8] flex">
 
       {/* --- LEFT SIDE (Illustration) --- */}
-      {/* Fixed: Moved this div to be a sibling of the form, not a parent */}
       <div className="hidden lg:flex lg:w-1/2 bg-white p-12 flex-col justify-between border-r border-gray-200">
         <div>
           {/* Logo */}
@@ -135,10 +169,10 @@ const Login = () => {
 
           <form onSubmit={handleSubmit} className="space-y-5">
 
-            {/* Email Input (Fixed: Removed duplicate input) */}
+            {/* Email Input */}
             <div>
               <label htmlFor="email" className="block text-sm font-medium text-gray-900 mb-2">
-                Matric Number / Email
+                     Matric Number / Email
               </label>
               <div className="relative">
                 <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">
@@ -147,12 +181,12 @@ const Login = () => {
                   </svg>
                 </span>
                 <input
-                  type="text"
+                  type="email"
                   id="email"
                   name="email"
                   value={formData.email}
                   onChange={handleChange}
-                  placeholder="e.g. 19/1234 or student@aul.edu.ng"
+                  placeholder="e.g. 19/1234 or student@aul.edu.ng "
                   className={`w-full pl-10 pr-4 py-3 border rounded-lg text-sm focus:outline-none focus:ring-2 bg-white focus:ring-[#0d7c01] focus:border-transparent transition-all ${errors.email ? 'border-red-500' : 'border-gray-300'}`}
                 />
               </div>
@@ -161,7 +195,7 @@ const Login = () => {
               )}
             </div>
 
-            {/* Password Input (Fixed: Removed duplicate className) */}
+            {/* Password Input */}
             <div>
               <div className="flex justify-between items-center mb-2">
                 <label htmlFor="password" className="block text-sm font-medium text-gray-900">
