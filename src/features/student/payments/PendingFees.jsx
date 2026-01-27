@@ -1,6 +1,6 @@
 import React from "react"
 import { Tag, Shirt, ArrowRight, GraduationCap, PartyPopper, CreditCard, BookOpen, Ticket } from "lucide-react"
-import PaymentComponent from "../../../components/payments/PaymentComponent" // Import the component
+import PaymentComponent from "../../../components/payments/PaymentComponents"
 import { toast } from "sonner"
 
 /**
