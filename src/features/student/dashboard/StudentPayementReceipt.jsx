@@ -17,7 +17,7 @@ export default function StudentPaymentReceipt() {
   
   // Extract data from API response
   const financeData = apiResponse?.data || {};
-  const { overview, pending_fees, history } = financeData;
+  const { overview, pending_fees, history } = financeData; 
 
   // Loading state
   if (isLoading) {
