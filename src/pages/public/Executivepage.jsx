@@ -3,13 +3,22 @@ import { useQuery } from '@tanstack/react-query';
 import { Mail, CheckCircle, Users, Linkedin, Twitter, MessageCircle, X } from 'lucide-react';
 import Navbar from '@/components/shared/Navbar';
 import Footer from '@/components/shared/Footer';
+import president from '@/assets/images/president_image.jpeg';
+import vice_president from '@/assets/images/vice_president_image.png';
+import software_director from '@/assets/images/software_director_image.png';
+import general_secretary from '@/assets/images/general_secretary_image.png';
+import financial_secretary from '@/assets/images/financial_secretary_image.jpeg';
+import legislative_officer from '@/assets/images/legislative_officer_image.png';
+import sportsDirector from '@/assets/images/director_sports_image.jpeg';
+import welfare_director from '@/assets/images/welfare_director_image.png';
+import treasurer from '@/assets/images/treasurer_image.png';
 // import client from '@/config/axios-client'; // Uncomment when API is ready
 
 // Mock data for development (remove when API is ready)
 const mockExecutives = {
   president: {
     name: "OMOSIGHO GODSWILL",
-    image: "src/assets/images/president_image.jpeg",
+    image: { president },
     bio: "A visionary leader committed to growth, innovation and excellence. Focused on empowering members, strengthening collaboration and driving the department toward greater heights through strategic leadership and collective effort.",
     email: "president@nacos.edu",
     linkedin: "https://linkedin.com",
@@ -64,7 +73,7 @@ const mockExecutives = {
     {
       name: "NORUWA CALEB",
       position: "Director of Sports",
-      image: "src/assets/images/director_sports_image.jpeg",
+      image: { sportsDirector },
       icon: "/director_sports_icon.svg",
       bio: "A 400-level Information Technology student in the Computing Department at Anchor University, Lagos. I currently serve as the department\’s Social and Sports Director. My interests include football, chess, student engagement, recreational activities, and fostering positive interaction within the department.",
       email: "sports@nacos.edu"
