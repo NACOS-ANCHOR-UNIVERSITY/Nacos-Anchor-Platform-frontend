@@ -14,7 +14,6 @@ import PostNewOpportunity from "@/components/admin/siwes-board/PostNewOpportunit
 import ModerationQueue from "@/components/admin/siwes-board/ModerationQueue";
 import { useEffect, useState } from "react";
 import { getSiwesBoardData } from "@/features/admin/siwes/api";
-import Spinner from "@/components/ui/Spinner";
 import Skeleton from "@/components/ui/Skeleton";
 
 const SiwesBoardMgt = () => {
@@ -41,7 +40,10 @@ const SiwesBoardMgt = () => {
   };
 
   useEffect(() => {
-    fetchBoardData();
+    const fetchData = async () => {
+      await fetchBoardData();
+    };
+    fetchData();
   }, []);
 
   return (
@@ -127,13 +129,21 @@ const SiwesBoardMgt = () => {
           {/* post new opportunity */}
           <PostNewOpportunity onSuccess={fetchBoardData} />
           {/* manage listing */}
-          <ManageListings listings={listings} loading={loading} />
+          <ManageListings
+            listings={listings}
+            loading={loading}
+            onSuccess={fetchBoardData}
+          />
         </div>
 
         {/* column 2 */}
         <div className="flex-none w-full xl:max-w-102.5 flex flex-col md:flex-row xl:flex-col gap-6">
           {/* moderation */}
-          <ModerationQueue queue={moderationQueue} loading={loading} />
+          <ModerationQueue
+            queue={moderationQueue}
+            loading={loading}
+            onSuccess={fetchBoardData}
+          />
 
           {/* quick actions */}
           <div className="w-full rounded-3xl drop-shadow-sm bg-white p-5 border border-[#F1F5F9] flex flex-col gap-4">

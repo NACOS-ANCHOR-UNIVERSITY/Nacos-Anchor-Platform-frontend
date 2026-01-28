@@ -1,12 +1,14 @@
 import React from "react"
 import { Tag, Shirt, ArrowRight, GraduationCap, PartyPopper, CreditCard, BookOpen, Ticket } from "lucide-react"
+import PaymentComponent from "../../../components/payments/PaymentComponents"
+import { toast } from "sonner"
 
 /**
  * Get icon and colors based on fee title/type
  */
 const getFeeIcon = (title, type) => {
   const titleLower = (title || "").toLowerCase();
-  
+
   if (titleLower.includes("dues") || titleLower.includes("departmental")) {
     return { icon: <GraduationCap className="w-6 h-6 text-blue-600" />, bg: "bg-blue-100" };
   }
@@ -31,7 +33,7 @@ const getFeeIcon = (title, type) => {
  */
 const getBadgeStyle = (status) => {
   const statusUpper = (status || "").toUpperCase();
-  
+
   if (statusUpper === "PENDING") {
     return "bg-orange-100 text-orange-700";
   }
@@ -49,12 +51,12 @@ const getBadgeStyle = (status) => {
 
 /**
  * Pending Fees Component
- * Displays list of pending fees from API
- * 
- * @param {Object} props
- * @param {Array} props.fees - Array of pending fees from API
  */
 export default function PendingFees({ fees = [] }) {
+  // 1. Get User Email (Required for Paystack)
+  const user = JSON.parse(localStorage.getItem("user") || "{}");
+  const userEmail = user.email || "student@aul.edu.ng";
+
   // Format amount with currency
   const formatAmount = (amount, currency = "₦") => {
     if (!amount) return `${currency}0`;
@@ -66,17 +68,56 @@ export default function PendingFees({ fees = [] }) {
   const getButtonProps = (fee) => {
     const type = (fee.type || "").toLowerCase();
     const buttonText = fee.button_text || "Pay Now";
-    
+
     if (type === "compulsory" || type === "required") {
       return {
         text: buttonText,
-        className: "min-w-[5rem] bg-[#138601] hover:bg-[#0e6001] shadow-[0px_2px_4px_-2px_#138601] hover:shadow-[0px_4px_6px_-1px_#138601] transition text-white py-2.5 rounded-lg text-sm font-medium"
+        // Your exact green button styles
+        className: "min-w-[5rem] bg-[#138601] hover:bg-[#0e6001] shadow-[0px_2px_4px_-2px_#138601] hover:shadow-[0px_4px_6px_-1px_#138601] transition text-white py-2.5 px-4 rounded-lg text-sm font-medium cursor-pointer"
       };
     }
     return {
       text: buttonText,
-      className: "min-w-[5rem] border border-gray-300 hover:bg-gray-50 transition py-2.5 px-2 rounded-lg text-sm font-medium"
+      // Your exact secondary button styles
+      className: "min-w-[5rem] border border-gray-300 hover:bg-gray-50 transition py-2.5 px-4 rounded-lg text-sm font-medium cursor-pointer"
     };
+  };
+
+  const handlePaymentSuccess = async (reference, feeItem) => {
+    // 1. Show immediate success to the user
+    toast.success(`Payment Successful! Verifying...`);
+    console.log("Paystack Reference:", reference);
+
+    try {
+      // 2. Tell the backend the payment happened
+      // Replace '/api/payments/verify' with your ACTUAL backend endpoint
+      const response = await fetch("https://nacos.nextgenerationones.org/api/payments/verify", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${localStorage.getItem("ACCESS_TOKEN")}` // Send their login token
+        },
+        body: JSON.stringify({
+          reference: reference.reference, // The code Paystack gave us (e.g. T39450320)
+          fee_id: feeItem.id,             // The ID of the fee they paid for
+          amount: feeItem.amount
+        }),
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        toast.success("Database Updated: Payment Recorded!");
+        // Optional: Refresh the page so the fee disappears from the list
+        // window.location.reload(); 
+      } else {
+        toast.error("Payment received, but database update failed. Contact Admin.");
+        console.error("Verification failed:", data);
+      }
+    } catch (error) {
+      console.error("Network Error:", error);
+      toast.error("Network error verifying payment.");
+    }
   };
 
   // Show empty state if no fees
@@ -109,7 +150,7 @@ export default function PendingFees({ fees = [] }) {
         </div>
         {fees.length > 3 && (
           <button className="text-[#138601] text-sm hover:text-gray-900 font-medium self-start sm:self-auto flex justify-center items-center gap-2">
-            View all <ArrowRight className="w-4"/>
+            View all <ArrowRight className="w-4" />
           </button>
         )}
       </div>
@@ -119,9 +160,9 @@ export default function PendingFees({ fees = [] }) {
           const { icon, bg } = getFeeIcon(fee.title, fee.type);
           const badgeStyle = getBadgeStyle(fee.status_badge);
           const buttonProps = getButtonProps(fee);
-          
+
           return (
-            <div key={fee.id} className="relative bg-white border border-gray-200 rounded-xl p-6 flex flex-col">
+            <div key={fee.id} className="relative bg-white border border-gray-200 rounded-xl p-6 flex flex-col hover:shadow-md transition-shadow">
               <span className={`absolute top-4 right-4 ${badgeStyle} text-xs px-3 py-1 rounded-full font-bold`}>
                 {fee.status_badge || "PENDING"}
               </span>
@@ -130,12 +171,22 @@ export default function PendingFees({ fees = [] }) {
               </div>
               <h3 className="font-semibold text-gray-900 mb-1">{fee.title}</h3>
               <p className="text-sm text-gray-500 leading-relaxed flex-1">{fee.description}</p>
+
               <div className="border-t border-gray-200 mt-6 pt-4 flex items-center justify-between gap-3">
                 <div>
                   <p className="text-xs tracking-wide text-gray-400 mb-1">AMOUNT</p>
                   <h4 className="text-2xl font-bold text-gray-900">{formatAmount(fee.amount)}</h4>
                 </div>
-                <button className={buttonProps.className}>{buttonProps.text}</button>
+
+                {/* 👇 THIS IS THE CHANGE: Replaced <button> with <PaymentComponent> */}
+                <PaymentComponent
+                  amount={fee.amount}
+                  email={userEmail}
+                  purpose={fee.title}
+                  btnText={buttonProps.text}
+                  className={buttonProps.className} // Passes your exact design classes
+                  onSuccess={(ref) => handlePaymentSuccess(ref, fee)}
+                />
               </div>
             </div>
           );

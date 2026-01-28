@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { toast } from "sonner";
 import { ChevronDown, PlusCircle, SendHorizonalIcon } from "lucide-react";
 import { MapPinIcon } from "../../../assets/icons";
 import { postSiwesOpportunity } from "@/features/admin/siwes/api";
@@ -58,11 +59,14 @@ const PostNewOpportunity = ({ onSuccess }) => {
     try {
       await postSiwesOpportunity(form);
       setSuccess("Opportunity posted successfully!");
+      toast.success("Opportunity posted successfully!");
       setForm(initialState);
       setFieldErrors({});
       if (typeof onSuccess === "function") onSuccess();
     } catch (err) {
-      setError(err?.response?.data?.message || "Failed to post opportunity.");
+      const msg = err?.response?.data?.message || "Failed to post opportunity.";
+      setError(msg);
+      toast.error(msg);
     } finally {
       setLoading(false);
     }
@@ -222,14 +226,7 @@ const PostNewOpportunity = ({ onSuccess }) => {
               {loading ? "Publishing..." : "Publish Post"}
             </button>
           </div>
-          {error && (
-            <div className="col-span-2 text-red-500 text-xs mt-2">{error}</div>
-          )}
-          {success && (
-            <div className="col-span-2 text-green-600 text-xs mt-2">
-              {success}
-            </div>
-          )}
+          {/* Toasts handle error/success messages now */}
         </form>
       </div>
     </div>
