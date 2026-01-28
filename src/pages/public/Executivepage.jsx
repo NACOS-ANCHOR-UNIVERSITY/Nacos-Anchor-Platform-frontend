@@ -165,7 +165,10 @@ const Executivepage = () => {
               <h2 className="text-2xl font-bold text-gray-900">The President</h2>
             </div>
 
-            <div className="bg-white rounded-2xl shadow-sm border border-gray-200 p-8 max-w-5xl ">
+            <div 
+              className="bg-white rounded-2xl shadow-sm border border-gray-200 p-8 max-w-5xl cursor-pointer hover:shadow-lg transition-all duration-300"
+              onClick={() => openModal({ ...executives.president, position: 'President' })}
+            >
               <div className="flex flex-col md:flex-row gap-8 items-start">
                 {/* President Image */}
                 <div className="relative flex-shrink-0">
@@ -187,9 +190,7 @@ const Executivepage = () => {
                   src="/president_icon.jpg"
                   className="mb-5"/>
                   <p 
-                    className="text-gray-600 leading-relaxed mb-6 text-base cursor-pointer hover:text-gray-800 transition-colors line-clamp-3"
-                    onClick={() => openModal({ ...executives.president, position: 'President' })}
-                    title="Click to read full bio"
+                    className="text-gray-600 leading-relaxed mb-6 text-base line-clamp-3"
                   >
                     {executives.president.bio || 'Leading the NACOS community with a vision for academic excellence and student empowerment.'}
                   </p>
@@ -199,6 +200,7 @@ const Executivepage = () => {
                         href={`mailto:${executives.president.email}`}
                         className="w-10 h-10 flex items-center justify-center rounded-full text-white  transition-colors shadow-md"
                         title="Email"
+                        onClick={(e) => e.stopPropagation()}
                       >
                         <img
                         src="/email.svg"
@@ -212,6 +214,7 @@ const Executivepage = () => {
                         rel="noopener noreferrer"
                         className="w-10 h-10 flex items-center justify-center rounded-full bg-[#128401] text-white hover:bg-[#0f6b01] transition-colors shadow-md"
                         title="LinkedIn"
+                        onClick={(e) => e.stopPropagation()}
                       >
                         <img
                         src="/Link.svg"/>
@@ -247,7 +250,8 @@ const Executivepage = () => {
               {executives.council.map((member, index) => (
                 <div
                   key={index}
-                  className="bg-white rounded-2xl shadow-sm border border-gray-200 p-6 hover:shadow-lg transition-all duration-300 hover:-translate-y-1"
+                  className="bg-white rounded-2xl shadow-sm border border-gray-200 p-6 hover:shadow-lg transition-all duration-300 hover:-translate-y-1 cursor-pointer"
+                  onClick={() => openModal(member)}
                 >
                   {/* Profile Image with Online Status */}
                   <div className="relative mb-4">
@@ -275,9 +279,7 @@ const Executivepage = () => {
                   </p>
                   {member.bio && (
                     <p 
-                      className="text-gray-600 text-sm text-center mb-4 leading-relaxed line-clamp-3 cursor-pointer hover:text-gray-800 transition-colors"
-                      onClick={() => openModal(member)}
-                      title="Click to read full bio"
+                      className="text-gray-600 text-sm text-center mb-4 leading-relaxed line-clamp-3"
                     >
                       {member.bio}
                     </p>
@@ -290,6 +292,7 @@ const Executivepage = () => {
                         href={`mailto:${member.email}`}
                         className="w-9 h-9 flex items-center justify-center rounded-full bg-[#128401] text-white hover:bg-[#0f6b01] transition-colors shadow-sm"
                         title="Email"
+                        onClick={(e) => e.stopPropagation()}
                       >
                         <Mail className="w-4 h-4" />
                       </a>
@@ -301,6 +304,7 @@ const Executivepage = () => {
                         rel="noopener noreferrer"
                         className="w-9 h-9 flex items-center justify-center rounded-full bg-[#128401] text-white hover:bg-[#0f6b01] transition-colors shadow-sm"
                         title="LinkedIn"
+                        onClick={(e) => e.stopPropagation()}
                       >
                         <Linkedin className="w-4 h-4" />
                       </a>
@@ -312,6 +316,7 @@ const Executivepage = () => {
                         rel="noopener noreferrer"
                         className="w-9 h-9 flex items-center justify-center rounded-full bg-[#128401] text-white hover:bg-[#0f6b01] transition-colors shadow-sm"
                         title="Twitter"
+                        onClick={(e) => e.stopPropagation()}
                       >
                         <Twitter className="w-4 h-4" />
                       </a>
