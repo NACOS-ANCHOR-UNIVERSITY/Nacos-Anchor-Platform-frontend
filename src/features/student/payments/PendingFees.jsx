@@ -54,6 +54,8 @@ const getBadgeStyle = (status) => {
 export default function PendingFees({ fees = [] }) {
   const user = JSON.parse(localStorage.getItem("user") || "{}");
   const userEmail = user.email || "student@aul.edu.ng";
+  const token = localStorage.getItem("token")
+  // console.log(token)
 
   const formatAmount = (amount, currency = "₦") => {
     if (!amount) return `${currency}0`;
@@ -86,9 +88,11 @@ export default function PendingFees({ fees = [] }) {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`,
+
         },
         body: JSON.stringify({
-          amount: feeItem.amount
+          reference
         }),
       });
 
@@ -105,7 +109,7 @@ export default function PendingFees({ fees = [] }) {
       toast.error("Network error verifying payment.");
     }
   };
-
+// T081630676065198 <--- reference to verify
   if (!fees || fees.length === 0) {
     return (
       <div className="mb-8">
