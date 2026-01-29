@@ -325,33 +325,39 @@ export default function AdminDashboard() {
 
       {/* RECENT ADMIN ACTIVITIES */}
       <div className="bg-white border border-gray-200 rounded-xl shadow-sm overflow-hidden">
-        <div className="p-6 border-b border-gray-100 flex items-center justify-between bg-gray-50/50">
-          <h3 className="text-lg font-bold text-gray-900 flex items-center gap-2">
+        <div className="p-4 md:p-6 border-b border-gray-100 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 bg-gray-50/50">
+          <h3 className="text-base md:text-lg font-bold text-gray-900 flex items-center gap-2">
             <Clock className="w-5 h-5 text-green-700" /> Recent Admin Activities
           </h3>
-          <div className="flex gap-3">
+          <div className="flex gap-2 sm:gap-3 w-full sm:w-auto">
             <button
               onClick={() => exportLogs()}
               disabled={isExporting}
-              className="flex items-center gap-2 px-3 py-1.5 text-xs font-medium text-gray-600 bg-white border border-gray-200 rounded hover:bg-gray-50 shadow-sm cursor-pointer disabled:opacity-50"
+              className="flex-1 sm:flex-none flex items-center justify-center gap-2 px-3 py-1.5 text-xs font-medium text-gray-600 bg-white border border-gray-200 rounded hover:bg-gray-50 shadow-sm cursor-pointer disabled:opacity-50"
             >
               {isExporting ? (
                 <Loader2 className="w-3 h-3 animate-spin" />
               ) : (
                 <Download className="w-3 h-3" />
               )}
-              {isExporting ? "Exporting..." : "Export Log"}
+              <span className="hidden xs:inline">
+                {isExporting ? "Exporting..." : "Export Log"}
+              </span>
+              <span className="xs:hidden">
+                {isExporting ? "..." : "Export"}
+              </span>
             </button>
             <button
               onClick={() => navigate("/admin/activities")}
-              className="flex items-center gap-2 px-3 py-1.5 text-xs font-medium text-white bg-green-700 rounded hover:bg-green-800 shadow-sm cursor-pointer"
+              className="flex-1 sm:flex-none flex items-center justify-center gap-2 px-3 py-1.5 text-xs font-medium text-white bg-green-700 rounded hover:bg-green-800 shadow-sm cursor-pointer"
             >
               View All <ArrowRight className="w-3 h-3" />
             </button>
           </div>
         </div>
 
-        <div className="overflow-x-auto">
+        {/* Desktop Table View */}
+        <div className="hidden md:block overflow-x-auto">
           <table className="w-full text-left">
             <thead className="bg-gray-50 border-b border-gray-100">
               <tr>
@@ -437,6 +443,58 @@ export default function AdminDashboard() {
               )}
             </tbody>
           </table>
+        </div>
+
+        {/* Mobile Card View */}
+        <div className="md:hidden divide-y divide-gray-100">
+          {recentActivities.length > 0 ? (
+            recentActivities.map((item) => (
+              <div key={item.id || Math.random()} className="p-4">
+                <div className="flex items-start justify-between gap-2 mb-2">
+                  <p className="text-sm font-medium text-gray-900 flex-1">
+                    {item.description || item.activity}
+                  </p>
+                  <span
+                    className={`shrink-0 inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-medium ${
+                      ["completed", "success", "successful", "active"].includes(
+                        item.status?.toLowerCase(),
+                      )
+                        ? "bg-green-100 text-green-700"
+                        : ["pending", "review", "processing"].includes(
+                              item.status?.toLowerCase(),
+                            )
+                          ? "bg-amber-100 text-amber-700"
+                          : ["failed", "rejected", "error"].includes(
+                                item.status?.toLowerCase(),
+                              )
+                            ? "bg-red-100 text-red-700"
+                            : "bg-gray-100 text-gray-700"
+                    }`}
+                  >
+                    {item.status}
+                  </span>
+                </div>
+                <div className="flex items-center justify-between text-xs text-gray-500">
+                  <span>
+                    {item.user || "System"} • {item.formatted_date || item.date}
+                  </span>
+                  <button
+                    className={`font-medium ${
+                      item.action === "Review"
+                        ? "text-green-700"
+                        : "text-gray-400"
+                    }`}
+                  >
+                    {item.action}
+                  </button>
+                </div>
+              </div>
+            ))
+          ) : (
+            <div className="p-8 text-center text-gray-500">
+              No recent activities found
+            </div>
+          )}
         </div>
       </div>
     </div>
