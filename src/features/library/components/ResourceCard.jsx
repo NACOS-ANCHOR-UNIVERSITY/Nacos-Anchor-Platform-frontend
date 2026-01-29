@@ -230,7 +230,7 @@ const PreviewModal = ({ title, fileUrl, fileType, onClose }) => {
       return (
         <iframe
           src={fileUrl}
-          className="w-full h-full min-h-[50vh]"
+          className="w-full h-full min-h-[80vh]"
           title={title}
         />
       );
@@ -281,7 +281,7 @@ const PreviewModal = ({ title, fileUrl, fileType, onClose }) => {
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-75 z-50 flex items-center justify-center p-4">
-      <div className="bg-white rounded-xl max-w-6xl w-full max-h-[90vh] min-h-[50vh] flex flex-col shadow-2xl">
+      <div className="bg-white rounded-xl max-w-6xl w-full max-h-[90vh] pb-2 flex flex-col shadow-2xl">
         {/* Header */}
         <div className="flex items-center justify-between p-4 border-b border-gray-200">
           <h2 className="text-lg font-bold text-gray-900 truncate flex-1 mr-4">
