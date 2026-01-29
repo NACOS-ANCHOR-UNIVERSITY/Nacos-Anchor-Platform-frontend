@@ -1,12 +1,13 @@
-
 import axios from "axios";
 // 👇 Import your store here so Axios can talk to it
 import useUserStore from "../store/useUserStore";
 
 const client = axios.create({
-  baseURL: "/api",
-  // Was: import.meta.env.VITE_API_BASE_URL || "https://nacos.nextgenerationones.org/api"
-  // Using relative path triggers the Vite proxy defined in vite.config.js
+  // Use proxy in development (vite.config.js), real URL in production
+  baseURL: import.meta.env.DEV
+    ? "/api"
+    : import.meta.env.VITE_API_BASE_URL ||
+      "https://nacos.nextgenerationones.org/api",
 });
 
 client.interceptors.request.use((config) => {

@@ -26,6 +26,7 @@ import UserManagement from "./pages/admin/UserManagement";
 import LibraryPage from "./features/library/pages/LibraryPage";
 import SiwesBoardMgt from "./pages/admin/siwes-board";
 import AdminActivityLogs from "./pages/admin/AdminActivityLogs";
+import RestoreTransactions from "./pages/admin/RestoreTransactions";
 import StudentNews from "./pages/student/StudentNews";
 import NotFound from "./pages/public/NotFound";
 import EventsAndPolls from "./pages/admin/EventsAndPolls";
@@ -70,6 +71,7 @@ function App() {
           <Route path="/admin/events" element={<EventsAndPolls />} />
           <Route path="/admin/siwes" element={<SiwesBoardMgt />} />
           <Route path="/admin/activities" element={<AdminActivityLogs />} />
+          <Route path="/admin/restore" element={<RestoreTransactions />} />
         </Route>
 
         {/* public */}

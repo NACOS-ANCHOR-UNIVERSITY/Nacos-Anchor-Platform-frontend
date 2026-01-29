@@ -18,6 +18,46 @@ const getInitials = (name) => {
   return (parts[0][0] + parts[parts.length - 1][0]).toUpperCase();
 };
 
+// Helper to format dates and handle invalid/null dates from the database
+const formatDate = (dateString) => {
+  if (!dateString) return "N/A";
+
+  // Convert to string in case it's not
+  const dateStr = String(dateString);
+
+  // Check for invalid date patterns like "0000-00-00" or dates with year -0001
+  if (
+    dateStr.includes("-0001") ||
+    dateStr.includes("0000-00-00") ||
+    dateStr.startsWith("0000")
+  ) {
+    return "N/A";
+  }
+
+  // Try to parse the date (handle MySQL datetime format: "2026-01-29 14:30:00")
+  let date = new Date(dateStr.replace(" ", "T"));
+
+  // If that fails, try parsing directly
+  if (isNaN(date.getTime())) {
+    date = new Date(dateStr);
+  }
+
+  // Check if date is valid and year is reasonable (after year 2000)
+  if (isNaN(date.getTime()) || date.getFullYear() < 2000) {
+    return "N/A";
+  }
+
+  // Format as "Jan 28, 2026 1:28 PM"
+  return date.toLocaleDateString("en-US", {
+    month: "short",
+    day: "numeric",
+    year: "numeric",
+    hour: "numeric",
+    minute: "2-digit",
+    hour12: true,
+  });
+};
+
 const handleExportCSV = (data, filename = "payments-report.csv") => {
   if (!data || !data.length) return;
 
@@ -114,7 +154,9 @@ export default function AdminPaymentsPage() {
         avatar: t.avatar_url?.startsWith("http") ? t.avatar_url : null,
         transaction: t.description,
         ref: t.reference_id,
-        date: t.formatted_date,
+        date: formatDate(
+          t.date || t.created_at || t.date_paid || t.formatted_date,
+        ),
         amount: t.formatted_amount,
         status: t.status === "Successful" ? "Approved" : t.status,
         initials: getInitials(t.full_name),
