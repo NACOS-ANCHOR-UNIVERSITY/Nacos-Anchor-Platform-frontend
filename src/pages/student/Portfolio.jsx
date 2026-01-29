@@ -1,4 +1,4 @@
-import { useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import {
   Linkedin,
   X,
@@ -9,6 +9,7 @@ import {
   Eye,
   Pencil,
   Plus,
+  Loader2,
 } from "lucide-react";
 
 // Placeholder images for projects (replace with actual images when available)
@@ -79,14 +80,15 @@ function SkillPill({ label, onRemove }) {
 }
 
 export default function Portfolio() {
-  const user = useMemo(
-    () => ({
-      fullName: "Adefemi Oluwatobi",
-      deptLevel: "Computer Science | 400 Level",
-      matric: "AUL/CPM/22/003",
-    }),
-    [],
-  );
+  const [user, setUser] = useState({
+    fullName: "Adefemi Oluwatobi",
+    deptLevel: "Computer Science | 400 Level",
+    matric: "AUL/CPM/22/003",
+  });
+
+  const [isLoading, setIsLoading] = useState(true);
+  const [isSaving, setIsSaving] = useState(false);
+  const [publicUrl, setPublicUrl] = useState("");
 
   // avatar
   const avatarInputRef = useRef(null);
@@ -457,7 +459,7 @@ export default function Portfolio() {
                   <FileText className="h-5 w-5 text-red-500" />
                   <div className="text-xs font-semibold text-slate-800">
                     {resume.name}
-                  </a>
+                  </div>
                 </div>
               </div>
             ) : null}

@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { toast } from "sonner";
 import {
   Users,
   ArrowUp,
@@ -132,12 +133,41 @@ const UserManagement = () => {
   const isHeaderCheckboxChecked =
     users.length > 0 && users.every((user) => user.selected);
 
+  // Placeholder for recent logs
+  const recentLogs = logs.map((log) => ({
+    ...log,
+    statusColor:
+      log.status === "Success"
+        ? "bg-green-100 text-green-700"
+        : "bg-amber-100 text-amber-700",
+    actionColor: "text-[#138601]",
+    action: "View Details",
+  }));
+
   const bulkApprover = () => {
     setUsers(
       users.map((user) =>
         user.selected ? { ...user, status: "Active" } : user,
       ),
     );
+  };
+
+  const approveUser = (id) => {
+    setUsers(
+      users.map((user) =>
+        user.id === id ? { ...user, status: "Active" } : user,
+      ),
+    );
+    toast.success("User approved");
+  };
+
+  const rejectUser = (id) => {
+    setUsers(
+      users.map((user) =>
+        user.id === id ? { ...user, status: "Rejected" } : user,
+      ),
+    );
+    toast.success("User rejected");
   };
 
   if (loading && users.length === 0) {
@@ -292,68 +322,74 @@ const UserManagement = () => {
                           </p>
                           <p className="text-gray-500 text-xs">{user.email}</p>
                         </div>
-                      </div>
-                    </td>
-                    <td className="p-4 text-[#64748B] text-[14px]">
-                      {user.matric}
-                    </td>
-                    <td className="p-4 text-[#64748B] text-[14px]">
-                      {user.level}
-                    </td>
-                    <td className="p-4">
-                      <span
-                        className={`px-3 py-1 rounded-full text-[12px] font-semibold ${
-                          user.role === "Class Rep"
-                            ? "bg-[#F3E8FF] text-[#6B21A8]"
-                            : "bg-[#F3F4F6] text-[#4B5563]"
-                        }`}
-                      >
-                        {user.role}
-                      </span>
-                    </td>
-                    <td className="p-4">
-                      <span
-                        className={`px-3 py-1 rounded-full text-xs font-semibold ${
-                          user.status === "Active"
-                            ? "bg-green-100 text-green-700"
-                            : user.status === "Rejected"
-                              ? "bg-red-100 text-red-700"
-                              : "bg-amber-100 text-amber-700"
-                        }`}
-                      >
-                        {user.status}
-                      </span>
-                    </td>
-                    <td className="p-4">
-                      <div className="flex items-center gap-3 text-gray-400">
-                        {user.status === "Pending" ? (
-                          <>
-                            <button
-                              title="Approve"
-                              onClick={() => approveUser(user.id)}
-                              className="cursor-pointer"
-                            >
-                              <CheckCircle className="w-4 h-4 text-green-600" />
-                            </button>
-                            <button
-                              title="Reject"
-                              onClick={() => rejectUser(user.id)}
-                              className="cursor-pointer"
-                            >
-                              <XCircle className="w-4 h-4 text-red-500" />
-                            </button>
-                          </>
-                        ) : (
-                          <>
-                            <button title="View">
-                              <Eye className="w-4 h-4" />
-                            </button>
-                            <button title="Edit">
-                              <Pencil className="w-4 h-4" />
-                            </button>
-                          </>
-                        )}
-                      </div>
+                      </td>
+                      <td className="p-4 text-[#64748B] text-[14px]">
+                        {user.matric}
+                      </td>
+                      <td className="p-4 text-[#64748B] text-[14px]">
+                        {user.level}
+                      </td>
+                      <td className="p-4">
+                        <span
+                          className={`px-3 py-1 rounded-full text-[12px] font-semibold ${
+                            user.role === "Class Rep"
+                              ? "bg-[#F3E8FF] text-[#6B21A8]"
+                              : "bg-[#F3F4F6] text-[#4B5563]"
+                          }`}
+                        >
+                          {user.role}
+                        </span>
+                      </td>
+                      <td className="p-4">
+                        <span
+                          className={`px-3 py-1 rounded-full text-xs font-semibold ${
+                            user.status === "Active"
+                              ? "bg-green-100 text-green-700"
+                              : user.status === "Rejected"
+                                ? "bg-red-100 text-red-700"
+                                : "bg-amber-100 text-amber-700"
+                          }`}
+                        >
+                          {user.status}
+                        </span>
+                      </td>
+                      <td className="p-4">
+                        <div className="flex items-center gap-3 text-gray-400">
+                          {user.status === "Pending" ? (
+                            <>
+                              <button
+                                title="Approve"
+                                onClick={() => approveUser(user.id)}
+                                className="cursor-pointer"
+                              >
+                                <CheckCircle className="w-4 h-4 text-green-600" />
+                              </button>
+                              <button
+                                title="Reject"
+                                onClick={() => rejectUser(user.id)}
+                                className="cursor-pointer"
+                              >
+                                <XCircle className="w-4 h-4 text-red-500" />
+                              </button>
+                            </>
+                          ) : (
+                            <>
+                              <button title="View">
+                                <Eye className="w-4 h-4" />
+                              </button>
+                              <button title="Edit">
+                                <Pencil className="w-4 h-4" />
+                              </button>
+                            </>
+                          )}
+                        </div>
+                      </td>
+                    </tr>
+                  ))
+                ) : (
+                  <tr>
+                    <td colSpan="6" className="p-8 text-center text-gray-500">
+                      No users found
                     </td>
                   </tr>
                 )}

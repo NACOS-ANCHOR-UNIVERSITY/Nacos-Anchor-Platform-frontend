@@ -1,3 +1,5 @@
+import { useEffect } from "react";
+import { useLocation } from "react-router-dom";
 import {
   Flag,
   LayoutGrid,
@@ -14,18 +16,18 @@ import Person3 from "../../assets/images/person3.png";
 import Person4 from "../../assets/images/person4.png";
 
 const AboutUs = () => {
-  const location = useLocation()
+  const location = useLocation();
 
   useEffect(() => {
     if (location.hash) {
-      const element = document.getElementById(location.hash.substring(1))
+      const element = document.getElementById(location.hash.substring(1));
       if (element) {
         setTimeout(() => {
-          element.scrollIntoView({ behavior: "instant" })
-        }, 100)
+          element.scrollIntoView({ behavior: "instant" });
+        }, 100);
       }
     }
-  }, [location])
+  }, [location]);
 
   const coreMission = [
     {
@@ -147,9 +149,16 @@ const AboutUs = () => {
 
       {/* History of the Chapter section */}
 
-      <section id="history" className="flex flex-col items-center justify-center w-full max-w-3xl mt-10">
-        <p className="uppercase text-brand-primary text-[14px] font-bold">our journey</p>
-        <h1 className="text-[#0F172A] text-[20px] md:text-[30px] font-bold">History of the Chapter</h1>
+      <section
+        id="history"
+        className="flex flex-col items-center justify-center w-full max-w-3xl mt-10"
+      >
+        <p className="uppercase text-brand-primary text-[14px] font-bold">
+          our journey
+        </p>
+        <h1 className="text-[#0F172A] text-[20px] md:text-[30px] font-bold">
+          History of the Chapter
+        </h1>
 
         <div className="relative mt-10 w-full">
           <div className="absolute left-8 top-4 bottom-0 w-0.5 bg-[#E2E8F0] -translate-x-1/2"></div>
