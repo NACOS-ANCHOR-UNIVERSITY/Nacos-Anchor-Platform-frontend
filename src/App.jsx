@@ -25,6 +25,8 @@ import AdminPaymentsPage from "./pages/admin/Payments";
 import UserManagement from "./pages/admin/UserManagement";
 import LibraryPage from "./features/library/pages/LibraryPage";
 import SiwesBoardMgt from "./pages/admin/siwes-board";
+import AdminActivityLogs from "./pages/admin/AdminActivityLogs";
+import StudentNews from "./pages/student/StudentNews";
 import NotFound from "./pages/public/NotFound";
 
 function App() {
@@ -55,6 +57,7 @@ function App() {
             path="/student/resources/upload"
             element={<UploadResourcePage />}
           />
+          <Route path="/student/news" element={<StudentNews />} />
           <Route path="/student/profile" element={<Portfolio />} />
         </Route>
 
@@ -64,6 +67,7 @@ function App() {
           <Route path="/admin/users" element={<UserManagement />} />
           <Route path="/admin/payments" element={<AdminPaymentsPage />} />
           <Route path="/admin/siwes" element={<SiwesBoardMgt />} />
+          <Route path="/admin/activities" element={<AdminActivityLogs />} />
         </Route>
 
         {/* public */}
@@ -78,4 +82,3 @@ function App() {
 }
 
 export default App;
-

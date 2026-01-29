@@ -12,39 +12,23 @@ import { Link } from "react-router-dom";
 import ManageListings from "@/components/admin/siwes-board/ManageListing";
 import PostNewOpportunity from "@/components/admin/siwes-board/PostNewOpportunity";
 import ModerationQueue from "@/components/admin/siwes-board/ModerationQueue";
-import { useEffect, useState } from "react";
-import { getSiwesBoardData } from "@/features/admin/siwes/api";
+import { useAdminSiwesBoard } from "@/hooks/useAdmin";
 import Skeleton from "@/components/ui/Skeleton";
 
 const SiwesBoardMgt = () => {
-  const [loading, setLoading] = useState(true);
-  const [metrics, setMetrics] = useState({
+  const { data: boardData, isLoading: loading, refetch } = useAdminSiwesBoard();
+
+  const metrics = boardData?.data?.metrics || {
     active_opportunities: 0,
     pending_logs: 0,
     placed_students: 0,
-  });
-  const [moderationQueue, setModerationQueue] = useState([]);
-  const [listings, setListings] = useState([]);
-
-  const fetchBoardData = () => {
-    setLoading(true);
-    getSiwesBoardData()
-      .then((res) => {
-        if (res?.status === "success" && res.data) {
-          setMetrics(res.data.metrics || {});
-          setModerationQueue(res.data.moderation_queue || []);
-          setListings(res.data.listings || []);
-        }
-      })
-      .finally(() => setLoading(false));
   };
+  const moderationQueue = boardData?.data?.moderation_queue || [];
+  const listings = boardData?.data?.listings || [];
 
-  useEffect(() => {
-    const fetchData = async () => {
-      await fetchBoardData();
-    };
-    fetchData();
-  }, []);
+  const handleSuccess = () => {
+    refetch();
+  };
 
   return (
     <div className="flex flex-col gap-6">
@@ -127,12 +111,12 @@ const SiwesBoardMgt = () => {
         {/* column 1 */}
         <div className="flex-1 w-full flex flex-col gap-6">
           {/* post new opportunity */}
-          <PostNewOpportunity onSuccess={fetchBoardData} />
+          <PostNewOpportunity onSuccess={handleSuccess} />
           {/* manage listing */}
           <ManageListings
             listings={listings}
             loading={loading}
-            onSuccess={fetchBoardData}
+            onSuccess={handleSuccess}
           />
         </div>
 
@@ -142,7 +126,7 @@ const SiwesBoardMgt = () => {
           <ModerationQueue
             queue={moderationQueue}
             loading={loading}
-            onSuccess={fetchBoardData}
+            onSuccess={handleSuccess}
           />
 
           {/* quick actions */}
@@ -191,4 +175,3 @@ const SiwesBoardMgt = () => {
 };
 
 export default SiwesBoardMgt;
-
