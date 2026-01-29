@@ -1,7 +1,7 @@
 import client from "@/config/axios-client";
 
 export const getSiwesBoardData = async () => {
-  const { data } = await client.get("/admin/dashboard");
+  const { data } = await client.get("/admin/siwes");
   return data;
 };
 

@@ -26,15 +26,30 @@ import Skeleton from "../../components/ui/Skeleton";
 const getCategoryIcon = (category) => {
   switch (category) {
     case "Software Dev":
-      return { icon: <CodeIcon className="text-[#94A3B8]" size={24} />, bg: "bg-[#F1F5F9] border-[#F1F5F9]" };
+      return {
+        icon: <CodeIcon className="text-[#94A3B8]" size={24} />,
+        bg: "bg-[#F1F5F9] border-[#F1F5F9]",
+      };
     case "Networking":
-      return { icon: <ServerIcon className="text-[#6366F1]" size={24} />, bg: "bg-[#EEF2FF] border-[#F1F5F9]" };
+      return {
+        icon: <ServerIcon className="text-[#6366F1]" size={24} />,
+        bg: "bg-[#EEF2FF] border-[#F1F5F9]",
+      };
     case "Product Design":
-      return { icon: <PaintIcon className="text-[#F97316]" size={24} />, bg: "bg-[#FFF7ED] border-[#FFEDD5]" };
+      return {
+        icon: <PaintIcon className="text-[#F97316]" size={24} />,
+        bg: "bg-[#FFF7ED] border-[#FFEDD5]",
+      };
     case "Data Analysis":
-      return { icon: <ShieldIcon className="text-[#A855F7]" size={24} />, bg: "bg-[#FAF5FF] border-[#F3E8FF]" };
+      return {
+        icon: <ShieldIcon className="text-[#A855F7]" size={24} />,
+        bg: "bg-[#FAF5FF] border-[#F3E8FF]",
+      };
     default:
-      return { icon: <CodeIcon className="text-[#94A3B8]" size={24} />, bg: "bg-[#F1F5F9] border-[#F1F5F9]" };
+      return {
+        icon: <CodeIcon className="text-[#94A3B8]" size={24} />,
+        bg: "bg-[#F1F5F9] border-[#F1F5F9]",
+      };
   }
 };
 
@@ -58,7 +73,7 @@ const LOCATIONS = ["Lagos", "Remote", "Abuja", "Hybrid"];
 const SiwesBoard = () => {
   // 2. Use the hook to fetch data from API
   const { data: apiResponse, isLoading, error } = useOpportunities();
-  
+
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategories, setSelectedCategories] = useState([]);
   const [selectedLocations, setSelectedLocations] = useState(["Lagos"]);
@@ -67,14 +82,14 @@ const SiwesBoard = () => {
   // 3. Transform API data to match our component's expected structure
   const jobData = useMemo(() => {
     if (!apiResponse?.data) return [];
-    
+
     return apiResponse.data.map((opportunity) => {
       const { icon, bg } = getCategoryIcon(opportunity.category);
       // Handle tags - API returns array, but might be string in some cases
-      const tags = Array.isArray(opportunity.tags) 
-        ? opportunity.tags 
-        : opportunity.tags?.split(",").map(t => t.trim()) || [];
-      
+      const tags = Array.isArray(opportunity.tags)
+        ? opportunity.tags
+        : opportunity.tags?.split(",").map((t) => t.trim()) || [];
+
       return {
         id: opportunity.id,
         title: opportunity.role_title,
@@ -84,7 +99,11 @@ const SiwesBoard = () => {
         category: opportunity.category,
         duration: opportunity.duration,
         tags: tags,
-        status: opportunity.is_featured ? "Featured" : opportunity.status === "Active" ? "Active" : null,
+        status: opportunity.is_featured
+          ? "Featured"
+          : opportunity.status === "Active"
+            ? "Active"
+            : null,
         posted: opportunity.posted_text || "Recently",
         icon,
         bg,
@@ -97,7 +116,7 @@ const SiwesBoard = () => {
     setSelectedCategories((prev) =>
       prev.includes(category)
         ? prev.filter((c) => c !== category)
-        : [...prev, category]
+        : [...prev, category],
     );
   };
 
@@ -106,7 +125,7 @@ const SiwesBoard = () => {
     setSelectedLocations((prev) =>
       prev.includes(location)
         ? prev.filter((l) => l !== location)
-        : [...prev, location]
+        : [...prev, location],
     );
   };
 
@@ -125,7 +144,7 @@ const SiwesBoard = () => {
         job.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
         job.company.toLowerCase().includes(searchQuery.toLowerCase()) ||
         job.tags.some((tag) =>
-          tag.toLowerCase().includes(searchQuery.toLowerCase())
+          tag.toLowerCase().includes(searchQuery.toLowerCase()),
         );
 
       //  Category Filter (OR logic within categories)
@@ -137,7 +156,7 @@ const SiwesBoard = () => {
       const matchesLocation =
         selectedLocations.length === 0 ||
         selectedLocations.some(
-          (loc) => job.type === loc || job.location.includes(loc)
+          (loc) => job.type === loc || job.location.includes(loc),
         );
 
       return matchesSearch && matchesCategory && matchesLocation;
@@ -148,7 +167,7 @@ const SiwesBoard = () => {
   const totalPages = Math.ceil(filteredJobs.length / ITEMS_PER_PAGE);
   const currentJobs = filteredJobs.slice(
     (currentPage - 1) * ITEMS_PER_PAGE,
-    currentPage * ITEMS_PER_PAGE
+    currentPage * ITEMS_PER_PAGE,
   );
 
   return (
@@ -357,7 +376,10 @@ const SiwesBoard = () => {
           {isLoading && (
             <div className="flex flex-col gap-4">
               {[1, 2, 3, 4].map((i) => (
-                <div key={i} className="bg-white rounded-xl p-5 border border-[#E2E8F099]">
+                <div
+                  key={i}
+                  className="bg-white rounded-xl p-5 border border-[#E2E8F099]"
+                >
                   <div className="flex gap-4 mb-4">
                     <Skeleton className="size-16 rounded-lg" />
                     <div className="flex-1">
@@ -388,7 +410,8 @@ const SiwesBoard = () => {
                 Failed to load opportunities
               </h3>
               <p className="text-red-600 max-w-xs">
-                {error.message || "Something went wrong. Please try again later."}
+                {error.message ||
+                  "Something went wrong. Please try again later."}
               </p>
             </div>
           )}
@@ -418,70 +441,70 @@ const SiwesBoard = () => {
 
           {/* Job Cards - Only show when not loading and no error */}
           {!isLoading && !error && (
-          <div className="flex flex-col gap-4">
-            {currentJobs.map((job) => (
-              <div
-                key={job.id}
-                className="bg-white rounded-xl p-5 border border-[#E2E8F099] hover:border-[#138601]/50 drop-shadow-xs transition-all group"
-              >
-                <div className="flex justify-between items-start mb-4">
-                  <div className="flex gap-4">
-                    <div
-                      className={`size-16 rounded-lg ${job.bg} flex items-center justify-center shrink-0`}
-                    >
-                      {job.icon}
+            <div className="flex flex-col gap-4">
+              {currentJobs.map((job) => (
+                <div
+                  key={job.id}
+                  className="bg-white rounded-xl p-5 border border-[#E2E8F099] hover:border-[#138601]/50 drop-shadow-xs transition-all group"
+                >
+                  <div className="flex justify-between items-start mb-4">
+                    <div className="flex gap-4">
+                      <div
+                        className={`size-16 rounded-lg ${job.bg} flex items-center justify-center shrink-0`}
+                      >
+                        {job.icon}
+                      </div>
+                      <div>
+                        <h3 className="font-bold text-[#0F172A] text-lg">
+                          {job.title}
+                        </h3>
+                        <p className="text-[#64748B] text-sm font-medium">
+                          {job.company} • {job.location}
+                        </p>
+                      </div>
                     </div>
-                    <div>
-                      <h3 className="font-bold text-[#0F172A] text-lg">
-                        {job.title}
-                      </h3>
-                      <p className="text-[#64748B] text-sm font-medium">
-                        {job.company} • {job.location}
-                      </p>
-                    </div>
+                    {job.status && (
+                      <span
+                        className={`text-xs font-medium capitalize px-2 py-1 rounded-md border-2 ${
+                          job.status === "Active"
+                            ? "bg-green-100 text-green-700 border-green-200"
+                            : "bg-blue-50 text-blue-700 border-blue-200"
+                        }`}
+                      >
+                        {job.status}
+                      </span>
+                    )}
                   </div>
-                  {job.status && (
-                    <span
-                      className={`text-xs font-medium capitalize px-2 py-1 rounded-md border-2 ${
-                        job.status === "Active"
-                          ? "bg-[#F0FDF4] text-green-700 border-[#E2E8F099]"
-                          : "bg-blue-50 text-blue-700 border-blue-200"
-                      }`}
-                    >
-                      {job.status}
-                    </span>
-                  )}
-                </div>
 
-                <div className="flex flex-wrap gap-2 mb-6 ml-20">
-                  <span className="px-2 py-1 bg-[#1386010D] rounded text-xs text-[#138601] font-medium flex items-center gap-1">
-                    <Clock size={12} /> {job.duration}
-                  </span>
-                  {job.tags.map((tag) => (
-                    <span
-                      key={tag}
-                      className="px-2 py-1 bg-[#F1F5F9]  rounded text-xs text-[#475569] font-medium"
-                    >
-                      {tag}
+                  <div className="flex flex-wrap gap-2 mb-6 ml-20">
+                    <span className="px-2 py-1 bg-[#1386010D] rounded text-xs text-[#138601] font-medium flex items-center gap-1">
+                      <Clock size={12} /> {job.duration}
                     </span>
-                  ))}
-                </div>
+                    {job.tags.map((tag) => (
+                      <span
+                        key={tag}
+                        className="px-2 py-1 bg-[#F1F5F9]  rounded text-xs text-[#475569] font-medium"
+                      >
+                        {tag}
+                      </span>
+                    ))}
+                  </div>
 
-                <div className="ml-20 flex justify-between items-center pt-4 border-t-2 border-[#F1F5F9]">
-                  <span className="text-xs text-[#94A3B8] flex items-center gap-1">
-                    <CalendarIcon className="size-3" />
-                    Posted {job.posted}
-                  </span>
-                  <button
-                    type="button"
-                    className="text-sm font-bold text-[#138601] flex items-center gap-1 hover:gap-2 transition-all"
-                  >
-                    View Details <ArrowRight size={16} />
-                  </button>
+                  <div className="ml-20 flex justify-between items-center pt-4 border-t-2 border-[#F1F5F9]">
+                    <span className="text-xs text-[#94A3B8] flex items-center gap-1">
+                      <CalendarIcon className="size-3" />
+                      Posted {job.posted}
+                    </span>
+                    <button
+                      type="button"
+                      className="text-sm font-bold text-[#138601] flex items-center gap-1 hover:gap-2 transition-all"
+                    >
+                      View Details <ArrowRight size={16} />
+                    </button>
+                  </div>
                 </div>
-              </div>
-            ))}
-          </div>
+              ))}
+            </div>
           )}
 
           {/* Pagination - Only show when not loading */}
@@ -510,7 +533,7 @@ const SiwesBoard = () => {
                   >
                     {page}
                   </button>
-                )
+                ),
               )}
 
               <button
@@ -552,4 +575,3 @@ const SiwesBoard = () => {
 };
 
 export default SiwesBoard;
-

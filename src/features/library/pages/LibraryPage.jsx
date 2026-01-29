@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { Search, Filter, Plus, ChevronDown, ChevronUp } from "lucide-react";
 import { Link } from "react-router-dom";
 import ResourceCard from "../components/ResourceCard";
+import UploadResourceModal from "../components/UploadResourceModal";
 
 const LibraryPage = () => {
   const [resources, setResources] = useState([]);
@@ -13,6 +14,7 @@ const LibraryPage = () => {
   const [selectedSemesters, setSelectedSemesters] = useState([]);
   const [sortBy, setSortBy] = useState("newest");
   const [currentPage, setCurrentPage] = useState(1);
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const itemsPerPage = 9;
 
   useEffect(() => {
@@ -20,51 +22,50 @@ const LibraryPage = () => {
       setDebouncedSearchTerm(searchTerm);
     }, 500);
     return () => clearTimeout(timer);
-  }, [searchTerm]);//<-- intresting concept, should save this one
+  }, [searchTerm]);
 
   useEffect(() => {
     const fetchResources = async () => {
       setIsLoading(true);
       try {
-        const token = localStorage.getItem("ACCESS_TOKEN") || localStorage.getItem("token");
+        const token =
+          localStorage.getItem("ACCESS_TOKEN") || localStorage.getItem("token");
         const params = new URLSearchParams();
         if (debouncedSearchTerm.trim()) {
-          params.append('search', debouncedSearchTerm.trim());
+          params.append("search", debouncedSearchTerm.trim());
         }
         if (selectedLevels.length > 0) {
-          selectedLevels.forEach(level => {
-            const levelNum = level.split(' ')[0];
-            params.append('level', levelNum);
+          selectedLevels.forEach((level) => {
+            const levelNum = level.split(" ")[0];
+            params.append("level", levelNum);
           });
         }
         if (selectedSemesters.length > 0) {
-          selectedSemesters.forEach(sem => {
-            params.append('semester', sem);
+          selectedSemesters.forEach((sem) => {
+            params.append("semester", sem);
           });
         }
         if (selectedTypes.length > 0) {
-          selectedTypes.forEach(type => {
-            params.append('type', type);
+          selectedTypes.forEach((type) => {
+            params.append("type", type);
           });
         }
-        const url = `https://nacos.nextgenerationones.org/api/resources/library${params.toString() ? `?${params.toString()}` : ''}`;
-        console.log("Fetching from:", url);
+        const url = `https://nacos.nextgenerationones.org/api/resources/library${params.toString() ? `?${params.toString()}` : ""}`;
         const response = await fetch(url, {
           method: "GET",
           headers: {
-            "Authorization": `Bearer ${token}`,
+            Authorization: `Bearer ${token}`,
             "Content-Type": "application/json",
-            "Accept": "application/json"
-          }
+            Accept: "application/json",
+          },
         });
         const result = await response.json();
-        console.log("API Response:", result);
         if (!response.ok) {
           throw new Error(result.message || "Failed to fetch");
         }
         const apiData = result.data || result;
         if (Array.isArray(apiData) && apiData.length > 0) {
-          const mappedData = apiData.map(item => ({
+          const mappedData = apiData.map((item) => ({
             id: item.id,
             type: item.file_type?.toUpperCase() || "PDF",
             code: item.course_code || "GEN 000",
@@ -77,7 +78,7 @@ const LibraryPage = () => {
             semester: item.semester || "Alpha Semester",
             resourceType: item.resource_type || "Lecture Notes",
             downloads: item.downloads || 0,
-            created_at: item.created_at
+            created_at: item.created_at,
           }));
           setResources(mappedData);
         } else {
@@ -94,17 +95,25 @@ const LibraryPage = () => {
   }, [debouncedSearchTerm, selectedLevels, selectedTypes, selectedSemesters]);
 
   const handleLevelToggle = (level) => {
-    setSelectedLevels(prev => prev.includes(level) ? prev.filter(l => l !== level) : [...prev, level]);
+    setSelectedLevels((prev) =>
+      prev.includes(level) ? prev.filter((l) => l !== level) : [...prev, level],
+    );
     setCurrentPage(1);
   };
 
   const handleTypeToggle = (type) => {
-    setSelectedTypes(prev => prev.includes(type) ? prev.filter(t => t !== type) : [...prev, type]);
+    setSelectedTypes((prev) =>
+      prev.includes(type) ? prev.filter((t) => t !== type) : [...prev, type],
+    );
     setCurrentPage(1);
   };
 
   const handleSemesterToggle = (semester) => {
-    setSelectedSemesters(prev => prev.includes(semester) ? prev.filter(s => s !== semester) : [...prev, semester]);
+    setSelectedSemesters((prev) =>
+      prev.includes(semester)
+        ? prev.filter((s) => s !== semester)
+        : [...prev, semester],
+    );
     setCurrentPage(1);
   };
 
@@ -130,7 +139,7 @@ const LibraryPage = () => {
 
   const handlePageChange = (page) => {
     setCurrentPage(page);
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
   const getPageNumbers = () => {
@@ -142,11 +151,26 @@ const LibraryPage = () => {
       }
     } else {
       if (currentPage <= 3) {
-        pages.push(1, 2, 3, 4, '...', totalPages);
+        pages.push(1, 2, 3, 4, "...", totalPages);
       } else if (currentPage >= totalPages - 2) {
-        pages.push(1, '...', totalPages - 3, totalPages - 2, totalPages - 1, totalPages);
+        pages.push(
+          1,
+          "...",
+          totalPages - 3,
+          totalPages - 2,
+          totalPages - 1,
+          totalPages,
+        );
       } else {
-        pages.push(1, '...', currentPage - 1, currentPage, currentPage + 1, '...', totalPages);
+        pages.push(
+          1,
+          "...",
+          currentPage - 1,
+          currentPage,
+          currentPage + 1,
+          "...",
+          totalPages,
+        );
       }
     }
     return pages;
@@ -160,18 +184,26 @@ const LibraryPage = () => {
     setCurrentPage(1);
   };
 
-  const activeFiltersCount = selectedLevels.length + selectedTypes.length + selectedSemesters.length;
+  const activeFiltersCount =
+    selectedLevels.length + selectedTypes.length + selectedSemesters.length;
 
   return (
     <div className="max-w-7xl mx-auto pb-10">
       <div className="bg-green-50 border border-green-100 rounded-xl p-6 mb-6 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900 mb-1">Digital Library</h1>
-          <p className="text-sm text-gray-600 max-w-xl leading-snug">Access verified course materials, past questions, and handouts.</p>
+          <h1 className="text-2xl font-bold text-gray-900 mb-1">
+            Digital Library
+          </h1>
+          <p className="text-sm text-gray-600 max-w-xl leading-snug">
+            Access verified course materials, past questions, and handouts.
+          </p>
         </div>
-        <Link to="/student/resources/upload" className="bg-green-600 text-white px-5 py-2.5 rounded-lg text-sm font-bold hover:bg-green-700 flex items-center gap-2 shadow-sm transition-transform active:scale-95 shrink-0">
+        <button
+          onClick={() => setIsModalOpen(true)}
+          className="bg-green-600 text-white px-5 py-2.5 rounded-lg text-sm font-bold hover:bg-green-700 flex items-center gap-2 shadow-sm transition-transform active:scale-95 shrink-0 cursor-pointer"
+        >
           <Plus className="w-4 h-4" /> Upload Resource
-        </Link>
+        </button>
       </div>
 
       <div className="flex flex-col lg:flex-row gap-8 items-start">
@@ -182,29 +214,55 @@ const LibraryPage = () => {
                 <Filter className="w-4 h-4 text-green-600" />
                 Filters
                 {activeFiltersCount > 0 && (
-                  <span className="bg-green-100 text-green-700 text-xs font-bold px-2 py-0.5 rounded-full">{activeFiltersCount}</span>
+                  <span className="bg-green-100 text-green-700 text-xs font-bold px-2 py-0.5 rounded-full">
+                    {activeFiltersCount}
+                  </span>
                 )}
               </div>
               {activeFiltersCount > 0 && (
-                <button onClick={clearAllFilters} className="text-xs text-gray-500 hover:text-green-600 font-normal">Clear all</button>
+                <button
+                  onClick={clearAllFilters}
+                  className="text-xs text-gray-500 hover:text-green-600 font-normal"
+                >
+                  Clear all
+                </button>
               )}
             </div>
 
             <FilterGroup title="Academic Level" open>
-              {["100 Level", "200 Level", "300 Level", "400 Level"].map((lvl) => (
-                <CheckboxItem key={lvl} label={lvl} checked={selectedLevels.includes(lvl)} onChange={() => handleLevelToggle(lvl)} />
-              ))}
+              {["100 Level", "200 Level", "300 Level", "400 Level"].map(
+                (lvl) => (
+                  <CheckboxItem
+                    key={lvl}
+                    label={lvl}
+                    checked={selectedLevels.includes(lvl)}
+                    onChange={() => handleLevelToggle(lvl)}
+                  />
+                ),
+              )}
             </FilterGroup>
 
             <FilterGroup title="Resource Type">
-              {["Lecture Notes", "Past Questions", "Textbooks", "Datasets"].map((type) => (
-                <CheckboxItem key={type} label={type} checked={selectedTypes.includes(type)} onChange={() => handleTypeToggle(type)} />
-              ))}
+              {["Lecture Notes", "Past Questions", "Textbooks", "Datasets"].map(
+                (type) => (
+                  <CheckboxItem
+                    key={type}
+                    label={type}
+                    checked={selectedTypes.includes(type)}
+                    onChange={() => handleTypeToggle(type)}
+                  />
+                ),
+              )}
             </FilterGroup>
 
             <FilterGroup title="Semester">
               {["Alpha Semester", "Omega Semester"].map((sem) => (
-                <CheckboxItem key={sem} label={sem} checked={selectedSemesters.includes(sem)} onChange={() => handleSemesterToggle(sem)} />
+                <CheckboxItem
+                  key={sem}
+                  label={sem}
+                  checked={selectedSemesters.includes(sem)}
+                  onChange={() => handleSemesterToggle(sem)}
+                />
               ))}
             </FilterGroup>
           </div>
@@ -214,7 +272,16 @@ const LibraryPage = () => {
           <div className="flex flex-col md:flex-row gap-4 mb-6">
             <div className="flex-1 relative">
               <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
-              <input type="text" value={searchTerm} onChange={(e) => { setSearchTerm(e.target.value); setCurrentPage(1); }} placeholder="Search by course code, title, or lecturer name (e.g., 'CSC 201')" className="w-full pl-10 pr-4 py-3 bg-white border border-gray-200 rounded-xl text-sm outline-none focus:ring-2 focus:ring-green-100 focus:border-green-400 transition-all shadow-sm" />
+              <input
+                type="text"
+                value={searchTerm}
+                onChange={(e) => {
+                  setSearchTerm(e.target.value);
+                  setCurrentPage(1);
+                }}
+                placeholder="Search by course code, title, or lecturer name (e.g., 'CSC 201')"
+                className="w-full pl-10 pr-4 py-3 bg-white border border-gray-200 rounded-xl text-sm outline-none focus:ring-2 focus:ring-green-100 focus:border-green-400 transition-all shadow-sm"
+              />
               {searchTerm && searchTerm !== debouncedSearchTerm && (
                 <div className="absolute right-3 top-1/2 -translate-y-1/2">
                   <div className="w-4 h-4 border-2 border-green-600 border-t-transparent rounded-full animate-spin"></div>
@@ -224,11 +291,19 @@ const LibraryPage = () => {
           </div>
 
           <div className="flex items-center justify-between mb-4">
-            <h3 className="font-bold text-gray-900">{isLoading ? "Loading resources..." : `All Resources (${sortedResources.length})`}</h3>
+            <h3 className="font-bold text-gray-900">
+              {isLoading
+                ? "Loading resources..."
+                : `All Resources (${sortedResources.length})`}
+            </h3>
             <div className="flex items-center gap-2 text-sm text-gray-500">
               <span>Sort by:</span>
               <div className="relative">
-                <select value={sortBy} onChange={(e) => setSortBy(e.target.value)} className="appearance-none bg-white border border-gray-200 rounded-lg px-3 py-1.5 pr-8 font-bold text-gray-900 text-sm cursor-pointer hover:border-green-300 focus:outline-none focus:ring-2 focus:ring-green-100">
+                <select
+                  value={sortBy}
+                  onChange={(e) => setSortBy(e.target.value)}
+                  className="appearance-none bg-white border border-gray-200 rounded-lg px-3 py-1.5 pr-8 font-bold text-gray-900 text-sm cursor-pointer hover:border-green-300 focus:outline-none focus:ring-2 focus:ring-green-100"
+                >
                   <option value="newest">Newest First</option>
                   <option value="oldest">Oldest First</option>
                   <option value="title">Title (A-Z)</option>
@@ -242,7 +317,10 @@ const LibraryPage = () => {
           {isLoading ? (
             <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5">
               {[1, 2, 3, 4, 5, 6].map((i) => (
-                <div key={i} className="h-48 bg-gray-100 rounded-xl animate-pulse"></div>
+                <div
+                  key={i}
+                  className="h-48 bg-gray-100 rounded-xl animate-pulse"
+                ></div>
               ))}
             </div>
           ) : (
@@ -258,12 +336,21 @@ const LibraryPage = () => {
                   <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
                     <Search className="w-8 h-8 text-gray-400" />
                   </div>
-                  <p className="text-gray-500 font-medium mb-2">No resources found</p>
+                  <p className="text-gray-500 font-medium mb-2">
+                    No resources found
+                  </p>
                   {searchTerm && (
-                    <p className="text-sm text-gray-400 mb-4">No results for "{searchTerm}"</p>
+                    <p className="text-sm text-gray-400 mb-4">
+                      No results for "{searchTerm}"
+                    </p>
                   )}
                   {(searchTerm || activeFiltersCount > 0) && (
-                    <button onClick={clearAllFilters} className="text-green-600 text-sm font-bold hover:underline">Clear all filters</button>
+                    <button
+                      onClick={clearAllFilters}
+                      className="text-green-600 text-sm font-bold hover:underline"
+                    >
+                      Clear all filters
+                    </button>
                   )}
                 </div>
               )}
@@ -272,20 +359,53 @@ const LibraryPage = () => {
 
           {!isLoading && sortedResources.length > 0 && totalPages > 1 && (
             <div className="flex flex-col sm:flex-row justify-between items-center gap-4 mt-10">
-              <p className="text-sm text-gray-600">Showing {startIndex + 1}-{Math.min(endIndex, sortedResources.length)} of {sortedResources.length} resources</p>
+              <p className="text-sm text-gray-600">
+                Showing {startIndex + 1}-
+                {Math.min(endIndex, sortedResources.length)} of{" "}
+                {sortedResources.length} resources
+              </p>
               <div className="flex items-center gap-2">
-                <button onClick={() => handlePageChange(currentPage - 1)} disabled={currentPage === 1} className="w-9 h-9 flex items-center justify-center rounded-lg border border-gray-200 text-gray-500 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-all">{"<"}</button>
-                {getPageNumbers().map((page, index) => page === "..." ? (
-                  <span key={`ellipsis-${index}`} className="flex items-end px-2 text-gray-400">...</span>
-                ) : (
-                  <button key={page} onClick={() => handlePageChange(page)} className={`w-9 h-9 flex items-center justify-center rounded-lg font-bold transition-all ${currentPage === page ? "bg-green-600 text-white shadow-sm" : "border border-gray-200 text-gray-600 hover:bg-gray-50"}`}>{page}</button>
-                ))}
-                <button onClick={() => handlePageChange(currentPage + 1)} disabled={currentPage === totalPages} className="w-9 h-9 flex items-center justify-center rounded-lg border border-gray-200 text-gray-500 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-all">{">"}</button>
+                <button
+                  onClick={() => handlePageChange(currentPage - 1)}
+                  disabled={currentPage === 1}
+                  className="w-9 h-9 flex items-center justify-center rounded-lg border border-gray-200 text-gray-500 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-all"
+                >
+                  {"<"}
+                </button>
+                {getPageNumbers().map((page, index) =>
+                  page === "..." ? (
+                    <span
+                      key={`ellipsis-${index}`}
+                      className="flex items-end px-2 text-gray-400"
+                    >
+                      ...
+                    </span>
+                  ) : (
+                    <button
+                      key={page}
+                      onClick={() => handlePageChange(page)}
+                      className={`w-9 h-9 flex items-center justify-center rounded-lg font-bold transition-all ${currentPage === page ? "bg-green-600 text-white shadow-sm" : "border border-gray-200 text-gray-600 hover:bg-gray-50"}`}
+                    >
+                      {page}
+                    </button>
+                  ),
+                )}
+                <button
+                  onClick={() => handlePageChange(currentPage + 1)}
+                  disabled={currentPage === totalPages}
+                  className="w-9 h-9 flex items-center justify-center rounded-lg border border-gray-200 text-gray-500 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-all"
+                >
+                  {">"}
+                </button>
               </div>
             </div>
           )}
         </div>
       </div>
+      <UploadResourceModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+      />
     </div>
   );
 };
@@ -294,19 +414,37 @@ const FilterGroup = ({ title, children, open = false }) => {
   const [isOpen, setIsOpen] = useState(open);
   return (
     <div className="mb-6 border-b border-gray-50 pb-4 last:border-0 last:mb-0 last:pb-0">
-      <button onClick={() => setIsOpen(!isOpen)} className="w-full flex items-center justify-between text-sm font-bold text-gray-800 mb-3 hover:text-green-700 transition-colors">
+      <button
+        onClick={() => setIsOpen(!isOpen)}
+        className="w-full flex items-center justify-between text-sm font-bold text-gray-800 mb-3 hover:text-green-700 transition-colors"
+      >
         {title}
-        {isOpen ? (<ChevronUp className="w-3.5 h-3.5 text-gray-400" />) : (<ChevronDown className="w-3.5 h-3.5 text-gray-400" />)}
+        {isOpen ? (
+          <ChevronUp className="w-3.5 h-3.5 text-gray-400" />
+        ) : (
+          <ChevronDown className="w-3.5 h-3.5 text-gray-400" />
+        )}
       </button>
-      {isOpen && (<div className="space-y-2.5 animate-in slide-in-from-top-1 duration-200">{children}</div>)}
+      {isOpen && (
+        <div className="space-y-2.5 animate-in slide-in-from-top-1 duration-200">
+          {children}
+        </div>
+      )}
     </div>
   );
 };
 
 const CheckboxItem = ({ label, checked, onChange }) => (
   <label className="flex items-center gap-2.5 text-sm text-gray-500 cursor-pointer hover:text-gray-900 group">
-    <input type="checkbox" checked={checked} onChange={onChange} className="w-4 h-4 rounded border-gray-300 text-green-600 focus:ring-green-500 transition-all cursor-pointer" />
-    <span className="group-hover:translate-x-0.5 transition-transform">{label}</span>
+    <input
+      type="checkbox"
+      checked={checked}
+      onChange={onChange}
+      className="w-4 h-4 rounded border-gray-300 text-green-600 focus:ring-green-500 transition-all cursor-pointer"
+    />
+    <span className="group-hover:translate-x-0.5 transition-transform">
+      {label}
+    </span>
   </label>
 );
 

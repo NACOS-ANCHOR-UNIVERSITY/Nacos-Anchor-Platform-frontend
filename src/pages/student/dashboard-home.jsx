@@ -1,9 +1,7 @@
 import React, { useState, useEffect } from "react"; // Added imports
 // import useUserStore from "../../store/useUserStore"; // 🛑 Commented out to prevent conflicts
 
-import {
-  Plus,
-} from "lucide-react";
+import { Plus } from "lucide-react";
 import {
   ActiveIcon,
   AlertIcon,
@@ -19,17 +17,22 @@ import {
   WalletIcon,
 } from "../../assets/icons";
 
+import UploadResourceModal from "../../features/library/components/UploadResourceModal";
+
 const DashboardHome = () => {
+  const [isUploadModalOpen, setIsUploadModalOpen] = useState(false);
   // 1. GET USER DIRECTLY FROM STORAGE (Matches your Login Logic)
   const [user, setUser] = useState(() => {
     const savedUser = localStorage.getItem("user");
-    return savedUser ? JSON.parse(savedUser) : {
-      first_name: "Student",
-      last_name: "",
-      department: "Computer Science",
-      level: "100",
-      matric_number: "AUL/SCI/24/000"
-    };
+    return savedUser
+      ? JSON.parse(savedUser)
+      : {
+          first_name: "Student",
+          last_name: "",
+          department: "Computer Science",
+          level: "100",
+          matric_number: "AUL/SCI/24/000",
+        };
   });
 
   return (
@@ -42,7 +45,8 @@ const DashboardHome = () => {
             Welcome back, {user?.first_name || "Student"} 👋
           </h2>
           <p className="text-[#64748B] mt-1 text-sm md:text-base">
-            {user?.department || "Computer Science"} • {user?.level || "100"} Level • 2024/2025 Session
+            {user?.department || "Computer Science"} • {user?.level || "100"}{" "}
+            Level • 2024/2025 Session
           </p>
         </div>
         <div className="flex gap-3">
@@ -88,7 +92,8 @@ const DashboardHome = () => {
 
             <div className="flex items-center gap-4 sm:gap-2.5 md:gap-4 z-10">
               <div className="size-24! rounded-2xl bg-[#5d8b83] drop-shadow-sm drop-shadow-[#0000001A] border-3 border-white/30 flex items-center justify-center text-white text-2xl font-bold uppercase">
-                {user?.first_name?.[0]}{user?.last_name?.[0]}
+                {user?.first_name?.[0]}
+                {user?.last_name?.[0]}
               </div>
 
               <div>
@@ -257,7 +262,10 @@ const DashboardHome = () => {
               Submit assignments and project files.
             </p>
             <div className="mt-4">
-              <button className="w-full py-2 border border-dashed border-[#CBD5E1] rounded-lg text-sm font-medium text-[#64748B] hover:bg-gray-50 flex items-center justify-center gap-2 cursor-pointer">
+              <button
+                onClick={() => setIsUploadModalOpen(true)}
+                className="w-full py-2 border border-dashed border-[#CBD5E1] rounded-lg text-sm font-medium text-[#64748B] hover:bg-gray-50 flex items-center justify-center gap-2 cursor-pointer"
+              >
                 <Plus size={14} /> New Upload
               </button>
             </div>
@@ -273,7 +281,10 @@ const DashboardHome = () => {
               <NotificationIcon className="text-[#138601] size-5" /> Recent
               Notifications
             </h3>
-            <a href="#" className="text-sm font-medium text-[#138601] hover:underline">
+            <a
+              href="#"
+              className="text-sm font-medium text-[#138601] hover:underline"
+            >
               View All
             </a>
           </div>
@@ -339,6 +350,10 @@ const DashboardHome = () => {
           </button>
         </div>
       </div>
+      <UploadResourceModal
+        isOpen={isUploadModalOpen}
+        onClose={() => setIsUploadModalOpen(false)}
+      />
     </div>
   );
 };

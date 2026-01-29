@@ -1,15 +1,17 @@
+
 import axios from "axios";
 // 👇 Import your store here so Axios can talk to it
 import useUserStore from "../store/useUserStore";
 
 const client = axios.create({
-  baseURL:
-    import.meta.env.VITE_API_BASE_URL ||
-    "https://nacos.nextgenerationones.org/api",
+  baseURL: "/api",
+  // Was: import.meta.env.VITE_API_BASE_URL || "https://nacos.nextgenerationones.org/api"
+  // Using relative path triggers the Vite proxy defined in vite.config.js
 });
 
 client.interceptors.request.use((config) => {
-  const token = localStorage.getItem("ACCESS_TOKEN");
+  const token =
+    localStorage.getItem("token") || localStorage.getItem("ACCESS_TOKEN");
 
   //const token = useUserStore.getState().token;
 
@@ -24,7 +26,6 @@ client.interceptors.response.use(
   (error) => {
     const { response } = error;
     if (response && response.status === 401) {
-
       useUserStore.getState().logout();
     }
     throw error;
@@ -32,4 +33,3 @@ client.interceptors.response.use(
 );
 
 export default client;
-
