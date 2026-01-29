@@ -6,10 +6,10 @@ import {
   ChevronRight,
   X,
   AlertTriangle,
+  Eye,
+  Check,
 } from "lucide-react";
 import TableToolbar from "./TableToolbar";
-import checkMark from "../assets/table/Checkmark.png";
-import eyeIcon from "../assets/table/eye.png";
 import { toast } from "sonner";
 import { useVerifyPayment } from "../../../../hooks/useAdmin";
 
@@ -250,7 +250,7 @@ export default function PaymentsTable({
                         className="p-1.5 hover:bg-slate-50 rounded-lg transition-colors cursor-pointer"
                         title="View Details"
                       >
-                        <img src={eyeIcon} className="h-4 w-4" alt="View" />
+                        <Eye className="h-4 w-4 text-slate-500" />
                       </button>
 
                       {r.status === "Pending" ? (
@@ -260,22 +260,14 @@ export default function PaymentsTable({
                           className="p-1.5 hover:bg-green-50 rounded-lg transition-colors cursor-pointer disabled:opacity-50"
                           title="Approve"
                         >
-                          <img
-                            src={checkMark}
-                            className="h-4 w-4"
-                            alt="Approve"
-                          />
+                          <Check className="h-4 w-4 text-green-600" />
                         </button>
                       ) : (
                         <button
                           className="p-1.5 opacity-50 cursor-default"
                           title={r.status}
                         >
-                          <img
-                            src={checkMark}
-                            className="h-4 w-4 grayscale"
-                            alt="Status"
-                          />
+                          <Check className="h-4 w-4 text-slate-400" />
                         </button>
                       )}
                     </div>

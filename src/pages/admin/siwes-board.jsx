@@ -1,12 +1,12 @@
 import {
-  Briefcase3Icon,
-  CheckMark2Icon,
-  DownloadIcon,
-  EnvelopeIcon,
-  LogbookIcon,
-  PendingLogsIcon,
-  SettingsIcon,
-} from "../../assets/icons";
+  Briefcase,
+  CheckCircle,
+  Download,
+  Mail,
+  BookOpen,
+  Clock,
+  Settings,
+} from "lucide-react";
 import { Link } from "react-router-dom";
 
 import ManageListings from "@/components/admin/siwes-board/ManageListing";
@@ -48,7 +48,7 @@ const SiwesBoardMgt = () => {
           type="button"
           className="flex items-center w-max gap-2 py-2 px-4 border border-[#E2E8F0] bg-white rounded-xl text-sm text-[#334155] font-medium transition-all active:scale-95 duration-150 cursor-pointer"
         >
-          <DownloadIcon />
+          <Download className="w-4 h-4" />
           Export Report
         </button>
       </div>
@@ -57,7 +57,7 @@ const SiwesBoardMgt = () => {
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         <div className="bg-white border border-[#F1F5F9] drop-shadow-sm hover:drop-shadow-none transition-all duration-100 flex items-center gap-4 p-6 rounded-3xl">
           <span className="size-12 rounded-2xl flex items-center justify-center bg-[#EFF6FF]">
-            <Briefcase3Icon className="text-[#2563EB]" />
+            <Briefcase className="w-5 h-5 text-[#2563EB]" />
           </span>
           <span>
             <p className="text-[#64748B] font-bold uppercase">
@@ -74,7 +74,7 @@ const SiwesBoardMgt = () => {
         </div>
         <div className="bg-white border border-[#F1F5F9] drop-shadow-sm hover:drop-shadow-none transition-all duration-100 flex items-center gap-4 p-6 rounded-3xl">
           <span className="size-12 rounded-2xl flex items-center justify-center bg-[#FFF7ED]">
-            <PendingLogsIcon className="text-[#EA580C]" />
+            <Clock className="w-5 h-5 text-[#EA580C]" />
           </span>
           <span>
             <p className="text-[#64748B] font-bold uppercase">Pending Logs</p>
@@ -89,7 +89,7 @@ const SiwesBoardMgt = () => {
         </div>
         <div className="bg-white border border-[#F1F5F9] drop-shadow-sm hover:drop-shadow-none transition-all duration-100 flex items-center gap-4 p-6 rounded-3xl">
           <span className="size-12 rounded-2xl flex items-center justify-center bg-[#1386011A]">
-            <CheckMark2Icon className="text-[#138601]" />
+            <CheckCircle className="w-5 h-5 text-[#138601]" />
           </span>
           <span>
             <p className="text-[#64748B] font-bold uppercase">
@@ -137,7 +137,7 @@ const SiwesBoardMgt = () => {
 
             <div className="flex flex-col gap-4 text-[#475569] text-xs font-medium">
               <div className="flex items-center gap-2 py-2 px-3">
-                <LogbookIcon className="size-3.5 text-[#16A34A]" />
+                <BookOpen className="w-3.5 h-3.5 text-[#16A34A]" />
 
                 <Link
                   to="#"
@@ -147,7 +147,7 @@ const SiwesBoardMgt = () => {
                 </Link>
               </div>
               <div className="flex items-center gap-2 py-2 px-3">
-                <EnvelopeIcon className="size-3.5 text-[#2563EB]" />
+                <Mail className="w-3.5 h-3.5 text-[#2563EB]" />
 
                 <Link
                   to="#"
@@ -157,7 +157,7 @@ const SiwesBoardMgt = () => {
                 </Link>
               </div>
               <div className="flex items-center gap-2 py-2 px-3">
-                <SettingsIcon className="size-3.5 text-[#9333EA]" />
+                <Settings className="w-3.5 h-3.5 text-[#9333EA]" />
 
                 <Link
                   to="#"

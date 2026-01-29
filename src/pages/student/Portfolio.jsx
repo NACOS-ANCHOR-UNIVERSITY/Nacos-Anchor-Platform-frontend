@@ -1,13 +1,21 @@
-import { useEffect, useRef, useState } from "react";
-import { Linkedin, X, Loader2 } from "lucide-react";
-import projectLibraryImg from "../../assets/icons/Project-Library.png";
-import addProjectIcon from "../../assets/icons/add-project-icon.svg";
-import uploadFile from "../../assets/icons/Upload-file.svg";
-import pdf from "../../assets/icons/Pdf.svg";
-import gitHub from "../../assets/icons/Git-hub.svg";
-import globeIcon from "../../assets/icons/Portfolio.svg";
-import eye from "../../assets/icons/Eye.svg";
-import pencil from "../../assets/icons/Pencil.svg";
+import { useMemo, useRef, useState } from "react";
+import {
+  Linkedin,
+  X,
+  Upload,
+  FileText,
+  Github,
+  Globe,
+  Eye,
+  Pencil,
+  Plus,
+} from "lucide-react";
+
+// Placeholder images for projects (replace with actual images when available)
+const projectLibraryImg =
+  "https://images.unsplash.com/photo-1507842217343-583bb7270b66?w=400&h=300&fit=crop";
+const projectScraperImg =
+  "https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=400&h=300&fit=crop";
 
 import {
   getPortfolioData,
@@ -71,12 +79,38 @@ function SkillPill({ label, onRemove }) {
 }
 
 export default function Portfolio() {
-  const [isLoading, setIsLoading] = useState(true);
-  const [isSaving, setIsSaving] = useState(false);
-  const [user, setUser] = useState(null);
-  const [publicUrl, setPublicUrl] = useState("");
-  const [isPublic, setIsPublic] = useState(false);
-  const [about, setAbout] = useState("");
+  const user = useMemo(
+    () => ({
+      fullName: "Adefemi Oluwatobi",
+      deptLevel: "Computer Science | 400 Level",
+      matric: "AUL/CPM/22/003",
+    }),
+    [],
+  );
+
+  // avatar
+  const avatarInputRef = useRef(null);
+  const DEFAULT_AVATAR =
+    "https://api.dicebear.com/7.x/avataaars/svg?seed=portfolio";
+  const [avatarUrl, setAvatarUrl] = useState(DEFAULT_AVATAR);
+
+  function pickAvatar() {
+    avatarInputRef.current?.click();
+  }
+  function onAvatarChange(e) {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    const url = URL.createObjectURL(file);
+    setAvatarUrl(url);
+  }
+
+  // public visibility
+  const [isPublic, setIsPublic] = useState(true);
+
+  // about me editing
+  const [about, setAbout] = useState(
+    "I am a passionate Computer Science student with a strong focus on Full Stack Development and Artificial Intelligence. I love building tools that solve real-world problems. Currently serving as the General Secretary for NACOS Anchor University Chapter. Always eager to learn new technologies and collaborate on open-source projects.",
+  );
   const [isEditingAbout, setIsEditingAbout] = useState(false);
   const [aboutDraft, setAboutDraft] = useState("");
   const [skills, setSkills] = useState([]);
@@ -254,7 +288,7 @@ export default function Portfolio() {
               : "bg-slate-300 cursor-not-allowed"
           }`}
         >
-          <img src={eye} alt="Eye" className="size-4" />
+          <Eye className="h-4 w-4" />
           Preview Public Profile
         </button>
       </div>
@@ -274,6 +308,24 @@ export default function Portfolio() {
                     className="h-full w-full object-cover"
                   />
                 </div>
+
+                {/* edit avatar */}
+                <button
+                  type="button"
+                  onClick={pickAvatar}
+                  className="absolute -bottom-1 -right-1 grid h-7 w-7 place-items-center rounded-full bg-[var(--color-brand-primary)] text-white shadow hover:opacity-95"
+                  title="Edit photo"
+                >
+                  <Pencil className="h-4 w-4" />
+                </button>
+
+                <input
+                  ref={avatarInputRef}
+                  type="file"
+                  accept="image/*"
+                  className="hidden"
+                  onChange={onAvatarChange}
+                />
               </div>
 
               <div className="mt-4">
@@ -326,7 +378,7 @@ export default function Portfolio() {
           >
             <div className="space-y-3">
               <div className="flex items-center gap-2 rounded-lg border border-slate-200 bg-white px-3 py-2">
-                <img src={gitHub} alt="" className="size-4" />
+                <Github className="h-4 w-4 text-slate-600" />
                 <input
                   value={social.github}
                   onChange={(e) =>
@@ -350,7 +402,7 @@ export default function Portfolio() {
               </div>
 
               <div className="flex items-center gap-2 rounded-lg border border-slate-200 bg-white px-3 py-2">
-                <img src={globeIcon} alt="" className="size-4 text-slate-600" />
+                <Globe className="h-4 w-4 text-slate-600" />
                 <input
                   value={social.portfolio}
                   onChange={(e) =>
@@ -377,11 +429,7 @@ export default function Portfolio() {
                   disabled={isSaving}
                   className="grid size-10 place-items-center rounded-full border border-slate-200 bg-slate-50 text-slate-700 hover:bg-white disabled:opacity-50"
                 >
-                  {isSaving ? (
-                    <Loader2 className="animate-spin size-5" />
-                  ) : (
-                    <img src={uploadFile} alt="" className="h-6 w-5" />
-                  )}
+                  <Upload className="h-5 w-5" />
                 </button>
 
                 <button
@@ -405,14 +453,9 @@ export default function Portfolio() {
 
             {resume ? (
               <div className="mt-3 flex items-center justify-between rounded-lg border border-slate-200 bg-white px-3 py-2">
-                <div className="flex items-center gap-2 overflow-hidden">
-                  <img src={pdf} alt="PDF" className="h-6 w-5 shrink-0" />
-                  <a
-                    href={resume.url}
-                    target="_blank"
-                    rel="noreferrer"
-                    className="text-xs font-semibold text-slate-800 truncate hover:text-brand-primary"
-                  >
+                <div className="flex items-center gap-2">
+                  <FileText className="h-5 w-5 text-red-500" />
+                  <div className="text-xs font-semibold text-slate-800">
                     {resume.name}
                   </a>
                 </div>
@@ -436,7 +479,7 @@ export default function Portfolio() {
                 className="rounded-md p-2 text-slate-500 hover:bg-slate-100"
                 aria-label="edit about"
               >
-                <img src={pencil} alt="Pencil" className="size-4" />
+                <Pencil className="h-4 w-4" />
               </button>
             }
           >
@@ -567,13 +610,8 @@ export default function Portfolio() {
                 }
                 className="flex min-h-55 flex-col items-center justify-center rounded-xl border border-dashed border-slate-300 bg-slate-50 text-center hover:bg-slate-100"
               >
-                <div className="grid size-12 place-items-center rounded-full border border-slate-200 bg-slate-60">
-                  <img
-                    src={addProjectIcon}
-                    alt="Add project"
-                    className="size-5"
-                    draggable="false"
-                  />
+                <div className="grid h-12 w-12 place-items-center rounded-full border border-slate-200 bg-slate-50">
+                  <Plus className="h-5 w-5 text-slate-600" />
                 </div>
 
                 <div className="mt-3 text-sm font-semibold text-slate-900">
@@ -587,4 +625,3 @@ export default function Portfolio() {
     </div>
   );
 }
-

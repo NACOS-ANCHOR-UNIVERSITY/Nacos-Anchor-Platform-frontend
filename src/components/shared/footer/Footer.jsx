@@ -1,9 +1,14 @@
 import React from "react";
+import { Link } from "react-router-dom";
+import {
+  Mail,
+  MapPin,
+  Twitter,
+  Facebook,
+  Instagram,
+  Linkedin,
+} from "lucide-react";
 import img2 from "../../../assets/images/Icon.png";
-import icon2 from "../../../assets/icons/Container2.png";
-import icon3 from "../../../assets/icons/Container 3.png";
-import icon4 from "../../../assets/icons/Container 4.png";
-import {Link} from "react-router-dom";
 
 const Footer = () => {
   return (
@@ -50,11 +55,11 @@ const Footer = () => {
             <p className="font-bold text-[14px] text-[#0F172A]">Contact</p>
             <div className="flex flex-col gap-[12px] font-normal text-[14px] text-[#475569]">
               <div className="flex items-start gap-[5px]">
-                <img src={icon3} alt="" />
+                <MapPin className="h-4 w-4 mt-0.5 shrink-0 text-slate-500" />
                 <p>Anchor University, Lagos. Ayobo Road, Ipaja.</p>
               </div>
               <div className="flex items-center gap-[5px]">
-                <img src={icon2} alt="" />
+                <Mail className="h-4 w-4 shrink-0 text-slate-500" />
                 <p>info@nacosanchor.edu.ng</p>
               </div>
             </div>
@@ -67,7 +72,32 @@ const Footer = () => {
           <p className="font-normal text-[14px] text-[#64748B]">
             © 2026 NACOS Anchor University. All rights reserved.
           </p>
-          <img src={icon4} alt="" />
+          <div className="flex items-center gap-4">
+            <a
+              href="#"
+              className="text-slate-500 hover:text-brand-primary transition-colors"
+            >
+              <Twitter className="h-5 w-5" />
+            </a>
+            <a
+              href="#"
+              className="text-slate-500 hover:text-brand-primary transition-colors"
+            >
+              <Facebook className="h-5 w-5" />
+            </a>
+            <a
+              href="#"
+              className="text-slate-500 hover:text-brand-primary transition-colors"
+            >
+              <Instagram className="h-5 w-5" />
+            </a>
+            <a
+              href="#"
+              className="text-slate-500 hover:text-brand-primary transition-colors"
+            >
+              <Linkedin className="h-5 w-5" />
+            </a>
+          </div>
         </div>
       </div>
     </div>
