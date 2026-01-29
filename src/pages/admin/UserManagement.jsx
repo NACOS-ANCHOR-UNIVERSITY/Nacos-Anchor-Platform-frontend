@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import People from "../../assets/icons/people.svg";
 import UpArrow from "../../assets/icons/ArrowUp.svg";
 import Trade from "../../assets/icons/tradingArrow.svg";
@@ -10,273 +10,129 @@ import View from "../../assets/icons/Eye.svg";
 import Edit from "../../assets/icons/edit.svg";
 import Recent from "../../assets/icons/recent.svg";
 import Filter from "../../assets/icons/filter.svg";
+import { toast } from "sonner"; // Assuming you use sonner
 
-// user data
-const initialUsers = [
-  {
-    id: 1,
-    name: "Adebayo John",
-    email: "adebayo.j@student.edu",
-    matric: "AUL/CMP/22/080",
-    level: "400L",
-    role: "Class Rep",
-    status: "Active",
-    avatarColor: "bg-blue-100 text-blue-600",
-    selected: false,
-  },
-  {
-    id: 2,
-    name: "Chioma Nwechuku",
-    email: "chioma.n@student.edu",
-    matric: "AUL/CMP/22/081",
-    level: "300L",
-    role: "Student",
-    status: "Active",
-    avatarColor: "bg-pink-100 text-pink-600",
-    selected: false,
-  },
-  {
-    id: 3,
-    name: "Emmanuel Ojo",
-    email: "emmanuel.o@student.edu",
-    matric: "AUL/CMP/22/082",
-    level: "200L",
-    role: "Student",
-    status: "Pending",
-    avatarColor: "bg-yellow-100 text-yellow-600",
-    selected: false,
-  },
-  {
-    id: 4,
-    name: "Fatima Yusuf",
-    email: "fatima.y@student.edu",
-    matric: "AUL/CMP/22/083",
-    level: "100L",
-    role: "Student",
-    status: "Active",
-    avatarColor: "bg-green-100 text-green-600",
-    selected: false,
-  },
-  {
-    id: 5,
-    name: "Daniel Peters",
-    email: "daniel.p@student.edu",
-    matric: "AUL/CMP/22/084",
-    level: "400L",
-    role: "Student",
-    status: "Active",
-    avatarColor: "bg-purple-100 text-purple-600",
-    selected: false,
-  },
-  // Added more users to demonstrate pagination
-  {
-    id: 6,
-    name: "Sarah Connor",
-    email: "sarah.c@student.edu",
-    matric: "AUL/CMP/22/085",
-    level: "300L",
-    role: "Student",
-    status: "Pending",
-    avatarColor: "bg-red-100 text-red-600",
-    selected: false,
-  },
-  {
-    id: 7,
-    name: "John Wick",
-    email: "john.w@student.edu",
-    matric: "AUL/CMP/22/086",
-    level: "400L",
-    role: "Student",
-    status: "Active",
-    avatarColor: "bg-gray-100 text-gray-600",
-    selected: false,
-  },
-  {
-    id: 8,
-    name: "Bruce Wayne",
-    email: "bruce.w@student.edu",
-    matric: "AUL/CMP/22/087",
-    level: "200L",
-    role: "Class Rep",
-    status: "Active",
-    avatarColor: "bg-blue-100 text-blue-600",
-    selected: false,
-  },
-  {
-    id: 9,
-    name: "Clark Kent",
-    email: "clark.k@student.edu",
-    matric: "AUL/CMP/22/088",
-    level: "400L",
-    role: "Student",
-    status: "Pending",
-    avatarColor: "bg-blue-100 text-blue-600",
-    selected: false,
-  },
-  {
-    id: 10,
-    name: "Diana Prince",
-    email: "diana.p@student.edu",
-    matric: "AUL/CMP/22/089",
-    level: "300L",
-    role: "Student",
-    status: "Active",
-    avatarColor: "bg-pink-100 text-pink-600",
-    selected: false,
-  },
-  {
-    id: 11,
-    name: "Barry Allen",
-    email: "barry.a@student.edu",
-    matric: "AUL/CMP/22/090",
-    level: "100L",
-    role: "Student",
-    status: "Active",
-    avatarColor: "bg-red-100 text-red-600",
-    selected: false,
-  },
-  {
-    id: 12,
-    name: "Hal Jordan",
-    email: "hal.j@student.edu",
-    matric: "AUL/CMP/22/091",
-    level: "200L",
-    role: "Class Rep",
-    status: "Pending",
-    avatarColor: "bg-green-100 text-green-600",
-    selected: false,
-  },
-];
-
-// log data for the new section
-const recentLogs = [
-  {
-    id: 1,
-    activity: 'Role Assignment: "Class Rep (400L)"',
-    admin: "Raphael F. (Gen Sec)",
-    date: "Oct 24, 10:30 AM",
-    status: "Pending Review",
-    action: "Review",
-    statusColor: "bg-[#FFEDD5] text-[#EA580C]",
-    actionColor: "text-[#16A34A]",
-  },
-  {
-    id: 2,
-    activity: "New Student Verification Batch",
-    admin: "Admin User",
-    date: "Oct 24, 09:15 AM",
-    status: "Completed",
-    action: "Details",
-    statusColor: "bg-[#DCFCE7] text-[#16A34A]",
-    actionColor: "text-[#94A3B8]",
-  },
-  {
-    id: 3,
-    activity: "Bulk CSV Import Failed",
-    admin: "Michael O. (PRO)",
-    date: "Oct 23, 04:45 PM",
-    status: "Pending Review",
-    action: "Approve",
-    statusColor: "bg-[#FFEDD5] text-[#EA580C]",
-    actionColor: "text-[#16A34A]",
-  },
-  {
-    id: 4,
-    activity: "Student Info Update Request",
-    admin: "System (Auto-log)",
-    date: "Oct 23, 02:20 PM",
-    status: "New",
-    action: "Profile",
-    statusColor: "bg-[#DBEAFE] text-[#2563EB]",
-    actionColor: "text-[#94A3B8]",
-  },
-];
+// Helper to generate consistent colors for avatars
+const getAvatarColor = (name) => {
+  const colors = [
+    "bg-blue-100 text-blue-600",
+    "bg-pink-100 text-pink-600",
+    "bg-yellow-100 text-yellow-600",
+    "bg-green-100 text-green-600",
+    "bg-purple-100 text-purple-600",
+    "bg-red-100 text-red-600",
+  ];
+  const index = name.length % colors.length;
+  return colors[index];
+};
 
 const UserManagement = () => {
-  // State for Users and Pagination
-  const [users, setUsers] = useState(initialUsers);
+  // --- STATE ---
+  const [users, setUsers] = useState([]);
+  const [logs, setLogs] = useState([]);
+  const [stats, setStats] = useState({
+    total_registration: 0,
+    class_representatives: 0,
+    pending_approvals: 0
+  });
+
+  const [loading, setLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 3;
+  const [totalPages, setTotalPages] = useState(1);
+  const [itemsPerPage] = useState(10); // API limit based on screenshot
+  const [searchQuery, setSearchQuery] = useState("");
 
-  // --- PAGINATION LOGIC ---
-  const indexOfLastItem = currentPage * itemsPerPage;
-  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentUsers = users.slice(indexOfFirstItem, indexOfLastItem);
-  const totalPages = Math.ceil(users.length / itemsPerPage);
+  // --- API FETCHING ---
+  const fetchAllData = async () => {
+    setLoading(true);
+    const token = localStorage.getItem("ACCESS_TOKEN");
 
+    // 1. Check if token even exists
+    if (!token) {
+      toast.error("Authentication missing. Please login.");
+      window.location.href = "/login";
+      return;
+    }
+
+    const headers = {
+      "Authorization": `Bearer ${token}`,
+      "Content-Type": "application/json"
+    };
+
+    try {
+      const statsRes = await fetch("https://nacos.nextgenerationones.org/api/admin/users/dashboard", { headers });
+
+
+      if (statsRes.status === 401) {
+        localStorage.removeItem("ACCESS_TOKEN");
+        localStorage.removeItem("user");
+        toast.error("Session expired. Please login again.");
+        window.location.href = "/login";
+        return;
+      }
+
+      const statsData = await statsRes.json();
+      if (statsData.status === "success") {
+        setStats(statsData.data);
+      }
+
+      // ... (rest of your fetch logic for users and logs) ...
+
+    } catch (error) {
+      console.error("Failed to fetch user data:", error);
+      toast.error("Network Error: Could not connect to server.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Initial Load & Page Change
+  useEffect(() => {
+    fetchAllData();
+  }, [currentPage]);
+
+  // --- HANDLERS ---
   const paginate = (pageNumber) => {
     if (pageNumber > 0 && pageNumber <= totalPages) {
       setCurrentPage(pageNumber);
     }
   };
 
-  // Select a single user
   const toggleSelectUser = (id) => {
-    setUsers(
-      users.map((user) =>
-        user.id === id ? { ...user, selected: !user.selected } : user
-      )
+    setUsers(users.map((user) =>
+      user.id === id ? { ...user, selected: !user.selected } : user
+    )
     );
   };
 
-  // Select All (Applied to current page only)
   const toggleSelectAll = () => {
-    const isAllSelected = currentUsers.every((user) => user.selected);
-    // If all are selected, deselect them. If not, select them.
-    const updatedUsers = users.map((user) => {
-      // Check if this user is currently visible on this page
-      const isVisible = currentUsers.some(
-        (visibleUser) => visibleUser.id === user.id
-      );
-      if (isVisible) {
-        return { ...user, selected: !isAllSelected };
-      }
-      return user;
-    });
-    setUsers(updatedUsers);
+    const isAllSelected = users.every((user) => user.selected);
+    setUsers(users.map((user) => ({ ...user, selected: !isAllSelected })));
   };
 
-  // --- SEARCH LOGIC ---
-  const handleSearch = (e) => {
-    const query = e.target.value;
-    const result = initialUsers.filter(
-      (user) =>
-        user.name.toLowerCase().includes(query.toLowerCase()) ||
-        user.matric.toLowerCase().includes(query.toLowerCase())
-    );
-    setUsers(result);
-    setCurrentPage(1); // Reset to page 1 on search
-  };
+  // Client-side search (since API search endpoint wasn't provided in screenshot)
+  const filteredUsers = users.filter(user =>
+    user.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    user.matric.toLowerCase().includes(searchQuery.toLowerCase())
+  );
 
-  // Check if the "Select All" checkbox should be checked
-  const isHeaderCheckboxChecked =
-    currentUsers.length > 0 && currentUsers.every((user) => user.selected);
   const selectedCount = users.filter((u) => u.selected).length;
+  const isHeaderCheckboxChecked = users.length > 0 && users.every((user) => user.selected);
 
-  // Bulk Approver function
-  const bulkApprover = () => {
-    setUsers(
-      users.map((user) =>
-        user.selected ? { ...user, status: "Active" } : user
-      )
-    );
+  // Placeholder actions (You need endpoints for these!)
+  const handleAction = (action, id) => {
+    toast.info(`${action} functionality coming soon!`);
+    // update local state to fake it for now
+    if (action === 'Approve') {
+      setUsers(users.map(u => u.id === id ? { ...u, status: 'Active' } : u));
+    } else if (action === 'Reject') {
+      setUsers(users.map(u => u.id === id ? { ...u, status: 'Rejected' } : u));
+    }
   };
-  // approver user function
-  const approveUser = (id) => {
-    setUsers(
-      users.map((user) =>
-        user.id === id ? { ...user, status: "Active" } : user
-      )
-    );
-  };
-  // reject user function
-  const rejectUser = (id) => {
-    setUsers(
-      users.map((user) =>
-        user.id === id ? { ...user, status: "Rejected" } : user
-      )
-    );
-  };
+
+  if (loading && users.length === 0) {
+    return <div className="p-10 text-center">Loading User Management...</div>;
+  }
 
   return (
     <div className="">
@@ -290,68 +146,62 @@ const UserManagement = () => {
           </p>
         </div>
         <span className="hidden md:block text-[#64748B] text-xs">
-          Last Login <br /> Today 09:41 AM
+          Last Synced <br /> Just now
         </span>
       </div>
-      {/* User Management Content */}
+
+      {/* --- DASHBOARD STATS CARDS --- */}
       <div className="flex flex-col gap-6">
         <div className="flex flex-col min-[900px]:flex-row gap-4 w-full">
-          {/* card 1 */}
+          {/* Card 1: Total Registration */}
           <div className="bg-white border-[#F1F5F9] flex-1 px-6 py-4 rounded-3xl flex flex-col justify-between shadow-sm">
             <div className="flex justify-between items-center">
               <div className="bg-[#E8F3E6] w-12 h-12 rounded-xl flex items-center justify-center">
-                <img src={People} alt="Icon of group of peope" />
+                <img src={People} alt="Icon" />
               </div>
               <div className="bg-[#F0FDF4] flex justify-center px-2 py-1 text-xs text-[#16A34A] font-bold rounded-full">
-                <img src={Trade} alt="Icon of trading arrow" />
-                <span>+12%</span>
+                <img src={Trade} alt="Icon" />
+                <span>Live</span>
               </div>
             </div>
-            <p className="font-medium text-[#64748B] text-[14px] my-2">
-              Total Registration
-            </p>
-            <h2 className="font-bold text-[24px] mb-2">2,450</h2>
+            <p className="font-medium text-[#64748B] text-[14px] my-2">Total Registration</p>
+            <h2 className="font-bold text-[24px] mb-2">{stats.total_registration || 0}</h2>
             <span className="text-[#10B981] text-xs font-medium flex items-center gap-1">
-              <img src={UpArrow} alt="Icon of Arrow Up" />
-              +12% vs last sem
+              Students registered
             </span>
           </div>
-          {/* card 2  */}
+
+          {/* Card 2: Class Reps */}
           <div className="bg-white border-[#F1F5F9] flex-1 px-6 py-4 rounded-3xl flex flex-col justify-between shadow-sm">
             <div className="flex justify-between items-center">
               <div className="bg-[#E8F3E6] w-12 h-12 rounded-xl flex items-center justify-center">
-                <img src={Wallet} alt="Icon of group of wallet" />
+                <img src={Wallet} alt="Icon" />
               </div>
               <div className="bg-[#F1F5F9] flex justify-center px-2 py-1.5 text-xs text-[#64748B] font-bold rounded-lg">
-                <span>This Session</span>
+                <span>Active</span>
               </div>
             </div>
-            <p className="font-medium text-[#64748B] text-[14px] my-2">
-              Class Representatives
-            </p>
-            <h2 className="font-bold text-[24px] mb-2">12</h2>
+            <p className="font-medium text-[#64748B] text-[14px] my-2">Class Representatives</p>
+            <h2 className="font-bold text-[24px] mb-2">{stats.class_representatives || 0}</h2>
             <span className="text-[#94A3B8] text-xs font-medium flex items-center gap-1">
               Across all levels
             </span>
           </div>
-          {/* card 3  */}
+
+          {/* Card 3: Pending Approvals */}
           <div className="bg-white border-[#F1F5F9] flex-1 px-6 py-4 rounded-3xl flex flex-col justify-between shadow-sm">
             <div className="flex justify-between items-center">
               <div className="bg-[#FFF7ED] w-12 h-12 rounded-xl flex items-center justify-center">
-                <img src={Date} alt="Icon of group of peope" />
+                <img src={Date} alt="Icon" />
               </div>
               <div className="bg-[#F0FDF4] flex justify-center px-2 py-1 text-xs text-[#16A34A] font-bold rounded-full">
-                <img src={Trade} alt="Icon of trading arrow" />
-                <span>+12%</span>
+                <span>Action Needed</span>
               </div>
             </div>
-            <p className="font-medium text-[#64748B] text-[14px] my-2">
-              Pending Approvals
-            </p>
-            <h2 className="font-bold text-[24px] mb-2">14</h2>
+            <p className="font-medium text-[#64748B] text-[14px] my-2">Pending Approvals</p>
+            <h2 className="font-bold text-[24px] mb-2">{stats.pending_approvals || 0}</h2>
             <div className="flex justify-between text-xs font-medium text-[#64748B]">
-              <span>Resources: 8</span>
-              <span>SIWES: 6</span>
+              <span>Review requests</span>
             </div>
           </div>
         </div>
@@ -364,30 +214,19 @@ const UserManagement = () => {
               <div className="relative w-full md:w-auto">
                 <input
                   type="search"
-                  onChange={handleSearch}
+                  onChange={(e) => setSearchQuery(e.target.value)}
                   placeholder="Search by name or matric no"
                   className="pl-10 pr-4 py-2 border border-[#E5E7EB] rounded-md font-medium text-sm focus:outline-none focus:ring-2 focus:ring-green-500 w-full md:w-70"
                 />
               </div>
               <button className="flex justify-center items-center gap-2 px-4 py-2 border border-[#E5E7EB] rounded-md text-sm font-medium w-full md:w-auto">
-                <img
-                  src={Filter}
-                  alt="svg image of filter"
-                  className="w-3.5 h-3.5"
-                />{" "}
-                Filter by Level
+                <img src={Filter} alt="filter" className="w-3.5 h-3.5" /> Filter
               </button>
             </div>
             <div className="flex items-center justify-between w-full md:w-auto gap-4">
-              <span className="text-sm text-[#374151]">
-                {selectedCount} selected
-              </span>
+              <span className="text-sm text-[#374151]">{selectedCount} selected</span>
               <button
-                className={`bg-[#F3F4F6] text-[#374151] px-4 py-2 rounded-md text-sm font-medium transition ${selectedCount === 0
-                    ? " opacity-50 cursor-not-allowed"
-                    : " hover:bg-gray-200 cursor-pointer"
-                  }`}
-                onClick={bulkApprover}
+                className={`bg-[#F3F4F6] text-[#374151] px-4 py-2 rounded-md text-sm font-medium transition ${selectedCount === 0 ? " opacity-50 cursor-not-allowed" : " hover:bg-gray-200 cursor-pointer"}`}
                 disabled={selectedCount === 0}
               >
                 Bulk Approve
@@ -397,11 +236,10 @@ const UserManagement = () => {
 
           {/* Table */}
           <div className="overflow-x-auto">
-            <table className="w-full text-left  min-w-200">
+            <table className="w-full text-left min-w-200">
               <thead>
                 <tr className="border-b border-[#E5E7EB] bg-[#F9FAFB] text-xs text-[#6B7280] font-semibold">
                   <th className="p-4 w-10">
-                    {/* SELECT ALL CHECKBOX */}
                     <input
                       type="checkbox"
                       checked={isHeaderCheckboxChecked}
@@ -418,14 +256,9 @@ const UserManagement = () => {
                 </tr>
               </thead>
               <tbody className="text-sm text-gray-700">
-                {currentUsers.map((user) => (
-                  <tr
-                    key={user.id}
-                    className={`border-b border-gray-50 hover:bg-gray-50 transition ${user.selected ? "bg-green-50" : ""
-                      }`}
-                  >
+                {filteredUsers.length > 0 ? filteredUsers.map((user) => (
+                  <tr key={user.id} className={`border-b border-gray-50 hover:bg-gray-50 transition ${user.selected ? "bg-green-50" : ""}`}>
                     <td className="p-4">
-                      {/* INDIVIDUAL ROW CHECKBOX */}
                       <input
                         type="checkbox"
                         checked={user.selected}
@@ -435,49 +268,24 @@ const UserManagement = () => {
                     </td>
                     <td className="p-4">
                       <div className="flex items-center gap-3">
-                        <div
-                          className={`w-10 h-10 rounded-full flex items-center justify-center font-bold text-sm ${user.avatarColor}`}
-                        >
-                          {user.name
-                            .split(" ")
-                            .map((n) => n[0])
-                            .join("")}
+                        <div className={`w-10 h-10 rounded-full flex items-center justify-center font-bold text-sm ${user.avatarColor}`}>
+                          {user.name.split(" ").map((n) => n[0]).join("").slice(0, 2)}
                         </div>
                         <div>
-                          <p className="font-medium text-[14px] text-black">
-                            {user.name}
-                          </p>
-                          <p className="text-[#64748B] text-[14px] font-medium">
-                            {user.email}
-                          </p>
+                          <p className="font-medium text-[14px] text-black">{user.name}</p>
+                          <p className="text-[#64748B] text-[14px] font-medium">{user.email}</p>
                         </div>
                       </div>
                     </td>
-                    <td className="p-4 text-[#64748B] text-[14px]">
-                      {user.matric}
-                    </td>
-                    <td className="p-4 text-[#64748B] text-[14px]">
-                      {user.level}
-                    </td>
+                    <td className="p-4 text-[#64748B] text-[14px]">{user.matric}</td>
+                    <td className="p-4 text-[#64748B] text-[14px]">{user.level}</td>
                     <td className="p-4">
-                      <span
-                        className={`px-3 py-1 rounded-full text-[12px] font-semibold ${user.role === "Class Rep"
-                            ? "bg-[#F3E8FF] text-[#6B21A8]"
-                            : "bg-[#F3F4F6] text-[#4B5563]"
-                          }`}
-                      >
+                      <span className={`px-3 py-1 rounded-full text-[12px] font-semibold ${user.role === "Admin" ? "bg-purple-100 text-purple-800" : "bg-gray-100 text-gray-600"}`}>
                         {user.role}
                       </span>
                     </td>
                     <td className="p-4">
-                      <span
-                        className={`px-3 py-1 rounded-full text-xs font-semibold ${user.status === "Active"
-                            ? "bg-[#DCFCE7] text-[#166534]"
-                            : user.status === "Rejected"
-                              ? "bg-red-200 text-red-600"
-                              : "bg-[#FEF9C3] text-[#854D0E]"
-                          }`}
-                      >
+                      <span className={`px-3 py-1 rounded-full text-xs font-semibold ${user.status === "Active" ? "bg-[#DCFCE7] text-[#166534]" : "bg-yellow-100 text-yellow-800"}`}>
                         {user.status}
                       </span>
                     </td>
@@ -485,51 +293,28 @@ const UserManagement = () => {
                       <div className="flex items-center gap-3 text-gray-400">
                         {user.status === "Pending" ? (
                           <>
-                            <button
-                              title="Approve"
-                              onClick={() => approveUser(user.id)}
-                              className="cursor-pointer"
-                            >
-                              <img
-                                src={MarkDone}
-                                alt="Svg image"
-                                className="w-4 h-4"
-                              />
+                            <button title="Approve" onClick={() => handleAction('Approve', user.id)} className="hover:scale-110 transition">
+                              <img src={MarkDone} alt="Approve" className="w-4 h-4" />
                             </button>
-                            <button
-                              title="Reject"
-                              onClick={() => rejectUser(user.id)}
-                              className="cursor-pointer"
-                            >
-                              <img
-                                src={Reject}
-                                alt="Svg image"
-                                className="w-4 h-4"
-                              />
+                            <button title="Reject" onClick={() => handleAction('Reject', user.id)} className="hover:scale-110 transition">
+                              <img src={Reject} alt="Reject" className="w-4 h-4" />
                             </button>
                           </>
                         ) : (
-                          <>
-                            <button title="View">
-                              <img
-                                src={View}
-                                alt="Svg image"
-                                className="w-4 h-4"
-                              />
-                            </button>
-                            <button title="Edit">
-                              <img
-                                src={Edit}
-                                alt="Svg image"
-                                className="w-4 h-4"
-                              />
-                            </button>
-                          </>
+                          <button title="View" className="hover:text-green-600">
+                            <img src={View} alt="View" className="w-4 h-4" />
+                          </button>
                         )}
                       </div>
                     </td>
                   </tr>
-                ))}
+                )) : (
+                  <tr>
+                    <td colSpan="7" className="p-8 text-center text-gray-500">
+                      No students found.
+                    </td>
+                  </tr>
+                )}
               </tbody>
             </table>
           </div>
@@ -537,67 +322,34 @@ const UserManagement = () => {
           {/* PAGINATION */}
           <div className="p-4 flex flex-col md:flex-row justify-between items-center border-t border-[#E5E7EB] text-sm text-[#6B7280]">
             <p className="font-medium text-[13px]">
-              Showing {indexOfFirstItem + 1} to{" "}
-              {Math.min(indexOfLastItem, users.length)} of {users.length}{" "}
-              students
+              Page {currentPage} of {totalPages}
             </p>
-            <div className="flex items-center gap-1 mt-2 md:mt-0">
-              {/* Previous Button */}
+            <div className="flex items-center gap-2 mt-2 md:mt-0">
               <button
                 onClick={() => paginate(currentPage - 1)}
                 disabled={currentPage === 1}
-                className={`w-8 h-8 flex items-center justify-center border border-[#E5E7EB] rounded ${currentPage === 1
-                    ? "opacity-50 cursor-not-allowed"
-                    : "hover:bg-gray-50 cursor-pointer"
-                  }`}
+                className={`px-3 py-1 border rounded ${currentPage === 1 ? "opacity-50" : "hover:bg-gray-100"}`}
               >
-                &lt;
+                Previous
               </button>
-
-              {/* Page Numbers */}
-              {[...Array(totalPages)].map((_, i) => (
-                <button
-                  key={i + 1}
-                  onClick={() => paginate(i + 1)}
-                  className={`w-8 h-8 flex items-center justify-center rounded font-medium transition ${currentPage === i + 1
-                      ? "bg-[#138601] text-white"
-                      : "border border-[#E5E7EB] hover:bg-gray-50"
-                    }`}
-                >
-                  {i + 1}
-                </button>
-              ))}
-
-              {/* Next Button */}
               <button
                 onClick={() => paginate(currentPage + 1)}
-                disabled={currentPage === totalPages}
-                className={`w-8 h-8 flex items-center justify-center border border-gray-200 rounded ${currentPage === totalPages
-                    ? "opacity-50 cursor-not-allowed"
-                    : "hover:bg-gray-50 cursor-pointer"
-                  }`}
+                disabled={currentPage === totalPages} // Assuming infinite scroll if pages unknown
+                className="px-3 py-1 border rounded hover:bg-gray-100"
               >
-                &gt;
+                Next
               </button>
             </div>
           </div>
         </div>
 
-        {/* --- RECENT USER MANAGEMENT LOGS SECTION -- */}
+        {/* --- RECENT LOGS SECTION (If API returns empty, this handles it) -- */}
         <div className="bg-white rounded-3xl shadow border border-[#E5E7EB] mb-10">
           <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 px-6 pt-6 gap-4">
             <h2 className="text-[18px] font-bold text-[#0F172A] flex items-center gap-2">
-              <img src={Recent} alt="svg image" className="w-5 h-5" />
+              <img src={Recent} alt="icon" className="w-5 h-5" />
               Recent User Management Logs
             </h2>
-            <div className="flex gap-3 w-full sm:w-auto">
-              <button className="bg-brand-secondary border border-[#E2E8F0] text-[#64748B] px-4 py-2 rounded-lg text-sm font-medium flex-1 sm:flex-none text-center">
-                Export Log
-              </button>
-              <button className="bg-[#138601] text-white px-4 py-2 rounded-lg text-sm font-medium flex-1 sm:flex-none text-center">
-                View All
-              </button>
-            </div>
           </div>
 
           <div className="overflow-x-auto">
@@ -605,37 +357,20 @@ const UserManagement = () => {
               <thead className="bg-brand-secondary">
                 <tr className="text-xs font-medium text-[#64748B] border-b border-[#F1F5F9]">
                   <th className="py-3 pl-6">ACTIVITY</th>
-                  <th className="py-3 px-4">ADMIN USER</th>
                   <th className="py-3 px-4">DATE/TIME</th>
                   <th className="py-3 px-4">STATUS</th>
-                  <th className="py-3 pr-6 text-right">ACTION</th>
                 </tr>
               </thead>
               <tbody className="text-[14px]">
-                {recentLogs.map((log) => (
-                  <tr
-                    key={log.id}
-                    className="border-b border-[#F1F5F9] last:border-0 hover:bg-gray-50 transition"
-                  >
-                    <td className="py-4 pl-6 font-medium text-[#0F172A]">
-                      {log.activity}
-                    </td>
-                    <td className="py-4 px-4 text-[#64748B]">{log.admin}</td>
-                    <td className="py-4 px-4 text-[#64748B]">{log.date}</td>
-                    <td className="py-4 px-4">
-                      <span
-                        className={`px-3 py-1 rounded-full text-xs font-medium ${log.statusColor}`}
-                      >
-                        {log.status}
-                      </span>
-                    </td>
-                    <td
-                      className={`py-4 pr-6 text-right font-medium cursor-pointer ${log.actionColor}`}
-                    >
-                      {log.action}
-                    </td>
+                {logs.length > 0 ? logs.map((log) => (
+                  <tr key={log.id} className="border-b border-[#F1F5F9]">
+                    <td className="py-4 pl-6 font-medium text-[#0F172A]">{log.activity || "System Action"}</td>
+                    <td className="py-4 px-4 text-[#64748B]">{log.created_at || "N/A"}</td>
+                    <td className="py-4 px-4"><span className="bg-gray-100 px-2 py-1 rounded-full text-xs">Logged</span></td>
                   </tr>
-                ))}
+                )) : (
+                  <tr><td colSpan="3" className="p-6 text-center text-gray-500">No recent logs found.</td></tr>
+                )}
               </tbody>
             </table>
           </div>
@@ -646,4 +381,3 @@ const UserManagement = () => {
 };
 
 export default UserManagement;
-
