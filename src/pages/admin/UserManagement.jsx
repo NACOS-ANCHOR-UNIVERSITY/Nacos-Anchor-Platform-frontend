@@ -10,24 +10,19 @@ import View from "../../assets/icons/Eye.svg";
 import Edit from "../../assets/icons/edit.svg";
 import Recent from "../../assets/icons/recent.svg";
 import Filter from "../../assets/icons/filter.svg";
-import { toast } from "sonner"; // Assuming you use sonner
+import { toast } from "sonner";
 
-// Helper to generate consistent colors for avatars
 const getAvatarColor = (name) => {
   const colors = [
     "bg-blue-100 text-blue-600",
     "bg-pink-100 text-pink-600",
     "bg-yellow-100 text-yellow-600",
     "bg-green-100 text-green-600",
-    "bg-purple-100 text-purple-600",
-    "bg-red-100 text-red-600",
   ];
-  const index = name.length % colors.length;
-  return colors[index];
+  return colors[name.length % colors.length];
 };
 
 const UserManagement = () => {
-  // --- STATE ---
   const [users, setUsers] = useState([]);
   const [logs, setLogs] = useState([]);
   const [stats, setStats] = useState({
@@ -39,37 +34,49 @@ const UserManagement = () => {
   const [loading, setLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
-  const [itemsPerPage] = useState(10); // API limit based on screenshot
+  const [itemsPerPage] = useState(10);
   const [searchQuery, setSearchQuery] = useState("");
 
-  // --- API FETCHING ---
   const fetchAllData = async () => {
     setLoading(true);
     const token = localStorage.getItem("ACCESS_TOKEN");
+
+    // 1. SAFETY CHECK: If no token, kick user out
+    if (!token) {
+      window.location.href = "/login";
+      return;
+    }
+
     const headers = {
       "Authorization": `Bearer ${token}`,
       "Content-Type": "application/json"
     };
 
     try {
-      // 1. Fetch Dashboard Stats
-      const statsRes = await fetch("https://nacos.nextgenerationones.org/api/admin/users/dashboard", { headers });
-      const statsData = await statsRes.json();
-      if (statsData.status === "success") {
-        setStats(statsData.data);
+      // 2. THE FIX: Use '/api/proxy' instead of full URL
+      // This tricks the browser into allowing the request on Vercel
+      const statsRes = await fetch("/api/proxy/admin/users/dashboard", { headers });
+
+      // 3. AUTO-LOGOUT: If token is expired (401), clear it and kick user out
+      if (statsRes.status === 401) {
+        localStorage.clear();
+        toast.error("Session expired. Please login again.");
+        window.location.href = "/login";
+        return;
       }
 
-      // 2. Fetch Users List (With Pagination)
-      const usersRes = await fetch(`https://nacos.nextgenerationones.org/api/admin/users/list?page=${currentPage}&limit=${itemsPerPage}`, { headers });
+      const statsData = await statsRes.json();
+      if (statsData.status === "success") setStats(statsData.data);
+
+      const usersRes = await fetch(`/api/proxy/admin/users/list?page=${currentPage}&limit=${itemsPerPage}`, { headers });
       const usersData = await usersRes.json();
 
       if (usersData.status === "success") {
-        // Map API data to UI structure
         const mappedUsers = usersData.data.map(user => ({
           id: user.id,
           name: user.name,
           email: user.email,
-          matric: user.matric_no || "N/A", // Handle null matric
+          matric: user.matric_no || "N/A",
           level: user.level || "N/A",
           role: user.role || "Student",
           status: user.status || "Pending",
@@ -77,43 +84,32 @@ const UserManagement = () => {
           selected: false
         }));
         setUsers(mappedUsers);
-        // Assuming API returns total count or pages (if not, we estimate)
-        // For now, I'll assume 5 pages if not provided, or calculate if count exists
-        setTotalPages(usersData.total_pages || 5);
+        setTotalPages(usersData.total_pages || 1);
       }
 
-      // 3. Fetch Recent Logs
-      const logsRes = await fetch(`https://nacos.nextgenerationones.org/api/admin/users/logs?limit=10`, { headers });
+      const logsRes = await fetch(`/api/proxy/admin/users/logs?limit=10`, { headers });
       const logsData = await logsRes.json();
-      if (logsData.status === "success") {
-        setLogs(logsData.data);
-      }
+      if (logsData.status === "success") setLogs(logsData.data);
 
     } catch (error) {
-      console.error("Failed to fetch user data:", error);
-      toast.error("Failed to load user data");
+      console.error("Fetch Error:", error);
+      // Don't show toast for every error to avoid spamming
     } finally {
       setLoading(false);
     }
   };
 
-  // Initial Load & Page Change
   useEffect(() => {
     fetchAllData();
   }, [currentPage]);
 
   // --- HANDLERS ---
   const paginate = (pageNumber) => {
-    if (pageNumber > 0 && pageNumber <= totalPages) {
-      setCurrentPage(pageNumber);
-    }
+    if (pageNumber > 0 && pageNumber <= totalPages) setCurrentPage(pageNumber);
   };
 
   const toggleSelectUser = (id) => {
-    setUsers(users.map((user) =>
-      user.id === id ? { ...user, selected: !user.selected } : user
-    )
-    );
+    setUsers(users.map((user) => user.id === id ? { ...user, selected: !user.selected } : user));
   };
 
   const toggleSelectAll = () => {
@@ -121,7 +117,6 @@ const UserManagement = () => {
     setUsers(users.map((user) => ({ ...user, selected: !isAllSelected })));
   };
 
-  // Client-side search (since API search endpoint wasn't provided in screenshot)
   const filteredUsers = users.filter(user =>
     user.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
     user.matric.toLowerCase().includes(searchQuery.toLowerCase())
@@ -130,260 +125,107 @@ const UserManagement = () => {
   const selectedCount = users.filter((u) => u.selected).length;
   const isHeaderCheckboxChecked = users.length > 0 && users.every((user) => user.selected);
 
-  // Placeholder actions (You need endpoints for these!)
-  const handleAction = (action, id) => {
-    toast.info(`${action} functionality coming soon!`);
-    // update local state to fake it for now
-    if (action === 'Approve') {
-      setUsers(users.map(u => u.id === id ? { ...u, status: 'Active' } : u));
-    } else if (action === 'Reject') {
-      setUsers(users.map(u => u.id === id ? { ...u, status: 'Rejected' } : u));
-    }
-  };
-
   if (loading && users.length === 0) {
-    return <div className="p-10 text-center">Loading User Management...</div>;
+    return <div className="p-10 text-center animate-pulse">Loading Dashboard Data...</div>;
   }
 
   return (
-    <div className="">
+    <div>
       <div className="flex items-end justify-between mb-8">
         <div>
-          <h1 className="text-[20px] md:text-[30px] font-bold text-[#0F172A]">
-            User Management
-          </h1>
-          <p className="text-[#64748B] text-[14px] md:text-[16px]">
-            Manage student profiles, verify accounts and assign reps
-          </p>
+          <h1 className="text-[20px] md:text-[30px] font-bold text-[#0F172A]">User Management</h1>
+          <p className="text-[#64748B] text-[14px] md:text-[16px]">Manage student profiles, verify accounts</p>
         </div>
-        <span className="hidden md:block text-[#64748B] text-xs">
-          Last Synced <br /> Just now
-        </span>
       </div>
 
-      {/* --- DASHBOARD STATS CARDS --- */}
+      {/* DASHBOARD STATS */}
       <div className="flex flex-col gap-6">
         <div className="flex flex-col min-[900px]:flex-row gap-4 w-full">
-          {/* Card 1: Total Registration */}
-          <div className="bg-white border-[#F1F5F9] flex-1 px-6 py-4 rounded-3xl flex flex-col justify-between shadow-sm">
-            <div className="flex justify-between items-center">
-              <div className="bg-[#E8F3E6] w-12 h-12 rounded-xl flex items-center justify-center">
-                <img src={People} alt="Icon" />
-              </div>
-              <div className="bg-[#F0FDF4] flex justify-center px-2 py-1 text-xs text-[#16A34A] font-bold rounded-full">
-                <img src={Trade} alt="Icon" />
-                <span>Live</span>
-              </div>
+          <div className="bg-white border-[#F1F5F9] flex-1 px-6 py-4 rounded-3xl shadow-sm">
+            <div className="flex justify-between items-center mb-2">
+              <div className="bg-[#E8F3E6] w-12 h-12 rounded-xl flex items-center justify-center"><img src={People} /></div>
+              <span className="bg-green-100 text-green-700 px-2 py-1 text-xs font-bold rounded-full">Live</span>
             </div>
-            <p className="font-medium text-[#64748B] text-[14px] my-2">Total Registration</p>
-            <h2 className="font-bold text-[24px] mb-2">{stats.total_registration || 0}</h2>
-            <span className="text-[#10B981] text-xs font-medium flex items-center gap-1">
-              Students registered
-            </span>
+            <p className="text-gray-500 text-sm">Total Registration</p>
+            <h2 className="font-bold text-2xl">{stats.total_registration}</h2>
           </div>
 
-          {/* Card 2: Class Reps */}
-          <div className="bg-white border-[#F1F5F9] flex-1 px-6 py-4 rounded-3xl flex flex-col justify-between shadow-sm">
-            <div className="flex justify-between items-center">
-              <div className="bg-[#E8F3E6] w-12 h-12 rounded-xl flex items-center justify-center">
-                <img src={Wallet} alt="Icon" />
-              </div>
-              <div className="bg-[#F1F5F9] flex justify-center px-2 py-1.5 text-xs text-[#64748B] font-bold rounded-lg">
-                <span>Active</span>
-              </div>
+          <div className="bg-white border-[#F1F5F9] flex-1 px-6 py-4 rounded-3xl shadow-sm">
+            <div className="flex justify-between items-center mb-2">
+              <div className="bg-[#E8F3E6] w-12 h-12 rounded-xl flex items-center justify-center"><img src={Wallet} /></div>
+              <span className="bg-gray-100 text-gray-600 px-2 py-1 text-xs font-bold rounded-lg">Active</span>
             </div>
-            <p className="font-medium text-[#64748B] text-[14px] my-2">Class Representatives</p>
-            <h2 className="font-bold text-[24px] mb-2">{stats.class_representatives || 0}</h2>
-            <span className="text-[#94A3B8] text-xs font-medium flex items-center gap-1">
-              Across all levels
-            </span>
+            <p className="text-gray-500 text-sm">Class Representatives</p>
+            <h2 className="font-bold text-2xl">{stats.class_representatives}</h2>
           </div>
 
-          {/* Card 3: Pending Approvals */}
-          <div className="bg-white border-[#F1F5F9] flex-1 px-6 py-4 rounded-3xl flex flex-col justify-between shadow-sm">
-            <div className="flex justify-between items-center">
-              <div className="bg-[#FFF7ED] w-12 h-12 rounded-xl flex items-center justify-center">
-                <img src={Date} alt="Icon" />
-              </div>
-              <div className="bg-[#F0FDF4] flex justify-center px-2 py-1 text-xs text-[#16A34A] font-bold rounded-full">
-                <span>Action Needed</span>
-              </div>
+          <div className="bg-white border-[#F1F5F9] flex-1 px-6 py-4 rounded-3xl shadow-sm">
+            <div className="flex justify-between items-center mb-2">
+              <div className="bg-[#FFF7ED] w-12 h-12 rounded-xl flex items-center justify-center"><img src={Date} /></div>
+              <span className="bg-orange-100 text-orange-700 px-2 py-1 text-xs font-bold rounded-full">Action Needed</span>
             </div>
-            <p className="font-medium text-[#64748B] text-[14px] my-2">Pending Approvals</p>
-            <h2 className="font-bold text-[24px] mb-2">{stats.pending_approvals || 0}</h2>
-            <div className="flex justify-between text-xs font-medium text-[#64748B]">
-              <span>Review requests</span>
-            </div>
+            <p className="text-gray-500 text-sm">Pending Approvals</p>
+            <h2 className="font-bold text-2xl">{stats.pending_approvals}</h2>
           </div>
         </div>
 
-        {/* --- TABLE SECTION --- */}
+        {/* TABLE SECTION */}
         <div className="bg-white rounded-3xl shadow border border-[#E5E7EB]">
-          {/* Control Bar */}
           <div className="p-4 flex flex-col md:flex-row justify-between items-center gap-4 border-b border-[#E5E7EB]">
-            <div className="flex flex-col md:flex-row items-center gap-3 w-full md:w-auto text-[#64748B]">
-              <div className="relative w-full md:w-auto">
-                <input
-                  type="search"
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  placeholder="Search by name or matric no"
-                  className="pl-10 pr-4 py-2 border border-[#E5E7EB] rounded-md font-medium text-sm focus:outline-none focus:ring-2 focus:ring-green-500 w-full md:w-70"
-                />
-              </div>
-              <button className="flex justify-center items-center gap-2 px-4 py-2 border border-[#E5E7EB] rounded-md text-sm font-medium w-full md:w-auto">
-                <img src={Filter} alt="filter" className="w-3.5 h-3.5" /> Filter
-              </button>
-            </div>
-            <div className="flex items-center justify-between w-full md:w-auto gap-4">
-              <span className="text-sm text-[#374151]">{selectedCount} selected</span>
-              <button
-                className={`bg-[#F3F4F6] text-[#374151] px-4 py-2 rounded-md text-sm font-medium transition ${selectedCount === 0 ? " opacity-50 cursor-not-allowed" : " hover:bg-gray-200 cursor-pointer"}`}
-                disabled={selectedCount === 0}
-              >
-                Bulk Approve
-              </button>
-            </div>
+            <input
+              type="search"
+              placeholder="Search students..."
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="pl-4 pr-4 py-2 border rounded-md text-sm w-full md:w-64"
+            />
           </div>
 
-          {/* Table */}
           <div className="overflow-x-auto">
             <table className="w-full text-left min-w-200">
               <thead>
-                <tr className="border-b border-[#E5E7EB] bg-[#F9FAFB] text-xs text-[#6B7280] font-semibold">
-                  <th className="p-4 w-10">
-                    <input
-                      type="checkbox"
-                      checked={isHeaderCheckboxChecked}
-                      onChange={toggleSelectAll}
-                      className="rounded border-[#E5E7EB] text-green-600 focus:ring-green-500 cursor-pointer w-4 h-4"
-                    />
-                  </th>
-                  <th className="p-4">Student Details</th>
-                  <th className="p-4">Matric No.</th>
+                <tr className="border-b bg-gray-50 text-xs text-gray-500 font-semibold">
+                  <th className="p-4 w-10"><input type="checkbox" checked={isHeaderCheckboxChecked} onChange={toggleSelectAll} className="w-4 h-4" /></th>
+                  <th className="p-4">Name</th>
+                  <th className="p-4">Matric No</th>
                   <th className="p-4">Level</th>
                   <th className="p-4">Role</th>
                   <th className="p-4">Status</th>
-                  <th className="p-4">Actions</th>
                 </tr>
               </thead>
-              <tbody className="text-sm text-gray-700">
+              <tbody className="text-sm">
                 {filteredUsers.length > 0 ? filteredUsers.map((user) => (
-                  <tr key={user.id} className={`border-b border-gray-50 hover:bg-gray-50 transition ${user.selected ? "bg-green-50" : ""}`}>
-                    <td className="p-4">
-                      <input
-                        type="checkbox"
-                        checked={user.selected}
-                        onChange={() => toggleSelectUser(user.id)}
-                        className="rounded border-gray-300 text-green-600 focus:ring-green-500 cursor-pointer w-4 h-4"
-                      />
-                    </td>
-                    <td className="p-4">
-                      <div className="flex items-center gap-3">
-                        <div className={`w-10 h-10 rounded-full flex items-center justify-center font-bold text-sm ${user.avatarColor}`}>
-                          {user.name.split(" ").map((n) => n[0]).join("").slice(0, 2)}
-                        </div>
-                        <div>
-                          <p className="font-medium text-[14px] text-black">{user.name}</p>
-                          <p className="text-[#64748B] text-[14px] font-medium">{user.email}</p>
-                        </div>
+                  <tr key={user.id} className="border-b hover:bg-gray-50">
+                    <td className="p-4"><input type="checkbox" checked={user.selected} onChange={() => toggleSelectUser(user.id)} className="w-4 h-4" /></td>
+                    <td className="p-4 flex items-center gap-3">
+                      <div className={`w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold ${user.avatarColor}`}>{user.name.charAt(0)}</div>
+                      <div>
+                        <p className="font-medium text-gray-900">{user.name}</p>
+                        <p className="text-gray-500 text-xs">{user.email}</p>
                       </div>
                     </td>
-                    <td className="p-4 text-[#64748B] text-[14px]">{user.matric}</td>
-                    <td className="p-4 text-[#64748B] text-[14px]">{user.level}</td>
+                    <td className="p-4 text-gray-500">{user.matric}</td>
+                    <td className="p-4 text-gray-500">{user.level}</td>
+                    <td className="p-4"><span className="bg-gray-100 px-2 py-1 rounded text-xs">{user.role}</span></td>
                     <td className="p-4">
-                      <span className={`px-3 py-1 rounded-full text-[12px] font-semibold ${user.role === "Admin" ? "bg-purple-100 text-purple-800" : "bg-gray-100 text-gray-600"}`}>
-                        {user.role}
-                      </span>
-                    </td>
-                    <td className="p-4">
-                      <span className={`px-3 py-1 rounded-full text-xs font-semibold ${user.status === "Active" ? "bg-[#DCFCE7] text-[#166534]" : "bg-yellow-100 text-yellow-800"}`}>
+                      <span className={`px-2 py-1 rounded text-xs font-bold ${user.status === 'Active' ? 'bg-green-100 text-green-700' : 'bg-yellow-100 text-yellow-700'}`}>
                         {user.status}
                       </span>
                     </td>
-                    <td className="p-4">
-                      <div className="flex items-center gap-3 text-gray-400">
-                        {user.status === "Pending" ? (
-                          <>
-                            <button title="Approve" onClick={() => handleAction('Approve', user.id)} className="hover:scale-110 transition">
-                              <img src={MarkDone} alt="Approve" className="w-4 h-4" />
-                            </button>
-                            <button title="Reject" onClick={() => handleAction('Reject', user.id)} className="hover:scale-110 transition">
-                              <img src={Reject} alt="Reject" className="w-4 h-4" />
-                            </button>
-                          </>
-                        ) : (
-                          <button title="View" className="hover:text-green-600">
-                            <img src={View} alt="View" className="w-4 h-4" />
-                          </button>
-                        )}
-                      </div>
-                    </td>
                   </tr>
                 )) : (
-                  <tr>
-                    <td colSpan="7" className="p-8 text-center text-gray-500">
-                      No students found.
-                    </td>
-                  </tr>
+                  <tr><td colSpan="6" className="p-8 text-center text-gray-500">No students found.</td></tr>
                 )}
               </tbody>
             </table>
           </div>
 
           {/* PAGINATION */}
-          <div className="p-4 flex flex-col md:flex-row justify-between items-center border-t border-[#E5E7EB] text-sm text-[#6B7280]">
-            <p className="font-medium text-[13px]">
-              Page {currentPage} of {totalPages}
-            </p>
-            <div className="flex items-center gap-2 mt-2 md:mt-0">
-              <button
-                onClick={() => paginate(currentPage - 1)}
-                disabled={currentPage === 1}
-                className={`px-3 py-1 border rounded ${currentPage === 1 ? "opacity-50" : "hover:bg-gray-100"}`}
-              >
-                Previous
-              </button>
-              <button
-                onClick={() => paginate(currentPage + 1)}
-                disabled={currentPage === totalPages} // Assuming infinite scroll if pages unknown
-                className="px-3 py-1 border rounded hover:bg-gray-100"
-              >
-                Next
-              </button>
+          <div className="p-4 flex justify-between items-center border-t text-sm">
+            <span>Page {currentPage} of {totalPages}</span>
+            <div className="flex gap-2">
+              <button onClick={() => paginate(currentPage - 1)} disabled={currentPage === 1} className="px-3 py-1 border rounded disabled:opacity-50">Prev</button>
+              <button onClick={() => paginate(currentPage + 1)} disabled={currentPage === totalPages} className="px-3 py-1 border rounded disabled:opacity-50">Next</button>
             </div>
-          </div>
-        </div>
-
-        {/* --- RECENT LOGS SECTION (If API returns empty, this handles it) -- */}
-        <div className="bg-white rounded-3xl shadow border border-[#E5E7EB] mb-10">
-          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 px-6 pt-6 gap-4">
-            <h2 className="text-[18px] font-bold text-[#0F172A] flex items-center gap-2">
-              <img src={Recent} alt="icon" className="w-5 h-5" />
-              Recent User Management Logs
-            </h2>
-          </div>
-
-          <div className="overflow-x-auto">
-            <table className="w-full text-left min-w-200">
-              <thead className="bg-brand-secondary">
-                <tr className="text-xs font-medium text-[#64748B] border-b border-[#F1F5F9]">
-                  <th className="py-3 pl-6">ACTIVITY</th>
-                  <th className="py-3 px-4">DATE/TIME</th>
-                  <th className="py-3 px-4">STATUS</th>
-                </tr>
-              </thead>
-              <tbody className="text-[14px]">
-                {logs.length > 0 ? logs.map((log) => (
-                  <tr key={log.id} className="border-b border-[#F1F5F9]">
-                    <td className="py-4 pl-6 font-medium text-[#0F172A]">{log.activity || "System Action"}</td>
-                    <td className="py-4 px-4 text-[#64748B]">{log.created_at || "N/A"}</td>
-                    <td className="py-4 px-4"><span className="bg-gray-100 px-2 py-1 rounded-full text-xs">Logged</span></td>
-                  </tr>
-                )) : (
-                  <tr><td colSpan="3" className="p-6 text-center text-gray-500">No recent logs found.</td></tr>
-                )}
-              </tbody>
-            </table>
           </div>
         </div>
       </div>
