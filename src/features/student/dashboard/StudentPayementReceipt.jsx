@@ -21,7 +21,7 @@ export default function StudentPaymentReceipt() {
   const fetchFinanceData = async () => {
     setIsLoading(true);
     setError(null);
-    
+
     try {
       const response = await fetch(`${BASE_URL}/finance/dashboard`, {
         method: 'GET',
@@ -37,7 +37,7 @@ export default function StudentPaymentReceipt() {
       }
 
       const result = await response.json();
-      
+
       if (result.status === 'success') {
         setFinanceData(result.data);
       } else {

@@ -26,6 +26,7 @@ import UserManagement from "./pages/admin/UserManagement";
 import LibraryPage from "./features/library/pages/LibraryPage";
 import SiwesBoardMgt from "./pages/admin/siwes-board";
 import NotFound from "./pages/public/NotFound";
+import EventsAndPolls from "./pages/admin/EventsAndPolls";
 
 function App() {
   return (
@@ -63,6 +64,7 @@ function App() {
           <Route path="/admin/dashboard" element={<AdminDashboard />} />
           <Route path="/admin/users" element={<UserManagement />} />
           <Route path="/admin/payments" element={<AdminPaymentsPage />} />
+          <Route path="/admin/events" element={<EventsAndPolls />} />
           <Route path="/admin/siwes" element={<SiwesBoardMgt />} />
         </Route>
 
