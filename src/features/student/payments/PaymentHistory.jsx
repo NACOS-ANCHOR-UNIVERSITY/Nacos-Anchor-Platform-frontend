@@ -1,5 +1,7 @@
 import React, { useState } from "react"
 import { Filter, Download, Dot, FileText } from "lucide-react"
+import { toast } from "sonner";
+import Receipt from "@/components/ui/Reciept";
 
 /**
  * Payment History Component
@@ -10,15 +12,19 @@ import { Filter, Download, Dot, FileText } from "lucide-react"
  */
 export default function PaymentHistory({ payments = [] }) {
   const [currentPage, setCurrentPage] = useState(1);
+  const [loadingReceipt, setLoadingReceipt] = useState(null);
+  const [receiptData, setReceiptData] = useState(null);
   const itemsPerPage = 4;
-  
+  const BASE_URL = "https://nacos.nextgenerationones.org/api";
+  const token = localStorage.getItem("token")
+
   // Calculate pagination
   const totalItems = payments.length;
   const totalPages = Math.ceil(totalItems / itemsPerPage);
   const startIndex = (currentPage - 1) * itemsPerPage;
   const endIndex = startIndex + itemsPerPage;
   const currentPayments = payments.slice(startIndex, endIndex);
-  
+
   // Format amount with currency
   const formatAmount = (amount, currency = "₦") => {
     if (!amount) return `${currency}0`;
@@ -47,6 +53,41 @@ export default function PaymentHistory({ payments = [] }) {
     return statusLower === "successful" || statusLower === "success";
   };
 
+  const handleDownloadReceipt = async (referenceId) => {
+    try {
+      setLoadingReceipt(referenceId);
+
+      const response = await fetch(`${BASE_URL}/payments/receipt/${referenceId}`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error(`Failed to fetch receipt: ${response.statusText}`);
+      }
+
+      const data = await response.json();
+
+      console.log('Receipt data:', data);
+      // Set receipt data - this will trigger the Receipt component to show and auto-print
+      setReceiptData(data);
+      // toast.success('Receipt loaded! Print dialog will open automatically.');
+
+    } catch (error) {
+      console.error('Error fetching receipt:', error);
+      toast.error('Failed to download receipt. Please try again.');
+    } finally {
+      setLoadingReceipt(null);
+    }
+  };
+
+  const handleCloseReceipt = () => {
+    setReceiptData(null);
+  };
+
   // Empty state
   if (!payments || payments.length === 0) {
     return (
@@ -70,6 +111,9 @@ export default function PaymentHistory({ payments = [] }) {
 
   return (
     <div className="w-full">
+      {/* Receipt Modal - only shows when receiptData exists */}
+      <Receipt receipt={receiptData} onClose={handleCloseReceipt} />
+
       <div className="flex items-center justify-between p-3 bg-white border border-gray-200 rounded-t-lg">
         <div className="flex items-center">
           <div className="w-1.5 h-7 rounded-lg bg-[#94A3B8]">
@@ -107,15 +151,22 @@ export default function PaymentHistory({ payments = [] }) {
                   </span>
                 </td>
                 <td className="px-6 py-4 text-sm whitespace-nowrap">
-                  {isSuccessful(p.status) && p.receipt_link ? (
-                    <a 
-                      href={p.receipt_link} 
-                      target="_blank" 
-                      rel="noopener noreferrer"
-                      className="text-[#94A3B8] hover:text-blue-700 font-medium flex items-center gap-1"
+                  {isSuccessful(p.status) ? (
+                    <button
+                      onClick={() => handleDownloadReceipt(p.reference_id)}
+                      disabled={loadingReceipt === p.reference_id}
+                      className="text-[#94A3B8] hover:text-blue-700 font-medium flex items-center gap-1 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
                     >
-                      PDF<Download className="w-3 h-3" />
-                    </a>
+                      {loadingReceipt === p.reference_id ? (
+                        <>
+                          <span className="animate-spin">⏳</span> Loading...
+                        </>
+                      ) : (
+                        <>
+                          PDF<Download className="w-3 h-3" />
+                        </>
+                      )}
+                    </button>
                   ) : (
                     <span className="text-[#CBD5E1]">No Receipt</span>
                   )}
@@ -128,14 +179,14 @@ export default function PaymentHistory({ payments = [] }) {
         <div className="px-6 py-4 border-t border-gray-200 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between text-sm text-gray-600 bg-gray-50">
           <p>Showing {startIndex + 1}–{Math.min(endIndex, totalItems)} of {totalItems} transactions</p>
           <div className="flex gap-2">
-            <button 
-              className="px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed" 
+            <button
+              className="px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
               disabled={currentPage === 1}
               onClick={() => setCurrentPage(prev => prev - 1)}
             >
               Previous
             </button>
-            <button 
+            <button
               className="px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
               disabled={currentPage >= totalPages}
               onClick={() => setCurrentPage(prev => prev + 1)}
@@ -148,4 +199,3 @@ export default function PaymentHistory({ payments = [] }) {
     </div>
   )
 }
-
