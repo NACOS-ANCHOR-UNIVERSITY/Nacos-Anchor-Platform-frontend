@@ -13,9 +13,6 @@ import Navbar from "@/components/shared/Navbar";
 import Footer from "@/components/shared/Footer";
 import president from "@/assets/images/president_image.jpeg";
 import software_director from "@/assets/images/software_director_image.png";
-import general_secretary from "@/assets/images/general_secretary_image.png";
-import financial_secretary from "@/assets/images/financial_secretary_image.jpeg";
-import sportsDirector from "@/assets/images/director_sports_image.jpeg";
 import avatar from "@/assets/images/avatar.svg";
 
 const mockExecutives = {
@@ -48,7 +45,7 @@ const mockExecutives = {
     {
       name: "RAPHEAL FULFILLED",
       position: "General Secretary",
-      image: general_secretary,
+      image: avatar,
       icon: "/general_secretary_icon.svg",
       bio: "Driven by efficiency and precision. Responsible for the administrative backbone of the department, ensuring that every decision is documented and every plan is executed with clarity and speed. Promoting a culture of transparency and organized leadership.",
       email: "general@nacos.edu",
@@ -57,7 +54,7 @@ const mockExecutives = {
     {
       name: "IYANDA JERRIE",
       position: "Financial Secretary",
-      image: financial_secretary,
+      image: avatar,
       icon: "/financial_secretary_icon.svg",
       bio: "I'm just that guy that loves money, loves making money bend to my desires - particularly helping the department manage funds in a fun, yet impactful way. On a deeper level, I'm a UI/UX designer and an aspiring automated AI/Cloud Engineer.",
       email: "finance@nacos.edu",
@@ -75,7 +72,7 @@ const mockExecutives = {
     {
       name: "NORUWA CALEB",
       position: "Director of Sports",
-      image: sportsDirector,
+      image: avatar,
       icon: "/director_sports_icon.svg",
       bio: "A 400-level Information Technology student in the Computing Department at Anchor University, Lagos. I currently serve as the department's Social and Sports Director. My interests include football, chess, student engagement, recreational activities, and fostering positive interaction within the department.",
       email: "sports@nacos.edu",
