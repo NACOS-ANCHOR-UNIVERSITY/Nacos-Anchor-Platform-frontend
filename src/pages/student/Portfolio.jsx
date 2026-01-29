@@ -198,7 +198,7 @@ export default function Portfolio() {
 
     // Validate size (5MB)
     if (file.size > 5 * 1024 * 1024) {
-      alert("File is too large. Max 5MB.");
+      toast.error("File is too large. Max 5MB.");
       return;
     }
 
@@ -206,10 +206,10 @@ export default function Portfolio() {
       setIsSaving(true);
       await uploadResume(file);
       setResume({ name: file.name });
-      alert("Resume uploaded successfully");
+      toast.success("Resume uploaded successfully");
     } catch (error) {
       console.error(error || "Upload failed");
-      alert("Failed to upload resume");
+      toast.error("Failed to upload resume");
     } finally {
       setIsSaving(false);
     }
@@ -219,7 +219,7 @@ export default function Portfolio() {
     if (isPublic && publicUrl) {
       window.open(publicUrl, "_blank");
     } else {
-      alert("Please turn on visibility to view public profile.");
+      toast.error("Please turn on visibility to view public profile.");
     }
   };
 
@@ -232,7 +232,7 @@ export default function Portfolio() {
   }
 
   return (
-    <div className="max-w-6xl">
+    <div>
       {/* Header */}
       <div className="mb-6 flex items-start justify-between">
         <div>
@@ -559,7 +559,7 @@ export default function Portfolio() {
                 </div>
               ))}
 
-              {/* Add New Project Button */}
+              {/* Add New Project  */}
               <button
                 type="button"
                 onClick={() =>
