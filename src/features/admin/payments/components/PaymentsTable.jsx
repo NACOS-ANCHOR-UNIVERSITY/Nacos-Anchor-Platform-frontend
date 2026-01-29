@@ -172,7 +172,8 @@ export default function PaymentsTable({
           setDateFilter={setDateFilter}
         />
 
-        <div className="overflow-x-auto">
+        {/* Desktop Table View */}
+        <div className="hidden md:block overflow-x-auto">
           <table className="w-full text-left text-sm">
             <thead className="bg-white">
               <tr className="border-b border-slate-200 text-[11px] font-semibold uppercase tracking-wide text-slate-500">
@@ -285,11 +286,79 @@ export default function PaymentsTable({
           </table>
         </div>
 
+        {/* Mobile Card View */}
+        <div className="md:hidden divide-y divide-slate-100">
+          {paginatedRows.map((r) => (
+            <div key={r.id} className="p-4">
+              <div className="flex items-start justify-between gap-3">
+                <div className="flex items-center gap-3 flex-1 min-w-0">
+                  <input
+                    type="checkbox"
+                    className="cursor-pointer mt-1"
+                    checked={selected.has(r.id)}
+                    onChange={() => toggleOne(r.id)}
+                  />
+                  <Avatar
+                    src={r.avatar}
+                    initials={r.initials}
+                    tone={r.avatarTone}
+                  />
+                  <div className="min-w-0 flex-1">
+                    <div className="text-sm font-semibold text-slate-900 truncate">
+                      {r.name}
+                    </div>
+                    <div className="text-xs text-slate-500 truncate">
+                      {r.matric}
+                    </div>
+                  </div>
+                </div>
+                <StatusPill status={r.status} />
+              </div>
+
+              <div className="mt-3 ml-12 space-y-2">
+                <div className="flex justify-between items-center">
+                  <span className="text-xs text-slate-500">
+                    {r.transaction}
+                  </span>
+                  <span className="text-sm font-bold text-slate-900">
+                    {r.amount}
+                  </span>
+                </div>
+                <div className="flex justify-between items-center">
+                  <span className="text-xs text-slate-400">{r.date}</span>
+                  <div className="flex items-center gap-2">
+                    <button
+                      className="p-1.5 hover:bg-slate-50 rounded-lg transition-colors cursor-pointer"
+                      title="View Details"
+                    >
+                      <img src={eyeIcon} className="h-4 w-4" alt="View" />
+                    </button>
+                    {r.status === "Pending" && (
+                      <button
+                        onClick={() => openConfirmModal(r)}
+                        disabled={verifying === r.id}
+                        className="p-1.5 hover:bg-green-50 rounded-lg transition-colors cursor-pointer disabled:opacity-50"
+                        title="Approve"
+                      >
+                        <img
+                          src={checkMark}
+                          className="h-4 w-4"
+                          alt="Approve"
+                        />
+                      </button>
+                    )}
+                  </div>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+
         {/* Footer with Dynamic Pagination */}
-        <div className="flex items-center justify-between px-5 py-4 text-xs text-slate-500">
-          <div>
-            Showing {totalRows === 0 ? 0 : startIndex + 1} to {endIndex} of{" "}
-            {totalRows} results
+        <div className="flex flex-col sm:flex-row items-center justify-between gap-3 px-4 sm:px-5 py-4 text-xs text-slate-500">
+          <div className="text-center sm:text-left">
+            Showing {totalRows === 0 ? 0 : startIndex + 1}-{endIndex} of{" "}
+            {totalRows}
           </div>
 
           {totalPages > 1 && (
