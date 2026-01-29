@@ -46,41 +46,52 @@ const UserManagement = () => {
   const fetchAllData = async () => {
     setLoading(true);
     const token = localStorage.getItem("ACCESS_TOKEN");
-
-    // 1. Check if token even exists
-    if (!token) {
-      toast.error("Authentication missing. Please login.");
-      window.location.href = "/login";
-      return;
-    }
-
     const headers = {
       "Authorization": `Bearer ${token}`,
       "Content-Type": "application/json"
     };
 
     try {
+      // 1. Fetch Dashboard Stats
       const statsRes = await fetch("https://nacos.nextgenerationones.org/api/admin/users/dashboard", { headers });
-
-
-      if (statsRes.status === 401) {
-        localStorage.removeItem("ACCESS_TOKEN");
-        localStorage.removeItem("user");
-        toast.error("Session expired. Please login again.");
-        window.location.href = "/login";
-        return;
-      }
-
       const statsData = await statsRes.json();
       if (statsData.status === "success") {
         setStats(statsData.data);
       }
 
-      // ... (rest of your fetch logic for users and logs) ...
+      // 2. Fetch Users List (With Pagination)
+      const usersRes = await fetch(`https://nacos.nextgenerationones.org/api/admin/users/list?page=${currentPage}&limit=${itemsPerPage}`, { headers });
+      const usersData = await usersRes.json();
+
+      if (usersData.status === "success") {
+        // Map API data to UI structure
+        const mappedUsers = usersData.data.map(user => ({
+          id: user.id,
+          name: user.name,
+          email: user.email,
+          matric: user.matric_no || "N/A", // Handle null matric
+          level: user.level || "N/A",
+          role: user.role || "Student",
+          status: user.status || "Pending",
+          avatarColor: getAvatarColor(user.name),
+          selected: false
+        }));
+        setUsers(mappedUsers);
+        // Assuming API returns total count or pages (if not, we estimate)
+        // For now, I'll assume 5 pages if not provided, or calculate if count exists
+        setTotalPages(usersData.total_pages || 5);
+      }
+
+      // 3. Fetch Recent Logs
+      const logsRes = await fetch(`https://nacos.nextgenerationones.org/api/admin/users/logs?limit=10`, { headers });
+      const logsData = await logsRes.json();
+      if (logsData.status === "success") {
+        setLogs(logsData.data);
+      }
 
     } catch (error) {
       console.error("Failed to fetch user data:", error);
-      toast.error("Network Error: Could not connect to server.");
+      toast.error("Failed to load user data");
     } finally {
       setLoading(false);
     }
