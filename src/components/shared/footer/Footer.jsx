@@ -7,7 +7,7 @@ import {Link} from "react-router-dom";
 
 const Footer = () => {
   return (
-    <div className="flex flex-col justify-center mx-auto max-w-[1800x]">
+    <div className="flex flex-col justify-center mx-auto w-full max-w-[1800x]">
       <div className="px-[260px] bg-white border border-[#E8F4E6] pt-[64px] pb-[32px]">
         <div className="grid grid-cols-4 w-[1096px] pb-[48px] mx-auto">
           <div className="flex flex-col w-[238px]">
@@ -29,20 +29,20 @@ const Footer = () => {
           <div className="flex flex-col gap-[16px] w-[238px]">
             <p className="font-bold text-[14px] text-[#0F172A]">Quick Links</p>
             <div className="flex flex-col gap-[12px] font-normal text-[14px] text-[#475569]">
-              <Link>About us</Link>
-              <Link>Executive Team</Link>
-              <Link>Constitution</Link>
-              <Link>Events Calendar</Link>
+              <Link to="/about">About us</Link>
+              <Link to="/executives">Executive Team</Link>
+              <Link to="/about#history">Roadmap</Link>
+              <Link to="/events">Events Calendar</Link>
             </div>
           </div>
 
           <div className="flex flex-col gap-[16px] w-[238px]">
             <p className="font-bold text-[14px] text-[#0F172A]">Resources</p>
             <div className="flex flex-col gap-[12px] font-normal text-[14px] text-[#475569]">
-              <Link>Student Portal</Link>
-              <Link>Pay Dues</Link>
-              <Link>Academic Library</Link>
-              <Link>Past Questions</Link>
+              <Link to="/login">Student Portal</Link>
+              <Link to="/login">Pay Dues</Link>
+              <Link to="/login">Academic Library</Link>
+              <Link to="/login">Past Questions</Link>
             </div>
           </div>
 

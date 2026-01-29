@@ -1,3 +1,5 @@
+import { useEffect } from "react"
+import { useLocation } from "react-router-dom"
 import Commnication from "../../assets/icons/communication.svg"
 import Collaboration from "../../assets/icons/collaboration.svg"
 import Innovation from "../../assets/icons/innovation.svg"
@@ -12,6 +14,18 @@ import Message from "../../assets/icons/message.svg"
 import Link from "../../assets/icons/link.svg"
 
 const AboutUs = () => {
+  const location = useLocation()
+
+  useEffect(() => {
+    if (location.hash) {
+      const element = document.getElementById(location.hash.substring(1))
+      if (element) {
+        setTimeout(() => {
+          element.scrollIntoView({ behavior: "instant" })
+        }, 100)
+      }
+    }
+  }, [location])
 
   const coreMission = [
     {
@@ -120,7 +134,7 @@ const AboutUs = () => {
 
       {/* History of the Chapter section */}
 
-      <section className="flex flex-col items-center justify-center w-full max-w-3xl mt-10">
+      <section id="history" className="flex flex-col items-center justify-center w-full max-w-3xl mt-10">
         <p className="uppercase text-brand-primary text-[14px] font-bold">our journey</p>
         <h1 className="text-[#0F172A] text-[20px] md:text-[30px] font-bold">History of the Chapter</h1>
 
