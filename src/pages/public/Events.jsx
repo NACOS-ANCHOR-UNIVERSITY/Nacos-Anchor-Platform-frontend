@@ -1,8 +1,6 @@
 import { useState, useEffect } from "react";
 import { Calendar, Clock, MapPin, Ticket, ArrowRight, Eye } from "lucide-react";
-import { useState } from "react"
 import Team from "../../assets/images/team.png"
-import Ticket from "../../assets/icons/ticket.svg"
 import Arrow from "../../assets/icons/arrow.svg"
 import View from "../../assets/icons/view.svg"
 import TechWeek from "../../assets/images/tech_week.png"
