@@ -1,15 +1,17 @@
 import React, { useState } from "react";
-import People from "../../assets/icons/people.svg";
-import UpArrow from "../../assets/icons/ArrowUp.svg";
-import Trade from "../../assets/icons/tradingArrow.svg";
-import Wallet from "../../assets/icons/Wallet.svg";
-import Date from "../../assets/icons/date.svg";
-import MarkDone from "../../assets/icons/mark_done.svg";
-import Reject from "../../assets/icons/cancel.svg";
-import View from "../../assets/icons/Eye.svg";
-import Edit from "../../assets/icons/edit.svg";
-import Recent from "../../assets/icons/recent.svg";
-import Filter from "../../assets/icons/filter.svg";
+import {
+  Users,
+  ArrowUp,
+  TrendingUp,
+  Wallet,
+  Calendar,
+  CheckCircle,
+  XCircle,
+  Eye,
+  Pencil,
+  Clock,
+  Filter,
+} from "lucide-react";
 
 // user data
 const initialUsers = [
@@ -300,10 +302,10 @@ const UserManagement = () => {
           <div className="bg-white border-[#F1F5F9] flex-1 px-6 py-4 rounded-3xl flex flex-col justify-between shadow-sm">
             <div className="flex justify-between items-center">
               <div className="bg-[#E8F3E6] w-12 h-12 rounded-xl flex items-center justify-center">
-                <img src={People} alt="Icon of group of peope" />
+                <Users className="w-6 h-6 text-[#138601]" />
               </div>
               <div className="bg-[#F0FDF4] flex justify-center px-2 py-1 text-xs text-[#16A34A] font-bold rounded-full">
-                <img src={Trade} alt="Icon of trading arrow" />
+                <TrendingUp className="w-3 h-3" />
                 <span>+12%</span>
               </div>
             </div>
@@ -312,7 +314,7 @@ const UserManagement = () => {
             </p>
             <h2 className="font-bold text-[24px] mb-2">2,450</h2>
             <span className="text-[#10B981] text-xs font-medium flex items-center gap-1">
-              <img src={UpArrow} alt="Icon of Arrow Up" />
+              <ArrowUp className="w-3 h-3" />
               +12% vs last sem
             </span>
           </div>
@@ -320,7 +322,7 @@ const UserManagement = () => {
           <div className="bg-white border-[#F1F5F9] flex-1 px-6 py-4 rounded-3xl flex flex-col justify-between shadow-sm">
             <div className="flex justify-between items-center">
               <div className="bg-[#E8F3E6] w-12 h-12 rounded-xl flex items-center justify-center">
-                <img src={Wallet} alt="Icon of group of wallet" />
+                <Wallet className="w-6 h-6 text-[#138601]" />
               </div>
               <div className="bg-[#F1F5F9] flex justify-center px-2 py-1.5 text-xs text-[#64748B] font-bold rounded-lg">
                 <span>This Session</span>
@@ -338,10 +340,10 @@ const UserManagement = () => {
           <div className="bg-white border-[#F1F5F9] flex-1 px-6 py-4 rounded-3xl flex flex-col justify-between shadow-sm">
             <div className="flex justify-between items-center">
               <div className="bg-[#FFF7ED] w-12 h-12 rounded-xl flex items-center justify-center">
-                <img src={Date} alt="Icon of group of peope" />
+                <Calendar className="w-6 h-6 text-[#EA580C]" />
               </div>
               <div className="bg-[#F0FDF4] flex justify-center px-2 py-1 text-xs text-[#16A34A] font-bold rounded-full">
-                <img src={Trade} alt="Icon of trading arrow" />
+                <TrendingUp className="w-3 h-3" />
                 <span>+12%</span>
               </div>
             </div>
@@ -370,12 +372,7 @@ const UserManagement = () => {
                 />
               </div>
               <button className="flex justify-center items-center gap-2 px-4 py-2 border border-[#E5E7EB] rounded-md text-sm font-medium w-full md:w-auto">
-                <img
-                  src={Filter}
-                  alt="svg image of filter"
-                  className="w-3.5 h-3.5"
-                />{" "}
-                Filter by Level
+                <Filter className="w-3.5 h-3.5" /> Filter by Level
               </button>
             </div>
             <div className="flex items-center justify-between w-full md:w-auto gap-4">
@@ -494,39 +491,23 @@ const UserManagement = () => {
                               onClick={() => approveUser(user.id)}
                               className="cursor-pointer"
                             >
-                              <img
-                                src={MarkDone}
-                                alt="Svg image"
-                                className="w-4 h-4"
-                              />
+                              <CheckCircle className="w-4 h-4 text-green-600" />
                             </button>
                             <button
                               title="Reject"
                               onClick={() => rejectUser(user.id)}
                               className="cursor-pointer"
                             >
-                              <img
-                                src={Reject}
-                                alt="Svg image"
-                                className="w-4 h-4"
-                              />
+                              <XCircle className="w-4 h-4 text-red-500" />
                             </button>
                           </>
                         ) : (
                           <>
                             <button title="View">
-                              <img
-                                src={View}
-                                alt="Svg image"
-                                className="w-4 h-4"
-                              />
+                              <Eye className="w-4 h-4" />
                             </button>
                             <button title="Edit">
-                              <img
-                                src={Edit}
-                                alt="Svg image"
-                                className="w-4 h-4"
-                              />
+                              <Pencil className="w-4 h-4" />
                             </button>
                           </>
                         )}
@@ -594,7 +575,7 @@ const UserManagement = () => {
         <div className="bg-white rounded-3xl shadow border border-[#E5E7EB] mb-10">
           <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 px-6 pt-6 gap-4">
             <h2 className="text-[18px] font-bold text-[#0F172A] flex items-center gap-2">
-              <img src={Recent} alt="svg image" className="w-5 h-5" />
+              <Clock className="w-5 h-5" />
               Recent User Management Logs
             </h2>
             <div className="flex gap-3 w-full sm:w-auto">

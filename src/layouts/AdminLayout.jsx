@@ -13,8 +13,8 @@ import {
   ChevronDown,
   Menu,
   X,
+  Home,
 } from "lucide-react";
-import { Briefcase2Icon } from "../assets/icons";
 import profileImg from "../assets/images/profile.png";
 import Logo from "../assets/images/nacos-logo.svg";
 
@@ -139,12 +139,12 @@ const AdminLayout = () => {
                 to="/student/dashboard"
                 className="hover:text-[#1E293B] transition-colors"
               >
-                <Briefcase2Icon className="size-4.5" />
+                <Home className="w-4 h-4" />
               </Link>
               <span className="mx-2">/</span>
               <span className="text-[#1E293B] font-medium capitalize text-sm sm:text-base">
                 {[...mainLinks, ...moduleLinks].find((link) =>
-                  location.pathname.startsWith(link.path)
+                  location.pathname.startsWith(link.path),
                 )?.name || "Dashboard"}
               </span>
             </div>
@@ -201,4 +201,3 @@ const AdminLayout = () => {
 };
 
 export default AdminLayout;
-

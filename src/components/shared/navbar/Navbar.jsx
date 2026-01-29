@@ -1,7 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import { Search } from "lucide-react";
 import img1 from "../../../assets/images/Heading 2.png";
-import icon1 from "../../../assets/icons/Container.png";
 
 const Navbar = () => {
   return (
@@ -39,11 +39,11 @@ const Navbar = () => {
         {/* ======================================= */}
         <div className="flex justify-between w-87.5">
           <div className="flex items-center rounded-lg py-3 pl-4 pr-10 w-[256px] bg-[#E8F4E6] gap-2">
-            <img src={icon1} alt="search icon" />
+            <Search className="h-4 w-4 text-slate-500" />
             <input
               type="text"
               placeholder="Search executives..."
-              className="outline-none"
+              className="outline-none bg-transparent"
             />
           </div>
           <Link
@@ -59,4 +59,3 @@ const Navbar = () => {
 };
 
 export default Navbar;
-
