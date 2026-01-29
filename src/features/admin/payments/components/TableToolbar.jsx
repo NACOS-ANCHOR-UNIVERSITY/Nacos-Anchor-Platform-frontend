@@ -1,6 +1,4 @@
-import { Search, Filter, Calendar as CalendarIcon } from "lucide-react";
-import adjust from "../assets/table/Adjust.png";
-import calendar from "../assets/table/Calendar.png";
+import { Search, Calendar, SlidersHorizontal } from "lucide-react";
 
 export default function TableToolbar({
   selectedCount = 0,
@@ -37,17 +35,13 @@ export default function TableToolbar({
             <option value="Pending">Pending</option>
             <option value="Failed">Failed</option>
           </select>
-          <img
-            src={adjust}
-            alt=""
-            className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 pointer-events-none"
-          />
+          <SlidersHorizontal className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 pointer-events-none text-slate-500" />
         </div>
 
         {/* Date Filter */}
         <div className="relative">
           <div className="absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none">
-            <img src={calendar} alt="" className="h-4 w-4" />
+            <Calendar className="h-4 w-4 text-slate-500" />
           </div>
           <input
             type="date"

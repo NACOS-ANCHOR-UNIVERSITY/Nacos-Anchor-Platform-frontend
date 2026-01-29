@@ -1,16 +1,17 @@
-import React, { useState, useEffect } from "react";
-import People from "../../assets/icons/people.svg";
-import UpArrow from "../../assets/icons/ArrowUp.svg";
-import Trade from "../../assets/icons/tradingArrow.svg";
-import Wallet from "../../assets/icons/Wallet.svg";
-import Date from "../../assets/icons/date.svg";
-import MarkDone from "../../assets/icons/mark_done.svg";
-import Reject from "../../assets/icons/cancel.svg";
-import View from "../../assets/icons/Eye.svg";
-import Edit from "../../assets/icons/edit.svg";
-import Recent from "../../assets/icons/recent.svg";
-import Filter from "../../assets/icons/filter.svg";
-import { toast } from "sonner";
+import React, { useState } from "react";
+import {
+  Users,
+  ArrowUp,
+  TrendingUp,
+  Wallet,
+  Calendar,
+  CheckCircle,
+  XCircle,
+  Eye,
+  Pencil,
+  Clock,
+  Filter,
+} from "lucide-react";
 
 const getAvatarColor = (name) => {
   const colors = [
@@ -165,20 +166,33 @@ const UserManagement = () => {
           <div className="bg-white border-[#F1F5F9] flex-1 px-6 py-4 rounded-3xl shadow-sm">
             <div className="flex justify-between items-center mb-2">
               <div className="bg-[#E8F3E6] w-12 h-12 rounded-xl flex items-center justify-center">
-                <img src={People} />
+                <Users className="w-6 h-6 text-[#138601]" />
+              </div>
+              <div className="bg-[#F0FDF4] flex justify-center px-2 py-1 text-xs text-[#16A34A] font-bold rounded-full">
+                <TrendingUp className="w-3 h-3" />
+                <span>+12%</span>
               </div>
               <span className="bg-green-100 text-green-700 px-2 py-1 text-xs font-bold rounded-full">
                 Live
               </span>
             </div>
-            <p className="text-gray-500 text-sm">Total Registration</p>
-            <h2 className="font-bold text-2xl">{stats.total_registration}</h2>
+            <p className="font-medium text-[#64748B] text-[14px] my-2">
+              Total Registration
+            </p>
+            <h2 className="font-bold text-[24px] mb-2">2,450</h2>
+            <span className="text-[#10B981] text-xs font-medium flex items-center gap-1">
+              <ArrowUp className="w-3 h-3" />
+              +12% vs last sem
+            </span>
           </div>
 
           <div className="bg-white border-[#F1F5F9] flex-1 px-6 py-4 rounded-3xl shadow-sm">
             <div className="flex justify-between items-center mb-2">
               <div className="bg-[#E8F3E6] w-12 h-12 rounded-xl flex items-center justify-center">
-                <img src={Wallet} />
+                <Wallet className="w-6 h-6 text-[#138601]" />
+              </div>
+              <div className="bg-[#F1F5F9] flex justify-center px-2 py-1.5 text-xs text-[#64748B] font-bold rounded-lg">
+                <span>This Session</span>
               </div>
               <span className="bg-gray-100 text-gray-600 px-2 py-1 text-xs font-bold rounded-lg">
                 Active
@@ -193,7 +207,11 @@ const UserManagement = () => {
           <div className="bg-white border-[#F1F5F9] flex-1 px-6 py-4 rounded-3xl shadow-sm">
             <div className="flex justify-between items-center mb-2">
               <div className="bg-[#FFF7ED] w-12 h-12 rounded-xl flex items-center justify-center">
-                <img src={Date} />
+                <Calendar className="w-6 h-6 text-[#EA580C]" />
+              </div>
+              <div className="bg-[#F0FDF4] flex justify-center px-2 py-1 text-xs text-[#16A34A] font-bold rounded-full">
+                <TrendingUp className="w-3 h-3" />
+                <span>+12%</span>
               </div>
               <span className="bg-orange-100 text-orange-700 px-2 py-1 text-xs font-bold rounded-full">
                 Action Needed
@@ -214,8 +232,7 @@ const UserManagement = () => {
                 className="pl-4 pr-4 py-2 border rounded-md text-sm w-full md:w-64"
               />
               <button className="flex justify-center items-center gap-2 px-4 py-2 border border-[#E5E7EB] rounded-md text-sm font-medium w-full md:w-auto">
-                <img src={Filter} alt="filter" className="w-3.5 h-3.5" /> Filter
-                by Level
+                <Filter className="w-3.5 h-3.5" /> Filter by Level
               </button>
             </div>
             <div className="flex items-center justify-between w-full md:w-auto gap-4">
@@ -275,27 +292,68 @@ const UserManagement = () => {
                           </p>
                           <p className="text-gray-500 text-xs">{user.email}</p>
                         </div>
-                      </td>
-                      <td className="p-4 text-gray-500">{user.matric}</td>
-                      <td className="p-4 text-gray-500">{user.level}</td>
-                      <td className="p-4">
-                        <span className="bg-gray-100 px-2 py-1 rounded text-xs">
-                          {user.role}
-                        </span>
-                      </td>
-                      <td className="p-4">
-                        <span
-                          className={`px-2 py-1 rounded text-xs font-bold ${user.status === "Active" ? "bg-green-100 text-green-700" : "bg-yellow-100 text-yellow-700"}`}
-                        >
-                          {user.status}
-                        </span>
-                      </td>
-                    </tr>
-                  ))
-                ) : (
-                  <tr>
-                    <td colSpan="6" className="p-8 text-center text-gray-500">
-                      No students found.
+                      </div>
+                    </td>
+                    <td className="p-4 text-[#64748B] text-[14px]">
+                      {user.matric}
+                    </td>
+                    <td className="p-4 text-[#64748B] text-[14px]">
+                      {user.level}
+                    </td>
+                    <td className="p-4">
+                      <span
+                        className={`px-3 py-1 rounded-full text-[12px] font-semibold ${
+                          user.role === "Class Rep"
+                            ? "bg-[#F3E8FF] text-[#6B21A8]"
+                            : "bg-[#F3F4F6] text-[#4B5563]"
+                        }`}
+                      >
+                        {user.role}
+                      </span>
+                    </td>
+                    <td className="p-4">
+                      <span
+                        className={`px-3 py-1 rounded-full text-xs font-semibold ${
+                          user.status === "Active"
+                            ? "bg-green-100 text-green-700"
+                            : user.status === "Rejected"
+                              ? "bg-red-100 text-red-700"
+                              : "bg-amber-100 text-amber-700"
+                        }`}
+                      >
+                        {user.status}
+                      </span>
+                    </td>
+                    <td className="p-4">
+                      <div className="flex items-center gap-3 text-gray-400">
+                        {user.status === "Pending" ? (
+                          <>
+                            <button
+                              title="Approve"
+                              onClick={() => approveUser(user.id)}
+                              className="cursor-pointer"
+                            >
+                              <CheckCircle className="w-4 h-4 text-green-600" />
+                            </button>
+                            <button
+                              title="Reject"
+                              onClick={() => rejectUser(user.id)}
+                              className="cursor-pointer"
+                            >
+                              <XCircle className="w-4 h-4 text-red-500" />
+                            </button>
+                          </>
+                        ) : (
+                          <>
+                            <button title="View">
+                              <Eye className="w-4 h-4" />
+                            </button>
+                            <button title="Edit">
+                              <Pencil className="w-4 h-4" />
+                            </button>
+                          </>
+                        )}
+                      </div>
                     </td>
                   </tr>
                 )}
@@ -323,6 +381,64 @@ const UserManagement = () => {
                 Next
               </button>
             </div>
+          </div>
+        </div>
+
+        {/* --- RECENT USER MANAGEMENT LOGS SECTION -- */}
+        <div className="bg-white rounded-3xl shadow border border-[#E5E7EB] mb-10">
+          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 px-6 pt-6 gap-4">
+            <h2 className="text-[18px] font-bold text-[#0F172A] flex items-center gap-2">
+              <Clock className="w-5 h-5" />
+              Recent User Management Logs
+            </h2>
+            <div className="flex gap-3 w-full sm:w-auto">
+              <button className="bg-brand-secondary border border-[#E2E8F0] text-[#64748B] px-4 py-2 rounded-lg text-sm font-medium flex-1 sm:flex-none text-center">
+                Export Log
+              </button>
+              <button className="bg-[#138601] text-white px-4 py-2 rounded-lg text-sm font-medium flex-1 sm:flex-none text-center">
+                View All
+              </button>
+            </div>
+          </div>
+
+          <div className="overflow-x-auto">
+            <table className="w-full text-left min-w-200">
+              <thead className="bg-brand-secondary">
+                <tr className="text-xs font-medium text-[#64748B] border-b border-[#F1F5F9]">
+                  <th className="py-3 pl-6">ACTIVITY</th>
+                  <th className="py-3 px-4">ADMIN USER</th>
+                  <th className="py-3 px-4">DATE/TIME</th>
+                  <th className="py-3 px-4">STATUS</th>
+                  <th className="py-3 pr-6 text-right">ACTION</th>
+                </tr>
+              </thead>
+              <tbody className="text-[14px]">
+                {recentLogs.map((log) => (
+                  <tr
+                    key={log.id}
+                    className="border-b border-[#F1F5F9] last:border-0 hover:bg-gray-50 transition"
+                  >
+                    <td className="py-4 pl-6 font-medium text-[#0F172A]">
+                      {log.activity}
+                    </td>
+                    <td className="py-4 px-4 text-[#64748B]">{log.admin}</td>
+                    <td className="py-4 px-4 text-[#64748B]">{log.date}</td>
+                    <td className="py-4 px-4">
+                      <span
+                        className={`px-3 py-1 rounded-full text-xs font-medium ${log.statusColor}`}
+                      >
+                        {log.status}
+                      </span>
+                    </td>
+                    <td
+                      className={`py-4 pr-6 text-right font-medium cursor-pointer ${log.actionColor}`}
+                    >
+                      {log.action}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
           </div>
         </div>
       </div>
