@@ -268,7 +268,7 @@ const Settings = () => {
                     <img
                       src={
                         userData?.avatar_url
-                          ? `${BASE_URL.replace("/api", "")}/${userData.avatar_url}`
+                          ? `${BASE_URL}/${userData.avatar_url}`
                           : "https://api.dicebear.com/7.x/avataaars/svg?seed=Sue"
                       }
                       alt="Profile"

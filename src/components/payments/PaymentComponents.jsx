@@ -3,14 +3,12 @@ import { PaystackButton } from 'react-paystack';
 import { toast } from 'sonner';
 
 const PaymentComponent = ({ amount, email, purpose, onSuccess, btnText, className }) => {
-    const publicKey = import.meta.env.VITE_PAYSTACK_PUBLIC_KEY;
+    const publicKey = 'pk_live_779b7cc3646c8a0f1a076ae73d7f549671648e91'; //<--- we should probably let this come from env or the backend....
 
     if (!publicKey) {
         console.error("Paystack public key is missing!");
         return <button disabled className="bg-gray-400 text-white px-4 py-2 rounded text-xs">Key Error</button>;
     }
-
-    // Ensure amount is a clean number (remove commas)
     const cleanAmount = parseFloat(amount.toString().replace(/,/g, ''));
     const amountInKobo = cleanAmount * 100;
 
