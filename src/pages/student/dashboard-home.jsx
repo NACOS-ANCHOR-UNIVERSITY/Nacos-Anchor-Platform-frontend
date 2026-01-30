@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react"; // Added imports
-// import useUserStore from "../../store/useUserStore"; // 🛑 Commented out to prevent conflicts
+
 
 import { Plus } from "lucide-react";
 import {
@@ -27,12 +27,12 @@ const DashboardHome = () => {
     return savedUser
       ? JSON.parse(savedUser)
       : {
-          first_name: "Student",
-          last_name: "",
-          department: "Computer Science",
-          level: "100",
-          matric_number: "AUL/SCI/24/000",
-        };
+        first_name: "Student",
+        last_name: "",
+        department: "Computer Science",
+        level: "100",
+        matric_number: "AUL/SCI/24/000",
+      };
   });
 
   return (
@@ -41,7 +41,7 @@ const DashboardHome = () => {
       <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
         <div>
           <h2 className="text-2xl md:text-3xl font-bold text-gray-900">
-            {/* 👇 FIXED: Uses first_name instead of name */}
+
             Welcome back, {user?.first_name || "Student"} 👋
           </h2>
           <p className="text-[#64748B] mt-1 text-sm md:text-base">
