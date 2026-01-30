@@ -41,10 +41,10 @@ const ComingSoon = ({ title = "Feature Coming Soon", message }) => {
         </button>
 
         <button
-          onClick={() => navigate('/admin/dashboard')}
+          onClick={() => navigate('/')}
           className="flex items-center justify-center gap-2 px-6 py-3 bg-[#138601] text-white rounded-xl font-medium hover:bg-[#0e6001] transition-all shadow-md hover:shadow-lg shadow-green-900/10"
         >
-          Return to Dashboard
+          Return Home
         </button>
       </div>
 
