@@ -27,14 +27,14 @@ const AdminLayout = () => {
   const mainLinks = [
     { name: "Dashboard", path: "/admin/dashboard", icon: LayoutDashboard },
     { name: "User Management", path: "/admin/users", icon: Users },
-    { name: "Content Moderation", path: "/admin/moderation", icon: FileCheck },
+    { name: "Content Moderation", path: "/moderation", icon: FileCheck },
     { name: "Payments", path: "/admin/payments", icon: CreditCard },
   ];
 
   const moduleLinks = [
     { name: "Events & Polls", path: "/admin/events", icon: Calendar },
     { name: "SIWES Board", path: "/admin/siwes", icon: Briefcase },
-    { name: "Voting System", path: "/admin/voting", icon: Vote },
+    { name: "Voting System", path: "/voting", icon: Vote },
   ];
 
   const renderLink = (item) => {
@@ -46,11 +46,10 @@ const AdminLayout = () => {
         key={item.name}
         to={item.path}
         onClick={() => setIsSidebarOpen(false)} // Close sidebar on mobile click
-        className={`flex items-center gap-3 px-4 py-3 text-sm font-medium rounded-xl transition-all mb-1 ${
-          isActive
+        className={`flex items-center gap-3 px-4 py-3 text-sm font-medium rounded-xl transition-all mb-1 ${isActive
             ? "bg-[#138601] text-white shadow-sm" // Active styles from your responsive layout
             : "text-[#475569] hover:bg-gray-50 hover:text-gray-900"
-        }`}
+          }`}
       >
         <item.icon
           className={`w-5 h-5 ${isActive ? "text-white" : "text-gray-500"}`}
