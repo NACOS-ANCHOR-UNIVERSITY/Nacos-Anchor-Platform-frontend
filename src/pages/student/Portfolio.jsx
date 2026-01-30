@@ -27,7 +27,7 @@ import {
 } from "@/features/student/portfolio/api";
 
 // Constants for Media
-const MEDIA_BASE_URL = "https://nacos.nextgenerationones.org";
+const MEDIA_BASE_URL = "https://nacos.nextgenerationones.org/api";
 const DEFAULT_AVATAR =
   "https://api.dicebear.com/7.x/avataaars/svg?seed=Student";
 const DEFAULT_PROJECT_IMG =
