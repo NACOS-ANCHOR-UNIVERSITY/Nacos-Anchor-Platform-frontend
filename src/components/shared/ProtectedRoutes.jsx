@@ -1,25 +1,28 @@
-import {Navigate, Outlet} from "react-router-dom";
-import {useUserStore} from "../../store/useUserStore"; 
+import useUserStore from "@/store/useUserStore";
+import { Navigate, Outlet, useLocation } from "react-router-dom";
 
-const ProtectedRoutes = ({allowedRoles}) => {
-  const {token, user} = useUserStore();
+const ProtectedRoutes = ({ allowedRoles }) => {
+  const { isAuthenticated, user } = useUserStore();
+  const location = useLocation();
 
-  if (!token) {
-    return <Navigate to="/login" replace />;
+  // Not logged in? Send to login, but save where they were trying to go
+  if (!isAuthenticated) {
+    return <Navigate to="/login" state={{ from: location }} replace />;
   }
 
- 
-  if (!allowedRoles.includes(user.role)) {
+  // Logged in, but role not authorized for this specific route?
+  if (allowedRoles && !allowedRoles.includes(user?.role)) {
     return (
       <Navigate
-        to={user.role === "admin" ? "/admin/dashboard" : "/student/dashboard"}
+        to={user?.role === "admin" ? "/admin/dashboard" : "/student/dashboard"}
         replace
       />
     );
   }
 
- 
+  // Authorized? Let them through
   return <Outlet />;
 };
 
 export default ProtectedRoutes;
+
