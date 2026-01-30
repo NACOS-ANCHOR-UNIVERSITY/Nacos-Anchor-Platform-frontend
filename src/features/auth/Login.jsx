@@ -35,15 +35,19 @@ const Login = () => {
     e.preventDefault();
     if (!validateForm()) return;
 
-    // 🛑 NUCLEAR FIX: Instantly wipe ALL old data before logging in.
-    // This prevents "Student Tokens" from blocking "Admin Access" later.
+    // 🛑 THE FIX: Clear old data immediately so "Student" and "Admin" 
+    // tokens never mix. This runs BEFORE we get the new token.
     localStorage.clear();
-    sessionStorage.clear(); // Just to be safe
+    sessionStorage.clear();
 
     setIsLoading(true);
     try {
+      // Now we fetch the NEW, CLEAN token
       const { user } = await authService.login(formData);
+
       toast.success(`Welcome back, ${user.first_name}!`);
+
+      // Navigate based on the NEW role
       navigate(
         user.role === "admin" ? "/admin/dashboard" : "/student/dashboard",
       );
@@ -53,6 +57,7 @@ const Login = () => {
       setIsLoading(false);
     }
   };
+
   return (
     <div className="min-h-screen bg-[#F6F7F8] flex">
       {/* --- LEFT SIDE (Illustration) --- */}
