@@ -14,6 +14,7 @@ import Person1 from "../../assets/images/person1.png";
 import Person2 from "../../assets/images/person2.png";
 import Person3 from "../../assets/images/person3.png";
 import Person4 from "../../assets/images/person4.png";
+import { Link } from "react-router-dom";
 
 const AboutUs = () => {
   const location = useLocation();
@@ -241,12 +242,16 @@ const AboutUs = () => {
           {/* <Link to="/register">Register on Portal</Link>
               <Link to="/support">Contact Support</Link> */}
 
-          <button className="bg-white text-brand-primary font-bold px-6 py-2 rounded-lg">
+          <Link 
+          to="/signup"
+          className="bg-white text-brand-primary font-bold px-6 py-2 rounded-lg">
             Register on Portal
-          </button>
-          <button className="border border-white text-white font-bold px-6 py-2 rounded-lg">
+          </Link>
+          <Link 
+          to="/contact"
+           className="border border-white text-white font-bold px-6 py-2 rounded-lg">
             Contact Support
-          </button>
+          </Link>
         </div>
       </div>
     </div>
