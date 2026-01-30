@@ -109,38 +109,52 @@ export default function PendingFees({ fees = [] }) {
     };
   };
 
-  const handlePaymentSuccess = async (reference, feeItem) => {
-    toast.success(`Payment Successful! Verifying...`);
-    console.log("Paystack Reference:", reference);
+  const handlePaymentSuccess = async (referenceObj, feeItem) => {
+    toast.info("Verifying payment with server...");
+    console.log("Paystack Reference:", referenceObj.reference);
+
+    // 1. Get Authentication Data
+    const token = localStorage.getItem("token") || localStorage.getItem("ACCESS_TOKEN");
+    const user = JSON.parse(localStorage.getItem("user") || "{}");
+
+    // Safety check: Ensure we have a User ID
+    if (!user.id) {
+      toast.error("User ID missing. Please relogin.");
+      return;
+    }
 
     try {
-      const response = await fetch(
-        "https://nacos.nextgenerationones.org/api/payments/verify",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-          body: JSON.stringify({
-            reference,
-          }),
+      // 2. Use the Proxy URL (Fixes Network Error)
+      const response = await fetch("/api/proxy/payments/verify", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`,
         },
-      );
+        // 3. Match the EXACT Backend Schema
+        body: JSON.stringify({
+          reference_id: referenceObj.reference, // The code from Paystack
+          user_id: user.id,                     // The logged-in student's ID
+          description: feeItem.title,           // e.g. "Departmental Dues"
+          amount: feeItem.amount,               // e.g. 15000
+          status: "success",                    // Paystack said it worked
+          date_paid: new Date().toISOString().split('T')[0] // Format: YYYY-MM-DD
+        }),
+      });
 
       const data = await response.json();
 
       if (response.ok) {
-        toast.success("Database Updated: Payment Recorded!");
+        toast.success("Payment Verified & Recorded!");
+        // Reload page after 2 seconds to update UI
+        setTimeout(() => window.location.reload(), 2000);
       } else {
-        toast.error(
-          "Payment received, but database update failed. Contact Admin.",
-        );
-        console.error("Verification failed:", data);
+        toast.error(data.message || "Database update failed.");
+        console.error("Backend Error:", data);
       }
     } catch (error) {
       console.error("Network Error:", error);
-      toast.error("Network error verifying payment.");
+      toast.error("Could not reach the server.");
     }
   };
 
