@@ -14,6 +14,7 @@ import {
   Menu,
   X,
   Home,
+  Search,
 } from "lucide-react";
 import profileImg from "../assets/images/profile.png";
 import Logo from "../assets/images/nacos-logo.svg";
