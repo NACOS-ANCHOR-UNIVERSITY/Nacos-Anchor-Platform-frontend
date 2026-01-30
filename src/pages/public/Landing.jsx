@@ -15,6 +15,8 @@ import communicate from "../../assets/images/communication.png";
 import collarb from "../../assets/images/collaboration.png";
 import innovate from "../../assets/images/innovation.png";
 import star from "../../assets/images/star.png";
+import Executivepage from "./Executivepage";
+import { Route, Link } from "react-router-dom";
 
 const Landing = () => {
   return (
@@ -30,9 +32,14 @@ const Landing = () => {
               Welcome to your new digital home. From lecture notes to exam past
               questions, everything you need is now just a click away.
             </p>
-            <button className="bg-[#138601] rounded-[4px] py-[14px] px-[32px] font-medium text-[16px] text-[#FFFFFF]">
+            <a
+              href="https://www.linkedin.com/company/nacos-anchor-university/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="bg-[#138601] rounded-[4px] py-[14px] px-[32px] font-medium text-[16px] text-[#FFFFFF]"
+            >
               Join the Community
-            </button>
+            </a>
           </div>
           <div>
             <img src={hero} alt="" className="w-[657px] " />
@@ -64,9 +71,12 @@ const Landing = () => {
               the tech industry, providing our students with a centralized
               platform for academic resources, mentorship, and career growth.
             </p>
-            <button className="bg-[#128401] rounded-[4px] py-[14px] px-[32px] font-medium text-[16px] text-[#FFFFFF]">
+            <Link
+              to="/executives"
+              className="bg-[#128401] rounded-[4px] py-[14px] px-[32px] font-medium text-[16px] text-[#FFFFFF]"
+            >
               Meet the Excos
-            </button>
+            </Link>
           </div>
         </div>
 
@@ -234,9 +244,13 @@ const Landing = () => {
               this platform replaces manual processes with transparency,
               accountability, and speed.
             </p>
-            <button className="bg-[#128401] rounded-[4px] py-[14px] px-[32px] font-medium text-[16px] text-[#FFFFFF]">
+            <Link  
+            to="/login"
+            className="bg-[#128401] rounded-[4px] py-[14px] px-[32px] font-medium text-[16px] text-[#FFFFFF]">
               Explore Features
-            </button>
+            </Link>
+            
+             
           </div>
         </div>
 
@@ -322,9 +336,12 @@ const Landing = () => {
                 </div>
               </div>
 
-              <button className="font-bold text-[14px] bg-[#128401] text-[#FFFFFF] rounded-[4px] py-[14px] px-[34px] w-[976px] mx-auto mt-[45px]">
+              <Link
+                to="/events"
+                className="font-bold text-[14px] bg-[#128401] text-[#FFFFFF] rounded-[4px] py-[14px] px-[34px] w-[976px] mx-auto mt-[45px] block text-center"
+              >
                 See all events
-              </button>
+              </Link>
             </div>
           </div>
         </div>

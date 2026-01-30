@@ -8,186 +8,55 @@ import {
   ChevronLeft,
   ChevronRight,
   X,
+  Calendar,
+  Code,
+  Palette,
+  Server,
+  Shield,
 } from "lucide-react";
 
-import {
-  CalendarIcon,
-  CodeIcon,
-  PaintIcon,
-  ServerIcon,
-  ShieldIcon,
-} from "../../assets/icons";
+// 1. Import the hook we created
+import { useOpportunities } from "../../hooks";
+import Skeleton from "../../components/ui/Skeleton";
 
-const INITIAL_JOB_DATA = [
-  {
-    id: 1,
-    title: "Frontend Developer Intern",
-    company: "Paystack",
-    location: "Ikeja, Lagos (Hybrid)",
-    type: "Hybrid",
-    category: "Software Dev",
-    duration: "6 Months",
-    tags: ["React", "TypeScript"],
-    status: "Active",
-    posted: "2 days ago",
-    icon: <CodeIcon className="text-[#94A3B8]" size={24} />,
-    bg: "bg-[#F1F5F9] border-[#F1F5F9]",
-  },
-  {
-    id: 2,
-    title: "Network Administrator Intern",
-    company: "MainOne Cables",
-    location: "Victoria Island, Lagos",
-    type: "Lagos",
-    category: "Networking",
-    duration: "1 Year",
-    tags: ["Cisco", "Troubleshooting"],
-    status: "Featured",
-    posted: "5 days ago",
-    icon: <ServerIcon className="text-[#6366F1]" size={24} />,
-    bg: "bg-[#EEF2FF] border-[#F1F5F9]",
-  },
-  {
-    id: 3,
-    title: "UI/UX Design Intern",
-    company: "Kuda Bank",
-    location: "Remote",
-    type: "Remote",
-    category: "Product Design",
-    duration: "6 Months",
-    tags: ["Figma", "Prototyping"],
-    status: null,
-    posted: "1 week ago",
-    icon: <PaintIcon className="text-[#F97316]" size={24} />,
-    bg: "bg-[#FFF7ED] border-[#FFEDD5]",
-  },
-  {
-    id: 4,
-    title: "Cyber Security Analyst Intern",
-    company: "First Bank",
-    location: "Marina, Lagos",
-    type: "Lagos",
-    category: "Data Analysis",
-    duration: "6 Months",
-    tags: ["Pen-Testing", "Networking"],
-    status: null,
-    posted: "1 week ago",
-    icon: <ShieldIcon className="text-[#A855F7]" size={24} />,
-    bg: "bg-[#FAF5FF] border-[#F3E8FF]",
-  },
-  {
-    id: 5,
-    title: "Backend Engineer Intern",
-    company: "Flutterwave",
-    location: "Lekki, Lagos",
-    type: "Lagos",
-    category: "Software Dev",
-    duration: "6 Months",
-    tags: ["Node.js", "PostgreSQL"],
-    status: "Active",
-    posted: "3 days ago",
-    icon: <CodeIcon className="text-[#94A3B8]" size={24} />,
-    bg: "bg-[#F1F5F9] border-[#F1F5F9]",
-  },
-  {
-    id: 6,
-    title: "Data Analyst Intern",
-    company: "MTN Nigeria",
-    location: "Abuja",
-    type: "Abuja",
-    category: "Data Analysis",
-    duration: "1 Year",
-    tags: ["Python", "SQL"],
-    status: null,
-    posted: "1 week ago",
-    icon: <ServerIcon className="text-[#6366F1]" size={24} />,
-    bg: "bg-[#EEF2FF] border-[#F1F5F9]",
-  },
-  {
-    id: 7,
-    title: "Product Designer",
-    company: "Brass",
-    location: "Remote",
-    type: "Remote",
-    category: "Product Design",
-    duration: "3 Months",
-    tags: ["Figma", "User Research"],
-    status: "Featured",
-    posted: "2 days ago",
-    icon: <PaintIcon className="text-[#F97316]" size={24} />,
-    bg: "bg-[#FFF7ED] border-[#FFEDD5]",
-  },
-  {
-    id: 8,
-    title: "DevOps Intern",
-    company: "Interswitch",
-    location: "Lagos",
-    type: "Lagos",
-    category: "Networking",
-    duration: "6 Months",
-    tags: ["AWS", "Docker"],
-    status: null,
-    posted: "4 days ago",
-    icon: <ServerIcon className="text-[#6366F1]" size={24} />,
-    bg: "bg-[#EEF2FF] border-[#F1F5F9]",
-  },
-  {
-    id: 9,
-    title: "Mobile Dev Intern",
-    company: "Moniepoint",
-    location: "Hybrid",
-    type: "Hybrid",
-    category: "Software Dev",
-    duration: "6 Months",
-    tags: ["Flutter", "Dart"],
-    status: "Active",
-    posted: "1 day ago",
-    icon: <CodeIcon className="text-[#94A3B8]" size={24} />,
-    bg: "bg-[#F1F5F9] border-[#F1F5F9]",
-  },
-  {
-    id: 10,
-    title: "Network Engineer",
-    company: "Globacom",
-    location: "Abuja",
-    type: "Abuja",
-    category: "Networking",
-    duration: "1 Year",
-    tags: ["IP Routing", "Switching"],
-    status: null,
-    posted: "2 weeks ago",
-    icon: <ServerIcon className="text-[#6366F1]" size={24} />,
-    bg: "bg-[#EEF2FF] border-[#F1F5F9]",
-  },
-  {
-    id: 11,
-    title: "Business Analyst",
-    company: "KPMG",
-    location: "Lagos",
-    type: "Lagos",
-    category: "Data Analysis",
-    duration: "6 Months",
-    tags: ["Excel", "PowerBI"],
-    status: null,
-    posted: "3 days ago",
-    icon: <ShieldIcon className="text-[#A855F7]" size={24} />,
-    bg: "bg-[#FAF5FF] border-[#F3E8FF]",
-  },
-  {
-    id: 12,
-    title: "Graphics Design Intern",
-    company: "Pulse NG",
-    location: "Lagos",
-    type: "Lagos",
-    category: "Product Design",
-    duration: "3 Months",
-    tags: ["Photoshop", "Illustrator"],
-    status: null,
-    posted: "5 days ago",
-    icon: <PaintIcon className="text-[#F97316]" size={24} />,
-    bg: "bg-[#FFF7ED] border-[#FFEDD5]",
-  },
-];
+// Helper function to get icon based on category
+const getCategoryIcon = (category) => {
+  switch (category) {
+    case "Software Dev":
+      return {
+        icon: <Code className="text-[#94A3B8]" size={24} />,
+        bg: "bg-[#F1F5F9] border-[#F1F5F9]",
+      };
+    case "Networking":
+      return {
+        icon: <Server className="text-[#6366F1]" size={24} />,
+        bg: "bg-[#EEF2FF] border-[#F1F5F9]",
+      };
+    case "Product Design":
+      return {
+        icon: <Palette className="text-[#F97316]" size={24} />,
+        bg: "bg-[#FFF7ED] border-[#FFEDD5]",
+      };
+    case "Data Analysis":
+      return {
+        icon: <Shield className="text-[#A855F7]" size={24} />,
+        bg: "bg-[#FAF5FF] border-[#F3E8FF]",
+      };
+    default:
+      return {
+        icon: <Code className="text-[#94A3B8]" size={24} />,
+        bg: "bg-[#F1F5F9] border-[#F1F5F9]",
+      };
+  }
+};
+
+// Helper to extract location type for filtering
+const getLocationType = (location) => {
+  if (location?.toLowerCase().includes("remote")) return "Remote";
+  if (location?.toLowerCase().includes("hybrid")) return "Hybrid";
+  if (location?.toLowerCase().includes("abuja")) return "Abuja";
+  return "Lagos"; // Default to Lagos for any Lagos-based location
+};
 
 const ITEMS_PER_PAGE = 4;
 const CATEGORIES = [
@@ -199,17 +68,52 @@ const CATEGORIES = [
 const LOCATIONS = ["Lagos", "Remote", "Abuja", "Hybrid"];
 
 const SiwesBoard = () => {
+  // 2. Use the hook to fetch data from API
+  const { data: apiResponse, isLoading, error } = useOpportunities();
+
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategories, setSelectedCategories] = useState([]);
   const [selectedLocations, setSelectedLocations] = useState(["Lagos"]);
   const [currentPage, setCurrentPage] = useState(1);
+
+  // 3. Transform API data to match our component's expected structure
+  const jobData = useMemo(() => {
+    if (!apiResponse?.data) return [];
+
+    return apiResponse.data.map((opportunity) => {
+      const { icon, bg } = getCategoryIcon(opportunity.category);
+      // Handle tags - API returns array, but might be string in some cases
+      const tags = Array.isArray(opportunity.tags)
+        ? opportunity.tags
+        : opportunity.tags?.split(",").map((t) => t.trim()) || [];
+
+      return {
+        id: opportunity.id,
+        title: opportunity.role_title,
+        company: opportunity.company_name,
+        location: opportunity.location,
+        type: getLocationType(opportunity.location),
+        category: opportunity.category,
+        duration: opportunity.duration,
+        tags: tags,
+        status: opportunity.is_featured
+          ? "Featured"
+          : opportunity.status === "Active"
+            ? "Active"
+            : null,
+        posted: opportunity.posted_text || "Recently",
+        icon,
+        bg,
+      };
+    });
+  }, [apiResponse]);
 
   const handleCategoryChange = (category) => {
     setCurrentPage(1);
     setSelectedCategories((prev) =>
       prev.includes(category)
         ? prev.filter((c) => c !== category)
-        : [...prev, category]
+        : [...prev, category],
     );
   };
 
@@ -218,7 +122,7 @@ const SiwesBoard = () => {
     setSelectedLocations((prev) =>
       prev.includes(location)
         ? prev.filter((l) => l !== location)
-        : [...prev, location]
+        : [...prev, location],
     );
   };
 
@@ -229,15 +133,15 @@ const SiwesBoard = () => {
     setCurrentPage(1);
   };
 
-  // Filtering Logic
+  // Filtering Logic - Now uses jobData from API instead of INITIAL_JOB_DATA
   const filteredJobs = useMemo(() => {
-    return INITIAL_JOB_DATA.filter((job) => {
+    return jobData.filter((job) => {
       // Search Filter
       const matchesSearch =
         job.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
         job.company.toLowerCase().includes(searchQuery.toLowerCase()) ||
         job.tags.some((tag) =>
-          tag.toLowerCase().includes(searchQuery.toLowerCase())
+          tag.toLowerCase().includes(searchQuery.toLowerCase()),
         );
 
       //  Category Filter (OR logic within categories)
@@ -249,18 +153,18 @@ const SiwesBoard = () => {
       const matchesLocation =
         selectedLocations.length === 0 ||
         selectedLocations.some(
-          (loc) => job.type === loc || job.location.includes(loc)
+          (loc) => job.type === loc || job.location.includes(loc),
         );
 
       return matchesSearch && matchesCategory && matchesLocation;
     });
-  }, [searchQuery, selectedCategories, selectedLocations]);
+  }, [jobData, searchQuery, selectedCategories, selectedLocations]);
 
   // Pagination
   const totalPages = Math.ceil(filteredJobs.length / ITEMS_PER_PAGE);
   const currentJobs = filteredJobs.slice(
     (currentPage - 1) * ITEMS_PER_PAGE,
-    currentPage * ITEMS_PER_PAGE
+    currentPage * ITEMS_PER_PAGE,
   );
 
   return (
@@ -440,10 +344,16 @@ const SiwesBoard = () => {
           {/* Feed Header */}
           <div className="flex justify-between items-center">
             <p className="text-[#64748B] text-sm">
-              <span className="font-bold text-[#0F172A]">
-                {filteredJobs.length}
-              </span>{" "}
-              opportunities found
+              {isLoading ? (
+                <Skeleton className="h-5 w-32" />
+              ) : (
+                <>
+                  <span className="font-bold text-[#0F172A]">
+                    {filteredJobs.length}
+                  </span>{" "}
+                  opportunities found
+                </>
+              )}
             </p>
 
             <div className="flex items-center gap-2">
@@ -459,8 +369,52 @@ const SiwesBoard = () => {
             </div>
           </div>
 
+          {/* Loading State */}
+          {isLoading && (
+            <div className="flex flex-col gap-4">
+              {[1, 2, 3, 4].map((i) => (
+                <div
+                  key={i}
+                  className="bg-white rounded-xl p-5 border border-[#E2E8F099]"
+                >
+                  <div className="flex gap-4 mb-4">
+                    <Skeleton className="size-16 rounded-lg" />
+                    <div className="flex-1">
+                      <Skeleton className="h-6 w-48 mb-2" />
+                      <Skeleton className="h-4 w-32" />
+                    </div>
+                  </div>
+                  <div className="flex gap-2 ml-20 mb-6">
+                    <Skeleton className="h-6 w-20" />
+                    <Skeleton className="h-6 w-16" />
+                    <Skeleton className="h-6 w-16" />
+                  </div>
+                  <div className="ml-20 pt-4 border-t-2 border-[#F1F5F9]">
+                    <Skeleton className="h-4 w-24" />
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+
+          {/* Error State */}
+          {error && !isLoading && (
+            <div className="bg-red-50 rounded-xl p-12 border border-red-200 flex flex-col items-center justify-center text-center gap-3">
+              <div className="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mb-2">
+                <X className="text-red-500" size={32} />
+              </div>
+              <h3 className="text-lg font-bold text-red-800">
+                Failed to load opportunities
+              </h3>
+              <p className="text-red-600 max-w-xs">
+                {error.message ||
+                  "Something went wrong. Please try again later."}
+              </p>
+            </div>
+          )}
+
           {/* Empty State */}
-          {filteredJobs.length === 0 && (
+          {!isLoading && !error && filteredJobs.length === 0 && (
             <div className="bg-white rounded-xl p-12 border border-[#E2E8F099] flex flex-col items-center justify-center text-center gap-3">
               <div className="w-16 h-16 bg-slate-50 rounded-full flex items-center justify-center mb-2">
                 <Search className="text-slate-400" size={32} />
@@ -482,74 +436,76 @@ const SiwesBoard = () => {
             </div>
           )}
 
-          {/* Job Cards */}
-          <div className="flex flex-col gap-4">
-            {currentJobs.map((job) => (
-              <div
-                key={job.id}
-                className="bg-white rounded-xl p-5 border border-[#E2E8F099] hover:border-[#138601]/50 drop-shadow-xs transition-all group"
-              >
-                <div className="flex justify-between items-start mb-4">
-                  <div className="flex gap-4">
-                    <div
-                      className={`size-16 rounded-lg ${job.bg} flex items-center justify-center shrink-0`}
-                    >
-                      {job.icon}
+          {/* Job Cards - Only show when not loading and no error */}
+          {!isLoading && !error && (
+            <div className="flex flex-col gap-4">
+              {currentJobs.map((job) => (
+                <div
+                  key={job.id}
+                  className="bg-white rounded-xl p-5 border border-[#E2E8F099] hover:border-[#138601]/50 drop-shadow-xs transition-all group"
+                >
+                  <div className="flex justify-between items-start mb-4">
+                    <div className="flex gap-4">
+                      <div
+                        className={`size-16 rounded-lg ${job.bg} flex items-center justify-center shrink-0`}
+                      >
+                        {job.icon}
+                      </div>
+                      <div>
+                        <h3 className="font-bold text-[#0F172A] text-lg">
+                          {job.title}
+                        </h3>
+                        <p className="text-[#64748B] text-sm font-medium">
+                          {job.company} • {job.location}
+                        </p>
+                      </div>
                     </div>
-                    <div>
-                      <h3 className="font-bold text-[#0F172A] text-lg">
-                        {job.title}
-                      </h3>
-                      <p className="text-[#64748B] text-sm font-medium">
-                        {job.company} • {job.location}
-                      </p>
-                    </div>
+                    {job.status && (
+                      <span
+                        className={`text-xs font-medium capitalize px-2 py-1 rounded-md border-2 ${
+                          job.status === "Active"
+                            ? "bg-green-100 text-green-700 border-green-200"
+                            : "bg-blue-50 text-blue-700 border-blue-200"
+                        }`}
+                      >
+                        {job.status}
+                      </span>
+                    )}
                   </div>
-                  {job.status && (
-                    <span
-                      className={`text-xs font-medium capitalize px-2 py-1 rounded-md border-2 ${
-                        job.status === "Active"
-                          ? "bg-[#F0FDF4] text-green-700 border-[#E2E8F099]"
-                          : "bg-blue-50 text-blue-700 border-blue-200"
-                      }`}
-                    >
-                      {job.status}
+
+                  <div className="flex flex-wrap gap-2 mb-6 ml-20">
+                    <span className="px-2 py-1 bg-[#1386010D] rounded text-xs text-[#138601] font-medium flex items-center gap-1">
+                      <Clock size={12} /> {job.duration}
                     </span>
-                  )}
-                </div>
+                    {job.tags.map((tag) => (
+                      <span
+                        key={tag}
+                        className="px-2 py-1 bg-[#F1F5F9]  rounded text-xs text-[#475569] font-medium"
+                      >
+                        {tag}
+                      </span>
+                    ))}
+                  </div>
 
-                <div className="flex flex-wrap gap-2 mb-6 ml-20">
-                  <span className="px-2 py-1 bg-[#1386010D] rounded text-xs text-[#138601] font-medium flex items-center gap-1">
-                    <Clock size={12} /> {job.duration}
-                  </span>
-                  {job.tags.map((tag) => (
-                    <span
-                      key={tag}
-                      className="px-2 py-1 bg-[#F1F5F9]  rounded text-xs text-[#475569] font-medium"
-                    >
-                      {tag}
+                  <div className="ml-20 flex justify-between items-center pt-4 border-t-2 border-[#F1F5F9]">
+                    <span className="text-xs text-[#94A3B8] flex items-center gap-1">
+                      <Calendar className="w-3 h-3" />
+                      Posted {job.posted}
                     </span>
-                  ))}
+                    <button
+                      type="button"
+                      className="text-sm font-bold text-[#138601] flex items-center gap-1 hover:gap-2 transition-all"
+                    >
+                      View Details <ArrowRight size={16} />
+                    </button>
+                  </div>
                 </div>
+              ))}
+            </div>
+          )}
 
-                <div className="ml-20 flex justify-between items-center pt-4 border-t-2 border-[#F1F5F9]">
-                  <span className="text-xs text-[#94A3B8] flex items-center gap-1">
-                    <CalendarIcon className="size-3" />
-                    Posted {job.posted}
-                  </span>
-                  <button
-                    type="button"
-                    className="text-sm font-bold text-[#138601] flex items-center gap-1 hover:gap-2 transition-all"
-                  >
-                    View Details <ArrowRight size={16} />
-                  </button>
-                </div>
-              </div>
-            ))}
-          </div>
-
-          {/* Pagination */}
-          {totalPages > 1 && (
+          {/* Pagination - Only show when not loading */}
+          {!isLoading && !error && totalPages > 1 && (
             <div className="flex justify-center mt-4 gap-2">
               <button
                 type="button"
@@ -574,7 +530,7 @@ const SiwesBoard = () => {
                   >
                     {page}
                   </button>
-                )
+                ),
               )}
 
               <button
@@ -616,4 +572,3 @@ const SiwesBoard = () => {
 };
 
 export default SiwesBoard;
-

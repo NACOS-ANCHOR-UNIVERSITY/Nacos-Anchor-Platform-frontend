@@ -1,19 +1,37 @@
-import { useMemo, useRef, useState } from "react";
-import { Linkedin, X} from "lucide-react";
-import projectLibraryImg from "../../assets/icons/Project-Library.png";
-import projectScraperImg from "../../assets/icons/Project-Scrapper.png";
-import addProjectIcon from "../../assets/icons/add-project-icon.svg";
-import uploadFile from "../../assets/icons/Upload-file.svg";
-import pdf from "../../assets/icons/Pdf.svg";
-import gitHub from "../../assets/icons/Git-hub.svg";
-import globeIcon from "../../assets/icons/Portfolio.svg";
-import eye from "../../assets/icons/Eye.svg";
-import pencil from "../../assets/icons/Pencil.svg";
+import { useEffect, useMemo, useRef, useState } from "react";
+import {
+  Linkedin,
+  X,
+  Upload,
+  FileText,
+  Github,
+  Globe,
+  Eye,
+  Pencil,
+  Plus,
+  Loader2,
+} from "lucide-react";
 
+// Placeholder images for projects (replace with actual images when available)
+const projectLibraryImg =
+  "https://images.unsplash.com/photo-1507842217343-583bb7270b66?w=400&h=300&fit=crop";
+const projectScraperImg =
+  "https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=400&h=300&fit=crop";
+
+import {
+  getPortfolioData,
+  toggleVisibility,
+  updateAbout,
+  addSkill,
+  deleteSkill,
+  updateSocials,
+  uploadResume,
+} from "@/features/student/portfolio/api";
+import { toast } from "sonner";
 
 function Card({ title, right, children }) {
   return (
-    <div className="rounded-xl border border-slate-200 bg-white">
+    <div className="rounded-xl border border-slate-200 bg-white h-full">
       {title ? (
         <div className="flex items-center justify-between px-5 pt-5">
           <h3 className="text-sm font-semibold text-slate-800">{title}</h3>
@@ -25,18 +43,19 @@ function Card({ title, right, children }) {
   );
 }
 
-function Toggle({ checked, onChange }) {
+function Toggle({ checked, onChange, disabled }) {
   return (
     <button
       type="button"
+      disabled={disabled}
       onClick={() => onChange(!checked)}
       className={`relative inline-flex h-6 w-11 items-center rounded-full transition ${
-        checked ? "bg-[var(--color-brand-primary)]" : "bg-slate-300"
-      }`}
+        checked ? "bg-brand-primary" : "bg-slate-300"
+      } ${disabled ? "opacity-50 cursor-not-allowed" : ""}`}
       aria-pressed={checked}
     >
       <span
-        className={`inline-block h-5 w-5 transform rounded-full bg-white transition ${
+        className={`inline-block size-5 transform rounded-full bg-white transition ${
           checked ? "translate-x-5" : "translate-x-1"
         }`}
       />
@@ -46,7 +65,7 @@ function Toggle({ checked, onChange }) {
 
 function SkillPill({ label, onRemove }) {
   return (
-    <span className="inline-flex items-center gap-2 rounded-full border border-[color-mix(in_srgb,var(--color-brand-primary)_25%,white)] bg-[color-mix(in_srgb,var(--color-brand-primary)_10%,white)] px-3 py-1 text-xs font-medium text-[var(--color-brand-primary)]">
+    <span className="inline-flex items-center gap-2 rounded-full border border-[color-mix(in_srgb,var(--color-brand-primary)_25%,white)] bg-[color-mix(in_srgb,var(--color-brand-primary)_10%,white)] px-3 py-1 text-xs font-medium text-brand-primary">
       {label}
       <button
         type="button"
@@ -61,18 +80,20 @@ function SkillPill({ label, onRemove }) {
 }
 
 export default function Portfolio() {
-  const user = useMemo(
-    () => ({
-      fullName: "Adefemi Oluwatobi",
-      deptLevel: "Computer Science | 400 Level",
-      matric: "AUL/CPM/22/003",
-    }),
-    []
-  );
+  const [user, setUser] = useState({
+    fullName: "Adefemi Oluwatobi",
+    deptLevel: "Computer Science | 400 Level",
+    matric: "AUL/CPM/22/003",
+  });
+
+  const [isLoading, setIsLoading] = useState(true);
+  const [isSaving, setIsSaving] = useState(false);
+  const [publicUrl, setPublicUrl] = useState("");
 
   // avatar
   const avatarInputRef = useRef(null);
-  const DEFAULT_AVATAR = "https://api.dicebear.com/7.x/avataaars/svg?seed=portfolio";
+  const DEFAULT_AVATAR =
+    "https://api.dicebear.com/7.x/avataaars/svg?seed=portfolio";
   const [avatarUrl, setAvatarUrl] = useState(DEFAULT_AVATAR);
 
   function pickAvatar() {
@@ -88,114 +109,203 @@ export default function Portfolio() {
   // public visibility
   const [isPublic, setIsPublic] = useState(true);
 
-  
   // about me editing
   const [about, setAbout] = useState(
-    "I am a passionate Computer Science student with a strong focus on Full Stack Development and Artificial Intelligence. I love building tools that solve real-world problems. Currently serving as the General Secretary for NACOS Anchor University Chapter. Always eager to learn new technologies and collaborate on open-source projects."
+    "I am a passionate Computer Science student with a strong focus on Full Stack Development and Artificial Intelligence. I love building tools that solve real-world problems. Currently serving as the General Secretary for NACOS Anchor University Chapter. Always eager to learn new technologies and collaborate on open-source projects.",
   );
   const [isEditingAbout, setIsEditingAbout] = useState(false);
-  const [aboutDraft, setAboutDraft] = useState(about);
-
-  // skills (add works)
-  const [skills, setSkills] = useState([
-    "Python",
-    "React JS",
-    "Node.js",
-    "UI/UX Design",
-    "Data Analysis",
-  ]);
+  const [aboutDraft, setAboutDraft] = useState("");
+  const [skills, setSkills] = useState([]);
   const [skillInput, setSkillInput] = useState("");
-
-  function addSkill() {
-    const v = skillInput.trim();
-    if (!v) return;
-    if (skills.some((s) => s.toLowerCase() === v.toLowerCase())) {
-      setSkillInput("");
-      return;
-    }
-    setSkills((p) => [...p, v]);
-    setSkillInput("");
-  }
-
-  // social presence
   const [social, setSocial] = useState({
-    github: "github.com/adefemioluwatobi",
+    github: "",
     linkedin: "",
     portfolio: "",
   });
-
-  // resume upload
   const resumeInputRef = useRef(null);
-  const [resume, setResume] = useState({ name: "John_Doe_CV_2024.pdf" });
+  const [resume, setResume] = useState(null);
+  const [projects, setProjects] = useState([]);
 
-  function pickResume() {
-    resumeInputRef.current?.click();
-  }
-  function onResumeChange(e) {
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  const fetchData = async () => {
+    try {
+      setIsLoading(true);
+      const data = await getPortfolioData();
+
+      setUser({
+        fullName: `${data.user?.last_name || ""} ${data.user?.first_name || ""}`,
+        deptLevel: "Computer Science",
+        matric: data.user?.matric_number,
+        avatar:
+          data.user?.avatar ||
+          "https://api.dicebear.com/7.x/avataaars/svg?seed=portfolio",
+      });
+
+      setIsPublic(!!data.user?.public_visibility);
+      setAbout(data.user?.bio || "No bio added yet.");
+      setPublicUrl(data.public_profile_link);
+      setSkills(data.skills || []);
+      setSocial({
+        github: data.user?.github_url || "",
+        linkedin: data.user?.linkedin_url || "",
+        portfolio: data.user?.portfolio_url || "",
+      });
+
+      setProjects(data.projects || []);
+
+      if (data.user?.resume_url) {
+        setResume({ name: "Uploaded Resume", url: data.user.resume_url });
+      }
+    } catch (error) {
+      console.error("Failed to fetch portfolio", error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+  const handleToggleVisibility = async (newStatus) => {
+    setIsPublic(newStatus);
+    try {
+      await toggleVisibility(newStatus);
+
+      toast.success(`Profile visibility turned ${newStatus ? "ON" : "OFF"}`);
+    } catch (error) {
+      setIsPublic(!newStatus);
+      console.error(error || "Failed to toggle visibility");
+    }
+  };
+
+  const handleSaveAbout = async () => {
+    try {
+      setIsSaving(true);
+      await updateAbout(aboutDraft);
+      setAbout(aboutDraft);
+      setIsEditingAbout(false);
+    } catch (error) {
+      console.error(error || "Failed to update bio");
+    } finally {
+      setIsSaving(false);
+    }
+  };
+
+  const handleSaveSocials = async () => {
+    try {
+      setIsSaving(true);
+      await updateSocials(social);
+      toast.success("Social links updated!");
+    } catch (error) {
+      console.error(error || "Failed to update socials");
+    } finally {
+      setIsSaving(false);
+    }
+  };
+
+  const handleAddSkill = async () => {
+    const v = skillInput.trim();
+    if (!v) return;
+
+    try {
+      setSkillInput("");
+      const newSkill = await addSkill(v);
+
+      setSkills((prev) => [...prev, newSkill.data || newSkill]);
+    } catch (error) {
+      console.error(error || "Failed to add skill");
+      toast.error("Failed to add skill");
+    }
+  };
+
+  const handleRemoveSkill = async (id) => {
+    try {
+      setSkills((prev) => prev.filter((s) => s.id !== id));
+      await deleteSkill(id);
+    } catch (error) {
+      console.error(error || "Failed to delete skill");
+      toast.error("Failed to delete skill");
+      fetchData();
+    }
+  };
+
+  const handleResumeChange = async (e) => {
     const file = e.target.files?.[0];
     if (!file) return;
-    setResume({ name: file.name });
-  }
-  function removeResume() {
-    setResume(null);
-    if (resumeInputRef.current) resumeInputRef.current.value = "";
-  }
 
-  // projects (mock)
-  const projects = [
-  {
-    id: 1,
-    title: "University Library App",
-    desc: "A comprehensive MERN stack application designed to digitize the university library...",
-    tags: ["REACT", "MONGODB"],
-    image: projectLibraryImg,
-  },
-  {
-    id: 2,
-    title: "Python Data Scraper",
-    desc: "Automated tool built with Beautiful Soup and Selenium to collect real-time housing data for...",
-    tags: ["PYTHON", "SELENIUM"],
-    image: projectScraperImg,
-  },
-];
+    // Validate size (5MB)
+    if (file.size > 5 * 1024 * 1024) {
+      alert("File is too large. Max 5MB.");
+      return;
+    }
 
+    try {
+      setIsSaving(true);
+      await uploadResume(file);
+      setResume({ name: file.name });
+      alert("Resume uploaded successfully");
+    } catch (error) {
+      console.error(error || "Upload failed");
+      alert("Failed to upload resume");
+    } finally {
+      setIsSaving(false);
+    }
+  };
+
+  const handlePreviewProfile = () => {
+    if (isPublic && publicUrl) {
+      window.open(publicUrl, "_blank");
+    } else {
+      alert("Please turn on visibility to view public profile.");
+    }
+  };
+
+  if (isLoading) {
+    return (
+      <div className="flex h-96 w-full items-center justify-center">
+        <Loader2 className="animate-spin text-brand-primary" />
+      </div>
+    );
+  }
 
   return (
     <div className="max-w-6xl">
       {/* Header */}
       <div className="mb-6 flex items-start justify-between">
         <div>
-          <div className="text-xs text-slate-500">
-            Dashboard <span className="mx-1">/</span>{" "}
-            <span className="font-medium text-[var(--color-brand-primary)]">My Portfolio</span>
-            <span className="font-medium text-[var(--color-brand-primary)]">My Portfolio</span>
-          </div>
-          <h1 className="mt-2 text-3xl font-bold text-slate-900">My Portfolio</h1>
+          <h1 className="mt-2 text-3xl font-bold text-slate-900">
+            My Portfolio
+          </h1>
           <p className="mt-1 text-sm text-slate-600">
-            Manage your profile visibility, skills, and showcase your best projects.
+            Manage your profile visibility, skills, and showcase your best
+            projects.
           </p>
         </div>
 
         <button
           type="button"
-          className="inline-flex items-center gap-2 rounded-lg bg-[var(--color-brand-primary)] px-4 py-2 text-sm font-semibold text-white shadow-sm hover:opacity-95"
+          onClick={handlePreviewProfile}
+          className={`inline-flex items-center gap-2 rounded-lg px-4 py-2 text-sm font-semibold text-white shadow-sm transition ${
+            isPublic
+              ? "bg-brand-primary hover:opacity-95"
+              : "bg-slate-300 cursor-not-allowed"
+          }`}
         >
-          <img src={eye} alt="Eye" className="h-4 w-4" />
+          <Eye className="h-4 w-4" />
           Preview Public Profile
         </button>
       </div>
 
       {/* Main grid */}
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
-        {/* Left column */}
+        {/* LEFT COLUMN */}
         <div className="space-y-6">
           {/* Profile card */}
           <Card>
             <div className="flex flex-col items-center text-center">
               <div className="relative">
-                <div className="h-20 w-20 overflow-hidden rounded-full border border-slate-200 bg-slate-100">
+                <div className="size-20 overflow-hidden rounded-full border border-slate-200 bg-slate-100">
                   <img
-                    src={avatarUrl}
+                    src={user?.avatar}
                     alt="profile avatar"
                     className="h-full w-full object-cover"
                   />
@@ -208,7 +318,7 @@ export default function Portfolio() {
                   className="absolute -bottom-1 -right-1 grid h-7 w-7 place-items-center rounded-full bg-[var(--color-brand-primary)] text-white shadow hover:opacity-95"
                   title="Edit photo"
                 >
-                  <img src={pencil} alt="Pencil" className="h-4 w-4" />
+                  <Pencil className="h-4 w-4" />
                 </button>
 
                 <input
@@ -221,11 +331,15 @@ export default function Portfolio() {
               </div>
 
               <div className="mt-4">
-                <div className="text-base font-bold text-slate-900">{user.fullName}</div>
-                <div className="text-xs font-semibold text-[var(--color-brand-primary)]">
-                  {user.deptLevel}
+                <div className="text-base font-bold text-slate-900">
+                  {user?.fullName}
                 </div>
-                <div className="mt-1 text-xs text-slate-500">Matric No: {user.matric}</div>
+                <div className="text-xs font-semibold text-brand-primary">
+                  {user?.deptLevel}
+                </div>
+                <div className="mt-1 text-xs text-slate-500">
+                  Matric No: {user?.matric}
+                </div>
               </div>
             </div>
 
@@ -233,49 +347,69 @@ export default function Portfolio() {
             <div className="mt-5 rounded-lg border border-slate-200 bg-slate-50 p-3">
               <div className="flex items-center justify-between">
                 <div>
-                  <div className="text-xs font-semibold text-slate-800">Public Visibility</div>
-                  <div className="text-[11px] text-slate-500">Visible to employers</div>
+                  <div className="text-xs font-semibold text-slate-800">
+                    Public Visibility
+                  </div>
+                  <div className="text-[11px] text-slate-500">
+                    Visible to employers
+                  </div>
                 </div>
-                <Toggle checked={isPublic} onChange={setIsPublic} />
+                <Toggle checked={isPublic} onChange={handleToggleVisibility} />
               </div>
             </div>
+            {isPublic && (
+              <div className="mt-2 text-[10px] text-slate-400 break-all">
+                {publicUrl}
+              </div>
+            )}
           </Card>
 
           {/* Social Presence */}
           <Card
             title="Social Presence"
             right={
-              <button type="button" className="text-xs font-semibold text-[var(--color-brand-primary)]">
-                Save
+              <button
+                type="button"
+                onClick={handleSaveSocials}
+                disabled={isSaving}
+                className="text-xs font-semibold text-brand-primary disabled:opacity-50"
+              >
+                {isSaving ? "Saving..." : "Save"}
               </button>
             }
           >
             <div className="space-y-3">
               <div className="flex items-center gap-2 rounded-lg border border-slate-200 bg-white px-3 py-2">
-                <img src={gitHub} alt="" className="h-4 w-4" />
+                <Github className="h-4 w-4 text-slate-600" />
                 <input
                   value={social.github}
-                  onChange={(e) => setSocial((p) => ({ ...p, github: e.target.value }))}
+                  onChange={(e) =>
+                    setSocial((p) => ({ ...p, github: e.target.value }))
+                  }
                   className="w-full bg-transparent text-sm outline-none"
                   placeholder="github.com/username"
                 />
               </div>
 
               <div className="flex items-center gap-2 rounded-lg border border-slate-200 bg-white px-3 py-2">
-                <Linkedin className="h-4 w-4 text-slate-600" />
+                <Linkedin className="size-4 text-slate-600" />
                 <input
                   value={social.linkedin}
-                  onChange={(e) => setSocial((p) => ({ ...p, linkedin: e.target.value }))}
+                  onChange={(e) =>
+                    setSocial((p) => ({ ...p, linkedin: e.target.value }))
+                  }
                   className="w-full bg-transparent text-sm outline-none"
                   placeholder="LinkedIn URL"
                 />
               </div>
 
               <div className="flex items-center gap-2 rounded-lg border border-slate-200 bg-white px-3 py-2">
-                <img src={globeIcon} alt="" className="h-4 w-4 text-slate-600" />
+                <Globe className="h-4 w-4 text-slate-600" />
                 <input
                   value={social.portfolio}
-                  onChange={(e) => setSocial((p) => ({ ...p, portfolio: e.target.value }))}
+                  onChange={(e) =>
+                    setSocial((p) => ({ ...p, portfolio: e.target.value }))
+                  }
                   className="w-full bg-transparent text-sm outline-none"
                   placeholder="Portfolio Website"
                 />
@@ -285,24 +419,27 @@ export default function Portfolio() {
 
           {/* Resume / CV */}
           <Card title="Resume / CV">
-            <p className="text-xs text-slate-600">Upload a PDF version of your resume.</p>
+            <p className="text-xs text-slate-600">
+              Upload a PDF version of your resume.
+            </p>
 
             <div className="mt-3 rounded-xl border border-dashed border-slate-300 bg-white p-5">
               <div className="flex flex-col items-center text-center">
                 <button
                   type="button"
-                  onClick={pickResume}
-                  className="grid h-10 w-10 place-items-center rounded-full border border-slate-200 bg-slate-50 text-slate-700 hover:bg-white"
+                  onClick={() => resumeInputRef.current?.click()}
+                  disabled={isSaving}
+                  className="grid size-10 place-items-center rounded-full border border-slate-200 bg-slate-50 text-slate-700 hover:bg-white disabled:opacity-50"
                 >
-                  <img src={uploadFile} alt="" className="h-6 w-5" />
+                  <Upload className="h-5 w-5" />
                 </button>
 
                 <button
                   type="button"
-                  onClick={pickResume}
+                  onClick={() => resumeInputRef.current?.click()}
                   className="mt-3 text-sm font-semibold text-slate-900"
                 >
-                  Click to upload
+                  {isSaving ? "Uploading..." : "Click to upload"}
                 </button>
                 <div className="text-[11px] text-slate-500">PDF max 5MB</div>
 
@@ -311,7 +448,7 @@ export default function Portfolio() {
                   type="file"
                   accept="application/pdf"
                   className="hidden"
-                  onChange={onResumeChange}
+                  onChange={handleResumeChange}
                 />
               </div>
             </div>
@@ -319,23 +456,17 @@ export default function Portfolio() {
             {resume ? (
               <div className="mt-3 flex items-center justify-between rounded-lg border border-slate-200 bg-white px-3 py-2">
                 <div className="flex items-center gap-2">
-                  <img src={pdf} alt="PDF" className="h-6 w-5" />
-                  <div className="text-xs font-semibold text-slate-800">{resume.name}</div>
+                  <FileText className="h-5 w-5 text-red-500" />
+                  <div className="text-xs font-semibold text-slate-800">
+                    {resume.name}
+                  </div>
                 </div>
-                <button
-                  type="button"
-                  onClick={removeResume}
-                  className="rounded-md p-1 text-slate-500 hover:bg-slate-100"
-                  aria-label="remove resume"
-                >
-                  <X className="h-4 w-4" />
-                </button>
               </div>
             ) : null}
           </Card>
         </div>
 
-              {/* Right column */}
+        {/* RIGHT COLUMN */}
         <div className="space-y-6 lg:col-span-2">
           {/* About Me */}
           <Card
@@ -350,18 +481,20 @@ export default function Portfolio() {
                 className="rounded-md p-2 text-slate-500 hover:bg-slate-100"
                 aria-label="edit about"
               >
-                <img src={pencil} alt="Pencil" className="h-4 w-4" />
+                <Pencil className="h-4 w-4" />
               </button>
             }
           >
             {!isEditingAbout ? (
-              <p className="text-sm leading-relaxed text-slate-700">{about}</p>
+              <p className="text-sm leading-relaxed text-slate-700 whitespace-pre-wrap">
+                {about}
+              </p>
             ) : (
               <div className="space-y-3">
                 <textarea
                   value={aboutDraft}
                   onChange={(e) => setAboutDraft(e.target.value)}
-                  className="min-h-[110px] w-full rounded-lg border border-slate-200 bg-white p-3 text-sm outline-none focus:border-[var(--color-brand-primary)]"
+                  className="min-h-27.5 w-full rounded-lg border border-slate-200 bg-white p-3 text-sm outline-none focus:border-brand-primary"
                 />
                 <div className="flex justify-end gap-2">
                   <button
@@ -373,13 +506,11 @@ export default function Portfolio() {
                   </button>
                   <button
                     type="button"
-                    onClick={() => {
-                      setAbout(aboutDraft);
-                      setIsEditingAbout(false);
-                    }}
-                    className="rounded-lg bg-[var(--color-brand-primary)] px-3 py-2 text-sm font-semibold text-white hover:opacity-95"
+                    onClick={handleSaveAbout}
+                    disabled={isSaving}
+                    className="rounded-lg bg-brand-primary px-3 py-2 text-sm font-semibold text-white hover:opacity-95 disabled:opacity-50"
                   >
-                    Save
+                    {isSaving ? "Saving..." : "Save"}
                   </button>
                 </div>
               </div>
@@ -392,8 +523,8 @@ export default function Portfolio() {
             right={
               <button
                 type="button"
-                onClick={addSkill}
-                className="text-xs font-semibold text-[var(--color-brand-primary)] hover:opacity-90"
+                onClick={handleAddSkill}
+                className="text-xs font-semibold text-brand-primary hover:opacity-90"
               >
                 + Add Skill
               </button>
@@ -402,9 +533,9 @@ export default function Portfolio() {
             <div className="flex flex-wrap gap-2">
               {skills.map((s) => (
                 <SkillPill
-                  key={s}
-                  label={s}
-                  onRemove={() => setSkills((p) => p.filter((x) => x !== s))}
+                  key={s.id || s.skill}
+                  label={s.skill}
+                  onRemove={() => handleRemoveSkill(s.id)}
                 />
               ))}
             </div>
@@ -415,26 +546,34 @@ export default function Portfolio() {
               onKeyDown={(e) => {
                 if (e.key === "Enter") {
                   e.preventDefault();
-                  addSkill();
+                  handleAddSkill();
                 }
               }}
-              className="mt-3 w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm outline-none focus:border-[var(--color-brand-primary)]"
+              className="mt-3 w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm outline-none focus:border-brand-primary"
               placeholder="Type a skill..."
             />
           </Card>
 
-          {/* Featured Projects */}
+          {/* Projects */}
           <div>
-            <div className="mb-3 text-sm font-semibold text-slate-800">Featured Projects</div>
+            <div className="mb-3 text-sm font-semibold text-slate-800">
+              Featured Projects
+            </div>
 
             <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+              {projects.length === 0 && (
+                <div className="col-span-full py-8 text-center text-sm text-slate-500">
+                  No projects added yet.
+                </div>
+              )}
+
               {projects.map((p) => (
                 <div
                   key={p.id}
                   className="overflow-hidden rounded-xl border border-slate-200 bg-white"
                 >
                   <img
-                    src={p.image}
+                    src={p.image_url || projectLibraryImg}
                     alt={p.title}
                     className="h-36 w-full object-cover"
                     loading="lazy"
@@ -443,50 +582,45 @@ export default function Portfolio() {
                   <div className="p-4">
                     <div className="flex items-start justify-between gap-3">
                       <div>
-                        <div className="text-sm font-semibold text-slate-900">{p.title}</div>
-                        <div className="mt-1 text-xs text-slate-600">{p.desc}</div>
+                        <div className="text-sm font-semibold text-slate-900">
+                          {p.title}
+                        </div>
+                        <div className="mt-1 text-xs text-slate-600 line-clamp-2">
+                          {p.description}
+                        </div>
                       </div>
-                      <button className="text-xs font-semibold text-[var(--color-brand-primary)] hover:opacity-90">
-                        View Project →
-                      </button>
-                    </div>
-
-                    <div className="mt-3 flex flex-wrap gap-2">
-                      {p.tags.map((t) => (
-                        <span
-                          key={t}
-                          className="rounded-md border border-slate-200 bg-slate-50 px-2 py-1 text-[10px] font-semibold text-slate-700"
+                      {p.project_url && (
+                        <a
+                          href={p.project_url}
+                          target="_blank"
+                          rel="noreferrer"
+                          className="text-xs font-semibold text-brand-primary hover:opacity-90"
                         >
-                          {t}
-                        </span>
-                      ))}
+                          View →
+                        </a>
+                      )}
                     </div>
                   </div>
                 </div>
               ))}
 
-              {/* Add New Project */}
+              {/* Add New Project Button */}
               <button
                 type="button"
-                className="flex min-h-[220px] flex-col items-center justify-center rounded-xl border border-dashed border-slate-300 bg-slate-50 text-center hover:bg-slate-100"
+                onClick={() =>
+                  toast("Project Form Modal to capture Title, Desc, and Image.")
+                }
+                className="flex min-h-55 flex-col items-center justify-center rounded-xl border border-dashed border-slate-300 bg-slate-50 text-center hover:bg-slate-100"
               >
-                <div className="grid h-12 w-12 place-items-center rounded-full border border-slate-200 bg-slate-60">
-                  <img
-                    src={addProjectIcon}
-                    alt="Add project"
-                    className="h-5 w-5"
-                    draggable="false"
-                  />
+                <div className="grid h-12 w-12 place-items-center rounded-full border border-slate-200 bg-slate-50">
+                  <Plus className="h-5 w-5 text-slate-600" />
                 </div>
 
-                <div className="mt-3 text-sm font-semibold text-slate-900">Add New Project</div>
-                <div className="mt-1 text-xs text-slate-500">Showcase your latest work</div>
+                <div className="mt-3 text-sm font-semibold text-slate-900">
+                  Add New Project
+                </div>
               </button>
             </div>
-          </div>
-
-          <div className="pt-8 text-center text-[11px] text-slate-400">
-            © 2024 NACOS Anchor University. All rights reserved.
           </div>
         </div>
       </div>

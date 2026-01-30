@@ -1,7 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import { Search } from "lucide-react";
 import img1 from "../../../assets/images/Heading 2.png";
-import icon1 from "../../../assets/icons/Container.png";
 
 const Navbar = () => {
   return (
@@ -12,11 +12,19 @@ const Navbar = () => {
             <img src={img1} alt="" />
           </div>
           <div className="flex gap-[32px]">
-            <Link to="/" className="font-medium text-[#0F1C0C] text-[14px]">Home</Link>
-            <Link to="/about" className="font-medium text-[#0F1C0C] text-[14px]">
+            <Link to="/" className="font-medium text-[#0F1C0C] text-[14px]">
+              Home
+            </Link>
+            <Link
+              to="/about"
+              className="font-medium text-[#0F1C0C] text-[14px]"
+            >
               About us
             </Link>
-            <Link to="/executives" className="font-medium text-[#0F1C0C] text-[14px]">
+            <Link
+              to="/executives"
+              className="font-medium text-[#0F1C0C] text-[14px]"
+            >
               Executives
             </Link>
             <Link className="font-medium text-[#0F1C0C] text-[14px]">
@@ -29,18 +37,21 @@ const Navbar = () => {
         </div>
 
         {/* ======================================= */}
-        <div className="flex justify-between w-[350px]">
-          <div className="flex items-center rounded-[8px] py-[12px] pl-[16px] pr-[40px] w-[256px] bg-[#E8F4E6] gap-[8px]">
-            <img src={icon1} alt="" />
+        <div className="flex justify-between w-87.5">
+          <div className="flex items-center rounded-lg py-3 pl-4 pr-10 w-[256px] bg-[#E8F4E6] gap-2">
+            <Search className="h-4 w-4 text-slate-500" />
             <input
               type="text"
               placeholder="Search executives..."
-              className="outline-none"
+              className="outline-none bg-transparent"
             />
           </div>
-          <button className="bg-[#128401] rounded-[8px] px-[20px] font-bold text-[#FFFFFF] text-[14px] items-center">
+          <Link
+            to="/login"
+            className="bg-brand-primary hover:bg-brand-primary/80 transition-colors rounded-lg px-5 py-3 font-bold text-[#FFFFFF] text-[14px] items-center"
+          >
             Login
-          </button>
+          </Link>
         </div>
       </div>
     </div>
