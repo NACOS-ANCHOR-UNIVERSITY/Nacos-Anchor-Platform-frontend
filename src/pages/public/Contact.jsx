@@ -1,4 +1,4 @@
-// import {
+{/*// import {
 //   FaPhoneAlt,
 //   FaEnvelope,
 //   FaMapMarkerAlt,
@@ -149,9 +149,10 @@
 //     </section>
 //   );
 // }
-// Israel commented prev for understandability
+// Israel commented prev for understandability*/}
 import { useState } from "react";
 import { FaPhoneAlt, FaEnvelope, FaMapMarkerAlt, FaTwitter, FaInstagram, FaDiscord } from "react-icons/fa";
+import { Phone, Twitter, Instagram, MessageCircle } from "lucide-react";
 
 //This is just component for the inquiry side, no biggie
 function InquiryOptions({ value, onChange }) {
