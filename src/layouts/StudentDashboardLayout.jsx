@@ -1,6 +1,5 @@
 import React, { useState } from "react";
-
-import { Link, useLocation, Outlet } from "react-router-dom";
+import { Link, useLocation, Outlet, useNavigate } from "react-router-dom";
 import { Menu, X, ChevronDown } from "lucide-react";
 import {
   DashboardIcon,
@@ -15,7 +14,6 @@ import {
   NotificationIcon,
   BookIcon,
 } from "../assets/icons";
-import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 import { authService } from "@/services/authService";
 import useUserStore from "@/store/useUserStore";
@@ -28,14 +26,19 @@ const StudentDashboardLayout = () => {
   const location = useLocation();
   const navigate = useNavigate();
 
+  // Get user data from Zustand store
   const { user } = useUserStore();
+
+  // Helper to get initials (e.g., "Chukwuebuka Ezirim" -> "CE")
+  const getInitials = () => {
+    if (!user?.first_name) return "ST";
+    return `${user.first_name[0]}${user.last_name ? user.last_name[0] : ""}`.toUpperCase();
+  };
 
   const toggleSidebar = () => setIsSidebarOpen(!isSidebarOpen);
 
   const handleLogout = () => {
     authService.logout();
-    // ^ This clears Zustand state, clears LocalStorage, and wipes the Axios token.
-
     toast.success("Signed out successfully");
     navigate("/login");
   };
@@ -64,9 +67,8 @@ const StudentDashboardLayout = () => {
       <aside
         className={`fixed inset-y-0 left-0 z-30 w-full sm:max-w-[288px] transform bg-white border-r border-[#E2E8F0] transition-transform duration-300 ease-in-out lg:static lg:translate-x-0 ${
           isSidebarOpen ? "translate-x-0" : "-translate-x-full"
-        } border-r border-gray-100 flex flex-col shadow-lg lg:shadow-none`}
+        } flex flex-col shadow-lg lg:shadow-none`}
       >
-        {/* Logo  */}
         <div className="flex items-center justify-between p-6 h-22">
           <Link to="/" className="flex items-center gap-3">
             <img
@@ -87,7 +89,6 @@ const StudentDashboardLayout = () => {
           </button>
         </div>
 
-        {/* Navigation */}
         <nav className="flex-1 p-4 flex flex-col gap-2 overflow-y-auto">
           {navItems.map((item) => {
             const isActive =
@@ -98,11 +99,11 @@ const StudentDashboardLayout = () => {
             return (
               <Link
                 key={item.name}
-                to={item.href} // Use 'to' instead of 'href'
+                to={item.href}
                 className={`flex items-center gap-3 px-4 py-2.5 h-12 rounded-xl transition-all font-medium text-sm duration-200 ${
                   isActive
-                    ? "bg-[#138601] text-white drop-shadow-md drop-shadow-[#13860133]" // Active Style
-                    : "text-[#475569] hover:bg-green-50 hover:text-green-700" // Inactive Style
+                    ? "bg-[#138601] text-white drop-shadow-md"
+                    : "text-[#475569] hover:bg-green-50 hover:text-green-700"
                 }`}
               >
                 <item.icon className="size-4.5" />
@@ -124,9 +125,8 @@ const StudentDashboardLayout = () => {
         </div>
       </aside>
 
-      {/* Main Content  */}
+      {/* Main Content */}
       <div className="flex-1 flex flex-col h-full overflow-hidden">
-        {/* Topbar */}
         <header className="h-20 bg-white border-b border-gray-100 flex items-center justify-between px-6 lg:px-10 z-10 relative">
           <div className="flex items-center gap-4">
             <button
@@ -144,7 +144,6 @@ const StudentDashboardLayout = () => {
                 <HomeIcon className="size-3.5" />
               </Link>
               <span className="mx-2">/</span>
-              {/* Simple dynamic breadcrumb */}
               <span className="text-[#1E293B] font-medium capitalize">
                 {location.pathname.split("/").pop() || "Dashboard"}
               </span>
@@ -158,16 +157,16 @@ const StudentDashboardLayout = () => {
               <input
                 type="text"
                 placeholder="Search resources..."
-                className="bg-transparent border-none outline-none text-sm ml-2 w-full text-gray-700 placeholder:text-[#94A3B8]"
+                className="bg-transparent border-none outline-none text-sm ml-2 w-full text-gray-700"
               />
             </div>
 
-            {/* Notification Dropdown */}
+            {/* Notifications */}
             <div className="relative">
               <button
                 type="button"
                 onClick={() => setShowNotifications(!showNotifications)}
-                className={`relative size-9.5 flex items-center justify-center rounded-full transition-colors bg-brand-secondary ${
+                className={`relative size-9.5 flex items-center justify-center rounded-full transition-colors cursor-pointer ${
                   showNotifications
                     ? "bg-green-50 text-[#138601]"
                     : "text-gray-500 hover:bg-gray-100"
@@ -207,13 +206,15 @@ const StudentDashboardLayout = () => {
               <button
                 type="button"
                 onClick={() => setShowProfileMenu(!showProfileMenu)}
-                className="flex items-center gap-3 md:w-44 hover:bg-gray-50 p-1.5 rounded-full transition-all pr-3"
+                className="flex items-center gap-3 md:w-52 hover:bg-gray-50 p-1.5 rounded-full transition-all pr-3 cursor-pointer"
               >
-                <div className="w-9 h-9 bg-orange-200 rounded-full flex items-center justify-center text-orange-700 font-bold text-sm">
-                  ET
+                {/* Dynamic Avatar */}
+                <div className="w-9 h-9 bg-orange-100 rounded-full flex items-center justify-center text-orange-700 font-bold text-sm">
+                  {getInitials()}
                 </div>
-                <span className="hidden md:block text-sm font-medium text-gray-700">
-                  Emmanuel T.
+                {/* Dynamic Name */}
+                <span className="hidden md:block text-sm font-medium text-gray-700 truncate">
+                  {user?.first_name || "User"}
                 </span>
                 <ChevronDown
                   size={14}
@@ -222,13 +223,14 @@ const StudentDashboardLayout = () => {
               </button>
 
               {showProfileMenu && (
-                <div className="absolute right-0 mt-3 w-48 bg-white rounded-xl shadow-xl border border-gray-100 py-2 z-50">
-                  {/* ... Profile Menu Content ... */}
+                <div className="absolute right-0 mt-3 w-56 bg-white rounded-xl shadow-xl border border-gray-100 py-2 z-50">
                   <div className="px-4 py-2 border-b border-gray-100 mb-1">
                     <p className="text-sm font-bold text-gray-800">
-                      Emmanuel Taiwo
+                      {user?.first_name} {user?.last_name}
                     </p>
-                    <p className="text-xs text-gray-500">Student</p>
+                    <p className="text-xs text-gray-500 capitalize">
+                      {user?.role || "Student"}
+                    </p>
                   </div>
                   <Link
                     to="/student/profile"
@@ -236,36 +238,26 @@ const StudentDashboardLayout = () => {
                   >
                     View Profile
                   </Link>
-                  <Link
-                    to="/student/settings"
-                    className="block px-4 py-2 text-sm text-gray-600 hover:bg-gray-50 hover:text-green-600"
+                  <button
+                    type="button"
+                    onClick={handleLogout}
+                    className="w-full text-left px-4 py-2 text-sm text-red-500 hover:bg-red-50"
                   >
-                    Account Settings
-                  </Link>
-                  <div className="border-t border-gray-100 mt-1 pt-1">
-                    <button
-                      type="button"
-                      onClick={handleLogout}
-                      className="w-full text-left px-4 py-2 text-sm text-red-500 hover:bg-red-50"
-                    >
-                      Logout
-                    </button>
-                  </div>
+                    Logout
+                  </button>
                 </div>
               )}
             </div>
           </div>
         </header>
 
-        {/* Page Content */}
         <main className="flex-1 overflow-y-auto bg-[#F6F7F8] p-4 lg:p-8 flex flex-col">
           <div className="max-w-7xl mx-auto w-full flex-1">
             <Outlet />
           </div>
-          {/* Footer */}
-          <div className="max-w-7xl mx-auto w-full mt-12 pt-6 border-t border-[#E2E8F0] flex flex-col md:flex-row justify-between items-center text-xs text-[#94A3B8] gap-4">
+          <footer className="max-w-7xl mx-auto w-full mt-12 pt-6 border-t border-[#E2E8F0] text-xs text-[#94A3B8]">
             <p>© {new Date().getFullYear()} NACOS Anchor University.</p>
-          </div>
+          </footer>
         </main>
       </div>
     </div>
