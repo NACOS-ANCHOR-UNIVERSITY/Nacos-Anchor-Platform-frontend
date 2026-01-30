@@ -323,7 +323,7 @@ export default function PaymentsTable({
                       className="p-1.5 hover:bg-slate-50 rounded-lg transition-colors cursor-pointer"
                       title="View Details"
                     >
-                      <img src={eyeIcon} className="h-4 w-4" alt="View" />
+                      <Eye className="h-4 w-4 text-slate-500" />
                     </button>
                     {r.status === "Pending" && (
                       <button
@@ -332,11 +332,7 @@ export default function PaymentsTable({
                         className="p-1.5 hover:bg-green-50 rounded-lg transition-colors cursor-pointer disabled:opacity-50"
                         title="Approve"
                       >
-                        <img
-                          src={checkMark}
-                          className="h-4 w-4"
-                          alt="Approve"
-                        />
+                        <Check className="h-4 w-4 text-green-600" />
                       </button>
                     )}
                   </div>
