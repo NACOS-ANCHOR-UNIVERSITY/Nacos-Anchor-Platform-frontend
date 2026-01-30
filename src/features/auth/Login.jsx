@@ -35,6 +35,11 @@ const Login = () => {
     e.preventDefault();
     if (!validateForm()) return;
 
+    // 🛑 NUCLEAR FIX: Instantly wipe ALL old data before logging in.
+    // This prevents "Student Tokens" from blocking "Admin Access" later.
+    localStorage.clear();
+    sessionStorage.clear(); // Just to be safe
+
     setIsLoading(true);
     try {
       const { user } = await authService.login(formData);
@@ -48,7 +53,6 @@ const Login = () => {
       setIsLoading(false);
     }
   };
-
   return (
     <div className="min-h-screen bg-[#F6F7F8] flex">
       {/* --- LEFT SIDE (Illustration) --- */}
