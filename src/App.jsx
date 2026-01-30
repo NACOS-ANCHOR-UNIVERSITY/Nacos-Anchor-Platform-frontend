@@ -1,4 +1,5 @@
 import "./index.css";
+import { useState, useEffect } from "react";
 import { Routes, Route } from "react-router-dom";
 import { Toaster } from "sonner";
 import Landing from "./pages/public/Landing";
@@ -30,8 +31,28 @@ import NotFound from "./pages/public/NotFound";
 import EventsAndPolls from "./pages/admin/EventsAndPolls";
 import ComingSoon from "./components/shared/ComingSoon";
 import ProtectedRoutes from "./components/shared/ProtectedRoutes";
+import useUserStore from "./store/useUserStore";
+import SplashScreen from "./components/shared/SplashScreen";
 
 function App() {
+  const hasHydrated = useUserStore((state) => state._hasHydrated);
+  const [showSplash, setShowSplash] = useState(true);
+
+  useEffect(() => {
+    // If the store is hydrated, start the 2.5s timer to hide the splash
+    if (hasHydrated) {
+      const timer = setTimeout(() => {
+        setShowSplash(false);
+      }, 2500);
+      return () => clearTimeout(timer);
+    }
+  }, [hasHydrated]);
+
+  // If we haven't hydrated OR the 2s timer hasn't finished, stay on Splash
+  if (!hasHydrated || showSplash) {
+    return <SplashScreen />;
+  }
+
   return (
     <>
       <Toaster position="top-center" richColors />

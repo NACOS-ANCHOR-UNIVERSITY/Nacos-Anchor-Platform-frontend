@@ -7,6 +7,9 @@ const useUserStore = create(
       user: null,
       token: null,
       isAuthenticated: false,
+      _hasHydrated: false,
+
+      setHasHydrated: (state) => set({ _hasHydrated: state }),
 
       login: (userData, authToken) =>
         set({
@@ -30,6 +33,9 @@ const useUserStore = create(
     {
       name: "nacos-auth-storage",
       storage: createJSONStorage(() => localStorage),
+      onRehydrateStorage: () => (state) => {
+        state.setHasHydrated(true);
+      },
     },
   ),
 );
