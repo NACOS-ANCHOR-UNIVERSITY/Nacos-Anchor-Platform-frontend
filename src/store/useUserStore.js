@@ -1,14 +1,13 @@
-import {create} from "zustand";
-import {persist, createJSONStorage} from "zustand/middleware";
+import { create } from "zustand";
+import { persist, createJSONStorage } from "zustand/middleware";
 
 const useUserStore = create(
   persist(
     (set) => ({
       user: null,
-      token: null, 
+      token: null,
       isAuthenticated: false,
 
-      
       login: (userData, authToken) =>
         set({
           user: userData,
@@ -23,17 +22,17 @@ const useUserStore = create(
           isAuthenticated: false,
         }),
 
-     
       updateUser: (updates) =>
         set((state) => ({
-          user: {...state.user, ...updates},
+          user: { ...state.user, ...updates },
         })),
     }),
     {
-      name: "nacos-auth-storage", 
-      storage: createJSONStorage(() => localStorage), 
-    }
-  )
+      name: "nacos-auth-storage",
+      storage: createJSONStorage(() => localStorage),
+    },
+  ),
 );
 
 export default useUserStore;
+
