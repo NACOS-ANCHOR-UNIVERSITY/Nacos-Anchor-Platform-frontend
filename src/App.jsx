@@ -48,7 +48,7 @@ function App() {
         <Route element={<StudentDashboardLayout />}>
           <Route path="/student/dashboard" element={<DashboardHome />} />
           <Route
-            path={"/student/Payments"}
+            path="/student/payments"
             element={<StudentPaymentReceipt />}
           />
           {/* <Route path={"/student/siwes"} element={<StudentSiwesPage />} /> */}

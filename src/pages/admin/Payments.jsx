@@ -8,8 +8,8 @@ import {
 import { useAdminPayments } from "../../hooks";
 import Skeleton from "../../components/ui/Skeleton";
 import { AlertCircle, RefreshCw } from "lucide-react";
-import exportReport from "../../features/admin/payments/assets/icons/Export-report.png";
-import recordPayment from "../../features/admin/payments/assets/icons/Record-payment.png";
+import exportReport from "../../assets/icons/Export-report.png";
+import recordPayment from "../../assets/icons/Record-payment.png";
 
 const getInitials = (name) => {
   if (!name) return "??";

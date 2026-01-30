@@ -8,15 +8,12 @@ import {
   ChevronLeft,
   ChevronRight,
   X,
+  Calendar,
+  Code,
+  Palette,
+  Server,
+  Shield,
 } from "lucide-react";
-
-import {
-  CalendarIcon,
-  CodeIcon,
-  PaintIcon,
-  ServerIcon,
-  ShieldIcon,
-} from "../../assets/icons";
 
 // 1. Import the hook we created
 import { useOpportunities } from "../../hooks";
@@ -27,27 +24,27 @@ const getCategoryIcon = (category) => {
   switch (category) {
     case "Software Dev":
       return {
-        icon: <CodeIcon className="text-[#94A3B8]" size={24} />,
+        icon: <Code className="text-[#94A3B8]" size={24} />,
         bg: "bg-[#F1F5F9] border-[#F1F5F9]",
       };
     case "Networking":
       return {
-        icon: <ServerIcon className="text-[#6366F1]" size={24} />,
+        icon: <Server className="text-[#6366F1]" size={24} />,
         bg: "bg-[#EEF2FF] border-[#F1F5F9]",
       };
     case "Product Design":
       return {
-        icon: <PaintIcon className="text-[#F97316]" size={24} />,
+        icon: <Palette className="text-[#F97316]" size={24} />,
         bg: "bg-[#FFF7ED] border-[#FFEDD5]",
       };
     case "Data Analysis":
       return {
-        icon: <ShieldIcon className="text-[#A855F7]" size={24} />,
+        icon: <Shield className="text-[#A855F7]" size={24} />,
         bg: "bg-[#FAF5FF] border-[#F3E8FF]",
       };
     default:
       return {
-        icon: <CodeIcon className="text-[#94A3B8]" size={24} />,
+        icon: <Code className="text-[#94A3B8]" size={24} />,
         bg: "bg-[#F1F5F9] border-[#F1F5F9]",
       };
   }
@@ -492,7 +489,7 @@ const SiwesBoard = () => {
 
                   <div className="ml-20 flex justify-between items-center pt-4 border-t-2 border-[#F1F5F9]">
                     <span className="text-xs text-[#94A3B8] flex items-center gap-1">
-                      <CalendarIcon className="size-3" />
+                      <Calendar className="w-3 h-3" />
                       Posted {job.posted}
                     </span>
                     <button

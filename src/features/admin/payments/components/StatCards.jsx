@@ -1,5 +1,4 @@
-import increase from "../assets/table/Increase.png";
-import decrease from "../assets/table/Decrease.png";
+import { TrendingUp, TrendingDown } from "lucide-react";
 
 export default function StatCards({ stats = [] }) {
   const colorMap = {
@@ -37,11 +36,11 @@ export default function StatCards({ stats = [] }) {
 
             <div className="mt-2 flex items-center gap-2 text-xs">
               <div className="flex items-center gap-1 font-semibold">
-                <img
-                  src={isUp ? increase : decrease}
-                  alt={isUp ? "increase" : "decrease"}
-                  className="h-3 w-3"
-                />
+                {isUp ? (
+                  <TrendingUp className="h-3 w-3 text-brand-primary" />
+                ) : (
+                  <TrendingDown className="h-3 w-3 text-red-600" />
+                )}
                 <span className={isUp ? "text-brand-primary" : "text-red-600"}>
                   {s.delta}
                 </span>
