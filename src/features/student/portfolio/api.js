@@ -2,7 +2,7 @@ import client from "@/config/axios-client";
 
 export const getPortfolioData = async () => {
   const { data } = await client.get("/portfolio/me");
-  return data;
+  return data.data;
 };
 
 export const updateAbout = async (bio) => {
@@ -46,15 +46,7 @@ export const uploadResume = async (file) => {
   return data;
 };
 
-// need a form to capture these details...no UI
-export const addProject = async (projectData) => {
-  const formData = new FormData();
-  formData.append("title", projectData.title);
-  formData.append("description", projectData.description);
-  if (projectData.project_url)
-    formData.append("project_url", projectData.project_url);
-  if (projectData.image) formData.append("image", projectData.image); // File object
-
+export const addProject = async (formData) => {
   const { data } = await client.post("/portfolio/projects", formData, {
     headers: { "Content-Type": "multipart/form-data" },
   });
@@ -66,3 +58,12 @@ export const deleteProject = async (projectId) => {
   return data;
 };
 
+export const uploadProfilePicture = async (file) => {
+  const formData = new FormData();
+  formData.append("profile_picture", file);
+
+  const { data } = await client.post("/settings/profile-picture", formData, {
+    headers: { "Content-Type": "multipart/form-data" },
+  });
+  return data;
+};
