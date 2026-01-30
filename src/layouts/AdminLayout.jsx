@@ -17,11 +17,21 @@ import {
   Search,
 } from "lucide-react";
 import profileImg from "../assets/images/profile.png";
-import Logo from "../assets/images/nacos-logo.svg";
+import { authService } from "@/services/authService";
+import { toast } from "sonner";
+import { Navigate } from "react-router-dom";
 
 const AdminLayout = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const location = useLocation();
+
+  const handleLogout = () => {
+    authService.logout();
+    // ^ This clears Zustand state, clears LocalStorage, and wipes the Axios token.
+
+    toast.success("Signed out successfully");
+    Navigate("/login");
+  };
 
   // Sidebar Navigation Data
   const mainLinks = [
@@ -46,10 +56,11 @@ const AdminLayout = () => {
         key={item.name}
         to={item.path}
         onClick={() => setIsSidebarOpen(false)} // Close sidebar on mobile click
-        className={`flex items-center gap-3 px-4 py-3 text-sm font-medium rounded-xl transition-all mb-1 ${isActive
+        className={`flex items-center gap-3 px-4 py-3 text-sm font-medium rounded-xl transition-all mb-1 ${
+          isActive
             ? "bg-[#138601] text-white shadow-sm" // Active styles from your responsive layout
             : "text-[#475569] hover:bg-gray-50 hover:text-gray-900"
-          }`}
+        }`}
       >
         <item.icon
           className={`w-5 h-5 ${isActive ? "text-white" : "text-gray-500"}`}
@@ -109,7 +120,11 @@ const AdminLayout = () => {
 
         {/* Sidebar Footer (Logout) */}
         <div className="p-4">
-          <button className="flex items-center gap-3 text-red-600 w-full px-4 py-3 text-sm font-medium hover:bg-red-50 rounded-lg transition-colors">
+          <button
+            type="button"
+            onClick={handleLogout}
+            className="flex items-center gap-3 text-red-600 w-full px-4 py-3 text-sm font-medium hover:bg-red-50 rounded-lg transition-colors cursor-pointer"
+          >
             <LogOut className="w-5 h-5" />
             Logout
           </button>
@@ -196,3 +211,4 @@ const AdminLayout = () => {
 };
 
 export default AdminLayout;
+

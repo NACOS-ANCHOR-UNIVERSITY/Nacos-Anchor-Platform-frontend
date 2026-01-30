@@ -15,6 +15,10 @@ import {
   NotificationIcon,
   BookIcon,
 } from "../assets/icons";
+import { useNavigate } from "react-router-dom";
+import { toast } from "sonner";
+import { authService } from "@/services/authService";
+import useUserStore from "@/store/useUserStore";
 
 const StudentDashboardLayout = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -22,8 +26,19 @@ const StudentDashboardLayout = () => {
   const [showProfileMenu, setShowProfileMenu] = useState(false);
 
   const location = useLocation();
+  const navigate = useNavigate();
+
+  const { user } = useUserStore();
 
   const toggleSidebar = () => setIsSidebarOpen(!isSidebarOpen);
+
+  const handleLogout = () => {
+    authService.logout();
+    // ^ This clears Zustand state, clears LocalStorage, and wipes the Axios token.
+
+    toast.success("Signed out successfully");
+    navigate("/login");
+  };
 
   const navItems = [
     { name: "Dashboard", icon: DashboardIcon, href: "/student/dashboard" },
@@ -100,6 +115,7 @@ const StudentDashboardLayout = () => {
         <div className="p-4 border-t border-gray-100">
           <button
             type="button"
+            onClick={handleLogout}
             className="w-full flex items-center gap-3 px-4 py-3 text-sm text-[#EF4444] hover:bg-red-50 rounded-xl transition-colors font-medium text-left cursor-pointer"
           >
             <LogoutIcon className="size-4.5" />
@@ -227,8 +243,12 @@ const StudentDashboardLayout = () => {
                     Account Settings
                   </Link>
                   <div className="border-t border-gray-100 mt-1 pt-1">
-                    <button className="w-full text-left px-4 py-2 text-sm text-red-500 hover:bg-red-50">
-                      Log Out
+                    <button
+                      type="button"
+                      onClick={handleLogout}
+                      className="w-full text-left px-4 py-2 text-sm text-red-500 hover:bg-red-50"
+                    >
+                      Logout
                     </button>
                   </div>
                 </div>
@@ -253,3 +273,4 @@ const StudentDashboardLayout = () => {
 };
 
 export default StudentDashboardLayout;
+
