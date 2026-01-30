@@ -110,46 +110,48 @@ export default function PendingFees({ fees = [] }) {
   };
 
   const handlePaymentSuccess = async (referenceObj, feeItem) => {
-    toast.info("Verifying payment with server...");
-    console.log("Paystack Reference:", referenceObj.reference);
+    toast.info("Verifying payment...");
+    console.log("Paystack Object:", referenceObj);
 
-    // 1. Get Authentication Data
+    // 1. Get Authentication
     const token = localStorage.getItem("token") || localStorage.getItem("ACCESS_TOKEN");
     const user = JSON.parse(localStorage.getItem("user") || "{}");
 
-    // Safety check: Ensure we have a User ID
+    // Safety check
     if (!user.id) {
       toast.error("User ID missing. Please relogin.");
       return;
     }
 
     try {
-      // 2. Use the Proxy URL (Fixes Network Error)
       const response = await fetch("/api/proxy/payments/verify", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
           "Authorization": `Bearer ${token}`,
         },
-        // 3. Match the EXACT Backend Schema
+
         body: JSON.stringify({
-          reference_id: referenceObj.reference, // The code from Paystack
-          user_id: user.id,                     // The logged-in student's ID
-          description: feeItem.title,           // e.g. "Departmental Dues"
-          amount: feeItem.amount,               // e.g. 15000
-          status: "success",                    // Paystack said it worked
-          date_paid: new Date().toISOString().split('T')[0] // Format: YYYY-MM-DD
+          reference: referenceObj.reference,    // Backend likely wants this
+          reference_id: referenceObj.reference, // Or this (as backup)
+          ref: referenceObj.reference,          // Or this (common abbreviation)
+
+          user_id: user.id,
+          description: feeItem.title,
+          amount: feeItem.amount,
+          status: "success",
+          date_paid: new Date().toISOString().split('T')[0]
         }),
       });
 
       const data = await response.json();
 
       if (response.ok) {
-        toast.success("Payment Verified & Recorded!");
-        // Reload page after 2 seconds to update UI
+        toast.success("Payment Verified Successfully!");
         setTimeout(() => window.location.reload(), 2000);
       } else {
-        toast.error(data.message || "Database update failed.");
+        // Show the exact error from the backend
+        toast.error(data.message || "Verification failed.");
         console.error("Backend Error:", data);
       }
     } catch (error) {
