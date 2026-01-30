@@ -1,5 +1,5 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import {
   Mail,
   MapPin,
@@ -9,6 +9,23 @@ import {
   Linkedin,
 } from "lucide-react";
 import img2 from "../../../assets/images/Icon.png";
+
+// Custom link component that scrolls to top on navigation
+const ScrollLink = ({ to, children, className }) => {
+  const navigate = useNavigate();
+  
+  const handleClick = (e) => {
+    e.preventDefault();
+    window.scrollTo(0, 0);
+    navigate(to);
+  };
+  
+  return (
+    <a href={to} onClick={handleClick} className={className}>
+      {children}
+    </a>
+  );
+};
 
 const Footer = () => {
   return (
@@ -34,20 +51,20 @@ const Footer = () => {
           <div className="flex flex-col gap-[16px] w-[238px]">
             <p className="font-bold text-[14px] text-[#0F172A]">Quick Links</p>
             <div className="flex flex-col gap-[12px] font-normal text-[14px] text-[#475569]">
-              <Link to="/about">About us</Link>
-              <Link to="/executives">Executive Team</Link>
-              <Link to="/about#history">Roadmap</Link>
-              <Link to="/events">Events Calendar</Link>
+              <ScrollLink to="/about">About us</ScrollLink>
+              <ScrollLink to="/executives">Executive Team</ScrollLink>
+              <ScrollLink to="/about#history">Roadmap</ScrollLink>
+              <ScrollLink to="/events">Events Calendar</ScrollLink>
             </div>
           </div>
 
           <div className="flex flex-col gap-[16px] w-[238px]">
             <p className="font-bold text-[14px] text-[#0F172A]">Resources</p>
             <div className="flex flex-col gap-[12px] font-normal text-[14px] text-[#475569]">
-              <Link to="/login">Student Portal</Link>
-              <Link to="/login">Pay Dues</Link>
-              <Link to="/login">Academic Library</Link>
-              <Link to="/login">Past Questions</Link>
+              <ScrollLink to="/login">Student Portal</ScrollLink>
+              <ScrollLink to="/login">Pay Dues</ScrollLink>
+              <ScrollLink to="/login">Academic Library</ScrollLink>
+              <ScrollLink to="/login">Past Questions</ScrollLink>
             </div>
           </div>
 
