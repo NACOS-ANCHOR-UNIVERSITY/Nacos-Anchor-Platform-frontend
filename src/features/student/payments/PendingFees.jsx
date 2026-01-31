@@ -112,7 +112,7 @@ export default function PendingFees({ fees = [] }) {
   const handlePaymentSuccess = async (referenceObj, feeItem) => {
     toast.info("Verifying payment...");
 
-    // 1. Clean the Amount (Ensure it is a Number)
+    // 1. Clean the Amount
     const cleanAmount = parseFloat(String(feeItem.amount).replace(/,/g, ""));
 
     const token =
@@ -124,19 +124,20 @@ export default function PendingFees({ fees = [] }) {
       return;
     }
 
-    // 2. 🛑 The Exact Schema Payload
-    // (reference_id, user_id, description, amount, status, date_paid)
+    // 2. 🛑 The "Hybrid" Payload
+    // We send BOTH 'reference' (for API validation) and 'reference_id' (for Database)
     const payload = {
-      reference_id: referenceObj.reference,
-      reference: referenceObj.reference,
-      user_id: user.id, // Matches backend schema
-      description: feeItem.title, // Matches backend schema
-      amount: cleanAmount, // Matches backend schema
-      status: "success", // Matches backend schema
-      date_paid: new Date().toISOString().split("T")[0], // Matches backend schema
+      reference: referenceObj.reference, // <--- API Validator likely wants this!
+      reference_id: referenceObj.reference, // <--- Database likely wants this
+
+      user_id: user.id,
+      description: feeItem.title,
+      amount: cleanAmount,
+      status: "success",
+      date_paid: new Date().toISOString().split("T")[0],
     };
 
-    console.log("Sending Exact Schema:", payload);
+    console.log("🚀 Sending Final Payload:", payload);
 
     try {
       const response = await fetch("/api/proxy/payments/verify", {
@@ -154,7 +155,7 @@ export default function PendingFees({ fees = [] }) {
         toast.success("Payment Verified & Recorded!");
         setTimeout(() => window.location.reload(), 2000);
       } else {
-        console.error("Backend Rejected:", data);
+        console.error("❌ Backend Rejected:", data);
         toast.error(data.message || "Verification failed");
       }
     } catch (error) {
@@ -162,7 +163,6 @@ export default function PendingFees({ fees = [] }) {
       toast.error("Could not reach the server.");
     }
   };
-
   if (!fees || fees.length === 0) {
     return (
       <div className="mb-8">
