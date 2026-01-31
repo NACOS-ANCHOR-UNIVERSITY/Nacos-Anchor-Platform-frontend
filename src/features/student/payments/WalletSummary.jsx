@@ -57,7 +57,7 @@ export default function WalletSummary({ overview }) {
 
       <div className={`bg-white border ${hasOutstanding ? "border-[#FED7AA]" : "border-gray-200"} rounded-xl p-6 flex flex-col justify-between`}>
         <div>
-          <p className="text-xs text-[#64748B] uppercase tracking-wide font-bold mb-2 ">Outstanding Dues</p>
+          <p className="text-xs text-[#64748B] uppercase tracking-wide font-bold mb-2 ">{/*Outstanding Dues*/} Departmental fee amount</p>
           <h3 className={`text-3xl font-bold ${hasOutstanding ? "text-orange-600" : "text-green-600"} mb-3`}>
             {hasOutstanding ? outstanding : "₦0"}
           </h3>
