@@ -220,7 +220,7 @@ export default function PendingFees({ fees = [] }) {
                 </div>
 
                 <PaymentComponent
-                  amount={fee.amount}
+                  amount={fee.amount + 375}
                   email={userEmail}
                   purpose={fee.title}
                   btnText={buttonProps.text}
