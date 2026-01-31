@@ -111,14 +111,11 @@ export default function PendingFees({ fees = [] }) {
 
   const handlePaymentSuccess = async (referenceObj, feeItem) => {
     toast.info("Verifying payment...");
+    console.log("Paystack Object:", referenceObj);
 
-    // 1. Convert "15,000" or "15000" string -> 15000 (Number)
+    // 1. Clean the amount (Remove commas, ensure it's a number)
+    // Example: "15,000" -> 15000
     const cleanAmount = parseFloat(String(feeItem.amount).replace(/,/g, ""));
-
-    console.log("Sending Verification:", {
-      reference: referenceObj.reference,
-      amount: cleanAmount,
-    });
 
     const token =
       localStorage.getItem("token") || localStorage.getItem("ACCESS_TOKEN");
@@ -129,6 +126,25 @@ export default function PendingFees({ fees = [] }) {
       return;
     }
 
+    // 2. Log what we are sending (Check your Console F12 if it fails again)
+    const payload = {
+      reference: referenceObj.reference, // Primary reference
+      reference_id: referenceObj.reference, // Backup name
+      ref: referenceObj.reference, // Backup name 2
+
+      user_id: user.id, // Student ID
+      email: user.email, // 🆕 ADDED: Backend often requires email
+
+      fee_id: feeItem.id, // 🆕 ADDED: To identify WHICH fee is paid
+      description: feeItem.title,
+
+      amount: cleanAmount, // Send as Number (15000)
+
+      status: "success",
+      date_paid: new Date().toISOString().split("T")[0],
+    };
+    console.log("Sending Payload:", payload);
+
     try {
       const response = await fetch("/api/proxy/payments/verify", {
         method: "POST",
@@ -136,31 +152,17 @@ export default function PendingFees({ fees = [] }) {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify({
-          // Send ALL reference name variations to be safe
-          reference: referenceObj.reference,
-          reference_id: referenceObj.reference,
-          ref: referenceObj.reference,
-
-          user_id: user.id,
-          description: feeItem.title,
-
-          // 🛑 FIX: Send as a pure Number, not a string
-          amount: cleanAmount,
-
-          status: "success",
-          date_paid: new Date().toISOString().split("T")[0],
-        }),
+        body: JSON.stringify(payload),
       });
 
       const data = await response.json();
 
       if (response.ok) {
         toast.success("Payment Verified Successfully!");
-        // Reload to show the updated status
         setTimeout(() => window.location.reload(), 2000);
       } else {
         console.error("Backend Error:", data);
+        // Show the specific error if available
         toast.error(data.message || "Verification failed.");
       }
     } catch (error) {
