@@ -24,7 +24,8 @@ export const adminService = {
   },
 
   getPayments: async () => {
-    const response = await client.get("/admin/payments");
+    const response = await client.get("/admin/finance/transactions");
+    // const response = await client.get("/admin/payments");
     return response.data;
   },
 
