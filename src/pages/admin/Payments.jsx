@@ -73,15 +73,14 @@ export default function AdminPaymentsPage() {
   const { data: apiResponse, isLoading, error, refetch } = useAdminPayments();
 
   const stats = useMemo(() => {
-    // 🛑 THE FIX: Access apiResponse.data.data.metrics (Double .data)
-    // 1st .data = Axios Wrapper
-    // 2nd .data = Your API "data" key
+    // 🛑 THE FIX: We check 'apiResponse.data.data.metrics' first.
+    // This handles the nesting: Axios -> API Response -> Data Object -> Metrics
     const metrics = apiResponse?.data?.data?.metrics || apiResponse?.data?.metrics || {};
 
     return [
       {
         label: "Total Revenue",
-        value: metrics.total_revenue || "₦ 0",
+        value: metrics.total_revenue || "₦ 0", // Ensure this matches your API key exactly
         delta: "+12%",
         deltaLabel: "vs last month",
         deltaTone: "up",
@@ -115,7 +114,7 @@ export default function AdminPaymentsPage() {
   }, [apiResponse]);
 
   const rows = useMemo(() => {
-    // 🛑 THE FIX: Access apiResponse.data.data.transactions
+    // 🛑 THE FIX: Same fix here for transactions
     const transactions = apiResponse?.data?.data?.transactions || apiResponse?.data?.transactions;
 
     if (!transactions) return [];
