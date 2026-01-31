@@ -112,7 +112,7 @@ export default function PendingFees({ fees = [] }) {
   const handlePaymentSuccess = async (referenceObj, feeItem) => {
     toast.info("Verifying payment...");
 
-    // 1. Clean Data
+    // 1. Clean the Amount
     const cleanAmount = parseFloat(String(feeItem.amount).replace(/,/g, ""));
 
     // 2. Get User Info
@@ -125,17 +125,27 @@ export default function PendingFees({ fees = [] }) {
       return;
     }
 
-    // 3. Strict Payload (Only what is necessary)
+    // 3. 🛑 PREPARE THE ROBUST PAYLOAD
     const payload = {
-      reference: referenceObj.reference, // The KEY field
+      // Send ALL reference variations (Backend might want 'reference_id')
+      reference: referenceObj.reference,
+      reference_id: referenceObj.reference,
+      ref: referenceObj.reference,
+
       user_id: user.id,
       email: user.email,
+
+      // 🛑 CRITICAL: Send the Fee ID so the backend knows what this is for
+      fee_id: feeItem.id,
+      payment_id: feeItem.id, // Send as payment_id too, just in case
+
       description: feeItem.title,
-      amount: cleanAmount, // Number (e.g. 15000)
+      amount: cleanAmount,
       status: "success",
+      date_paid: new Date().toISOString().split("T")[0],
     };
 
-    console.log("🚀 Sending Verification Payload:", payload);
+    console.log("🚀 Sending FULL Payload:", payload);
 
     try {
       const response = await fetch("/api/proxy/payments/verify", {
@@ -150,16 +160,11 @@ export default function PendingFees({ fees = [] }) {
       const data = await response.json();
 
       if (response.ok) {
-        toast.success("Payment Verified Successfully!");
+        toast.success("Payment Verified & Recorded!");
         setTimeout(() => window.location.reload(), 2000);
       } else {
-        console.error("❌ Backend Error:", data);
-        toast.error(data.message || "Verification failed.");
-
-        // DEBUG: Ask the user to check this log
-        console.log(
-          "To fix this, check the 'Network' tab -> 'Request' to see exactly what was sent.",
-        );
+        console.error("❌ Backend Rejected:", data);
+        toast.error(data.message || "Verification failed");
       }
     } catch (error) {
       console.error("Network Error:", error);
