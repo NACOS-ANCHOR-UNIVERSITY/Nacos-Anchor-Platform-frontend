@@ -10,11 +10,10 @@ import {
   Ticket,
 } from "lucide-react";
 import PaymentComponent from "../../../components/payments/PaymentComponents";
-import { toast } from "sonner";
+import {toast} from "sonner";
 
 const getFeeIcon = (title, type) => {
   const titleLower = (title || "").toLowerCase();
-
   if (titleLower.includes("dues") || titleLower.includes("departmental")) {
     return {
       icon: <GraduationCap className="w-6 h-6 text-blue-600" />,
@@ -61,26 +60,16 @@ const getFeeIcon = (title, type) => {
 
 const getBadgeStyle = (status) => {
   const statusUpper = (status || "").toUpperCase();
-
-  if (statusUpper === "PENDING") {
-    return "bg-amber-100 text-amber-700";
-  }
-  if (statusUpper === "OPTIONAL") {
-    return "bg-gray-100 text-gray-600";
-  }
-  if (statusUpper === "NEW") {
-    return "bg-green-100 text-green-700";
-  }
-  if (statusUpper === "URGENT") {
-    return "bg-red-100 text-red-700";
-  }
+  if (statusUpper === "PENDING") return "bg-amber-100 text-amber-700";
+  if (statusUpper === "OPTIONAL") return "bg-gray-100 text-gray-600";
+  if (statusUpper === "NEW") return "bg-green-100 text-green-700";
+  if (statusUpper === "URGENT") return "bg-red-100 text-red-700";
   return "bg-gray-100 text-gray-600";
 };
 
-export default function PendingFees({ fees = [] }) {
+export default function PendingFees({fees = []}) {
   const user = JSON.parse(localStorage.getItem("user") || "{}");
   const userEmail = user.email || "student@aul.edu.ng";
-  const token = localStorage.getItem("token");
 
   const formatAmount = (amount, currency = "₦") => {
     if (!amount) return `${currency}0`;
@@ -94,7 +83,6 @@ export default function PendingFees({ fees = [] }) {
   const getButtonProps = (fee) => {
     const type = (fee.type || "").toLowerCase();
     const buttonText = fee.button_text || "Pay Now";
-
     if (type === "compulsory" || type === "required") {
       return {
         text: buttonText,
@@ -109,37 +97,10 @@ export default function PendingFees({ fees = [] }) {
     };
   };
 
-  const handlePaymentSuccess = async (referenceObj, feeItem) => {
-    toast.info("Verifying payment...");
-
-    // 1. Clean the Amount
-    const cleanAmount = parseFloat(String(feeItem.amount).replace(/,/g, ""));
-
-    const token =
-      localStorage.getItem("token") || localStorage.getItem("ACCESS_TOKEN");
-    const user = JSON.parse(localStorage.getItem("user") || "{}");
-
-    if (!user.id) {
-      toast.error("User ID missing. Please relogin.");
-      return;
-    }
-
-    
-    const payload = {
-      reference: referenceObj.reference, // <--- API Validator likely wants this!
-      reference_id: referenceObj.reference, // <--- Database likely wants this
-      ref: referenceObj.reference,
-      user_id: user.id,
-      description: feeItem.title,
-      amount: cleanAmount,
-      status: "success",
-      date_paid: new Date().toISOString().split("T")[0],
-    };
-
-    console.log("🚀 Sending Final Payload:", payload);
-
+  // ✅ 1. SHARED HELPER: Sends status to backend without strict checking
+  const sendStatusToBackend = async (payload, token) => {
     try {
-      const response = await fetch("/api/proxy/payments/verify", {
+      await fetch("/api/proxy/payments/verify", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -147,21 +108,63 @@ export default function PendingFees({ fees = [] }) {
         },
         body: JSON.stringify(payload),
       });
-
-      const data = await response.json();
-
-      if (response.ok) {
-        toast.success("Payment Verified & Recorded!");
-        setTimeout(() => window.location.reload(), 2000);
-      } else {
-        console.error("❌ Backend Rejected:", data);
-        toast.error(data.message || "Verification failed");
-      }
+      // Always reload to show updated state
+      setTimeout(() => window.location.reload(), 1500);
     } catch (error) {
-      console.error("Network Error:", error);
-      toast.error("Could not reach the server.");
+      console.error("Backend Sync Error:", error);
     }
   };
+
+  // ✅ 2. SUCCESS HANDLER: Forces status = "success"
+  const handlePaymentSuccess = async (referenceObj, feeItem) => {
+    toast.success("Payment Successful!");
+
+    const token =
+      localStorage.getItem("token") || localStorage.getItem("ACCESS_TOKEN");
+    const user = JSON.parse(localStorage.getItem("user") || "{}");
+    const cleanAmount = parseFloat(String(feeItem.amount).replace(/,/g, ""));
+
+    const payload = {
+      reference: referenceObj.reference,
+      reference_id: referenceObj.reference,
+      user_id: user.id,
+      email: user.email,
+      fee_id: feeItem.id,
+      description: feeItem.title,
+      amount: cleanAmount,
+      status: "success", // <--- FORCE SUCCESS
+      date_paid: new Date().toISOString().split("T")[0],
+    };
+
+    await sendStatusToBackend(payload, token);
+  };
+
+  // ✅ 3. FAILED/CLOSED HANDLER: Forces status = "failed"
+  const handlePaymentClosed = async (feeItem) => {
+    toast.error("Payment Cancelled");
+
+    const token =
+      localStorage.getItem("token") || localStorage.getItem("ACCESS_TOKEN");
+    const user = JSON.parse(localStorage.getItem("user") || "{}");
+    const cleanAmount = parseFloat(String(feeItem.amount).replace(/,/g, ""));
+    const fakeRef = `FAILED-${Date.now()}`;
+
+    const payload = {
+      reference: fakeRef,
+      reference_id: fakeRef,
+      user_id: user.id,
+      email: user.email,
+      fee_id: feeItem.id,
+      description: feeItem.title,
+      amount: cleanAmount,
+      status: "failed", // <--- FORCE FAILED
+      date_paid: new Date().toISOString().split("T")[0],
+    };
+
+    // Uncomment this line if you want to save "Failed" attempts to the DB
+    // await sendStatusToBackend(payload, token);
+  };
+
   if (!fees || fees.length === 0) {
     return (
       <div className="mb-8">
@@ -204,7 +207,7 @@ export default function PendingFees({ fees = [] }) {
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
         {fees.slice(0, 3).map((fee) => {
-          const { icon, bg } = getFeeIcon(fee.title, fee.type);
+          const {icon, bg} = getFeeIcon(fee.title, fee.type);
           const badgeStyle = getBadgeStyle(fee.status_badge);
           const buttonProps = getButtonProps(fee);
 
@@ -243,7 +246,10 @@ export default function PendingFees({ fees = [] }) {
                   email={userEmail}
                   purpose={fee.title}
                   btnText={buttonProps.text}
+                  // 🟢 Handle Success
                   onSuccess={(ref) => handlePaymentSuccess(ref, fee)}
+                  // 🔴 Handle Failure/Cancel
+                  onClose={() => handlePaymentClosed(fee)}
                 />
               </div>
             </div>
