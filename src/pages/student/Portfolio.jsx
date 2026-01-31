@@ -24,7 +24,7 @@ import {
   uploadResume,
   addProject,
   uploadProfilePicture,
-} from "@/features/student/portfolio/api";
+} from "@/services/studentPortfolioService";
 
 // Constants for Media
 const MEDIA_BASE_URL = "https://nacos.nextgenerationones.org/api";

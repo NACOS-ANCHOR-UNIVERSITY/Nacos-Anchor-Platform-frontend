@@ -7,7 +7,7 @@ import Skeleton from "@/components/ui/Skeleton";
 import {
   deleteSiwesOpportunity,
   updateSiwesOpportunity,
-} from "@/features/admin/siwes/api";
+} from "@/services/adminSiwesService";
 
 const ManageListings = ({ listings = [], loading, onSuccess }) => {
   const [activeTab, setActiveTab] = useState("active");
