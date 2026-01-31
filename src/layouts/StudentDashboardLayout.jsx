@@ -43,7 +43,7 @@ const StudentDashboardLayout = () => {
   useEffect(() => {
     fetchNotifications();
 
-    // Optional: Poll for new notifications every 5 minutes
+    // Poll for new notifications every 5 minutes
     const interval = setInterval(fetchNotifications, 5 * 60 * 1000);
     return () => clearInterval(interval);
   }, [fetchNotifications]);
@@ -292,6 +292,7 @@ const StudentDashboardLayout = () => {
                   </div>
                   <Link
                     to="/student/profile"
+                    onClick={() => setShowProfileMenu(false)}
                     className="block px-4 py-2 text-sm text-gray-600 hover:bg-gray-50 hover:text-green-600"
                   >
                     View Profile
