@@ -16,7 +16,7 @@ export default function PaymentHistory({ payments = [] }) {
   const [receiptData, setReceiptData] = useState(null);
   const itemsPerPage = 4;
   const BASE_URL = "https://nacos.nextgenerationones.org/api";
-  const token = localStorage.getItem("token")
+  const token = JSON.parse(localStorage.getItem("nacos-auth-storage")).state.token
 
   // Calculate pagination
   const totalItems = payments.length;
