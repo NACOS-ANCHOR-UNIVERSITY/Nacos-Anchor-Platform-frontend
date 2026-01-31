@@ -74,6 +74,7 @@ export default function AdminPaymentsPage() {
   const [isModalPaymentOpen, setIsModalPaymentOpen] = useState(false);
 
   const { data: apiResponse, isLoading, error, refetch } = useAdminPayments();
+  console.log(apiResponse)
 
   const stats = useMemo(() => {
     // 🛑 THE FIX: We check 'apiResponse.data.data.metrics' first.
