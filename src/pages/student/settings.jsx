@@ -22,7 +22,12 @@ const Settings = () => {
   const [uploadingPhoto, setUploadingPhoto] = useState(false);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
-  console.log(userData);
+  const [passwords, setPasswords] = useState({
+    current_password: "",
+    new_password: "",
+    confirm_password: "",
+  });
+  const [showPasswords, setShowPasswords] = useState(false);
 
   const menuItems = [
     { id: "profile", label: "Edit Profile", icon: UserIcon },
@@ -51,7 +56,7 @@ const Settings = () => {
         setError("You are not logged in. Please login to continue.");
         // Redirect to login page after 2 seconds
         setTimeout(() => {
-          window.location.href = "/login"; // Update this path to your actual login route
+          window.location.href = "/login";
         }, 2000);
         return;
       }
@@ -211,6 +216,52 @@ const Settings = () => {
     document.getElementById("profile-photo-input").click();
   };
 
+  const handleChangePassword = async (e) => {
+    e.preventDefault();
+
+    if (passwords.new_password !== passwords.confirm_password) {
+      setError("New passwords do not match");
+      return;
+    }
+
+    setLoading(true);
+    setError("");
+    setSuccess("");
+
+    try {
+      const token = getAuthToken();
+      const response = await fetch(`${BASE_URL}/student/change-password`, {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          current_password: passwords.current_password,
+          new_password: passwords.new_password,
+        }),
+      });
+
+      const data = await response.json();
+
+      if (data.status === "success") {
+        setSuccess("Password updated successfully");
+        setPasswords({
+          current_password: "",
+          new_password: "",
+          confirm_password: "",
+        });
+      } else {
+        setError(data.message || "Failed to update password");
+      }
+    } catch (err) {
+      console.error("Error updating password:", err);
+      setError("An error occurred. Please try again.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <div>
       <div className="mb-8">
@@ -262,7 +313,7 @@ const Settings = () => {
         </div>
 
         <div className="w-full lg:w-3/4 space-y-6">
-          {activeTab === "profile" ? (
+          {activeTab === "profile" && (
             <>
               {/* Profile Header */}
               <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 flex flex-col sm:flex-row sm:items-center justify-between gap-6">
@@ -277,7 +328,6 @@ const Settings = () => {
                       alt="Profile"
                       className="size-32 rounded-full border-4 border-gray-50 bg-gray-200 object-cover"
                       onError={(e) => {
-                        e.error = null;
                         e.currentTarget.src =
                           "https://api.dicebear.com/7.x/avataaars/svg?seed=Sue";
                       }}
@@ -318,7 +368,7 @@ const Settings = () => {
                   type="button"
                   onClick={triggerFileInput}
                   disabled={uploadingPhoto}
-                  className="w-fit mx-auto sm:mx-0 flex items-center gap-2 px-4 py-2 bg-[#E8F4E6] hover:bg-gray-100 text-[#0F1C0C] rounded-lg text-sm font-bold transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="w-fit mx-auto sm:mx-0 flex items-center gap-2 px-4 py-2 bg-[#E8F4E6] hover:bg-gray-100 text-[#0F1C0C] rounded-lg text-sm font-bold transition-colors disabled:opacity-50"
                 >
                   <UploadIcon className="size-3.5" />
                   {uploadingPhoto ? "Uploading..." : "Change Photo"}
@@ -370,7 +420,7 @@ const Settings = () => {
                           id="email"
                           defaultValue={userData?.email || ""}
                           disabled={true}
-                          className="w-full pl-10 pr-4 py-2.5 border border-[#E5E7EB] rounded-lg focus:ring-2 focus:ring-[#138601] focus:border-transparent outline-none transition-all text-[#0F1C0C] bg-gray-50 cursor-not-allowed"
+                          className="w-full pl-10 pr-4 py-2.5 border border-[#E5E7EB] rounded-lg bg-gray-50 cursor-not-allowed outline-none"
                         />
                       </div>
                     </div>
@@ -389,41 +439,8 @@ const Settings = () => {
                           id="phone"
                           value={phoneNumber}
                           onChange={(e) => setPhoneNumber(e.target.value)}
-                          className="w-full pl-10 pr-4 py-2.5 border border-[#E5E7EB] rounded-lg focus:ring-2 focus:ring-[#138601] focus:border-transparent outline-none transition-all text-[#0F1C0C]"
+                          className="w-full pl-10 pr-4 py-2.5 border border-[#E5E7EB] rounded-lg focus:ring-2 focus:ring-[#138601] outline-none"
                         />
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="bg-[#F8FCF8] border border-dashed border-[#D1D5DB] rounded-lg p-4">
-                    <p className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-4">
-                      Academic Details (Read-only)
-                    </p>
-
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                      <div>
-                        <p className="text-xs text-[#6B7280] block mb-1">
-                          Matric Number
-                        </p>
-                        <p className="text-sm font-semibold text-[#0F1C0C]">
-                          {userData?.matric_no || "--------------"}
-                        </p>
-                      </div>
-                      <div>
-                        <p className="text-xs text-[#6B7280] block mb-1">
-                          Department
-                        </p>
-                        <p className="text-sm font-semibold text-[#0F1C0C]">
-                          {userData?.department || "--------------"}
-                        </p>
-                      </div>
-                      <div>
-                        <p className="text-xs text-[#6B7280] block mb-1">
-                          Current Level
-                        </p>
-                        <p className="text-sm font-semibold text-[#0F1C0C]">
-                          {userData?.level + " Level" || "---------------"}
-                        </p>
                       </div>
                     </div>
                   </div>
@@ -438,8 +455,7 @@ const Settings = () => {
                     <textarea
                       id="bio"
                       rows="4"
-                      placeholder="Write a short bio about yourself..."
-                      className="w-full p-4 border border-[#E5E7EB] rounded-lg focus:ring-2 focus:ring-[#138601] focus:border-transparent outline-none transition-all text-base resize-none h-32.5"
+                      className="w-full p-4 border border-[#E5E7EB] rounded-lg focus:ring-2 focus:ring-[#138601] outline-none resize-none h-32.5"
                       maxLength="300"
                       value={bioText}
                       onChange={(e) => setBioText(e.target.value)}
@@ -453,14 +469,14 @@ const Settings = () => {
                     <button
                       type="button"
                       onClick={handleCancel}
-                      className="text-sm font-bold text-[#4B5563] hover:text-gray-900 bg-transparent hover:bg-gray-100 transition-colors rounded-lg py-2.5 px-6 cursor-pointer"
+                      className="text-sm font-bold text-[#4B5563] hover:bg-gray-100 rounded-lg py-2.5 px-6"
                     >
                       Cancel
                     </button>
                     <button
                       type="submit"
                       disabled={loading}
-                      className="px-6 py-2.5 bg-[#138601] hover:bg-[#138601]/80 text-white text-sm font-bold rounded-lg transition-colors drop-shadow-sm cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+                      className="px-6 py-2.5 bg-[#138601] text-white text-sm font-bold rounded-lg disabled:opacity-50"
                     >
                       {loading ? "Saving..." : "Save Changes"}
                     </button>
@@ -468,12 +484,100 @@ const Settings = () => {
                 </form>
               </div>
             </>
-          ) : (
-            //   placeholder content for tabs
-            <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-12 flex items-center justify-center">
-              <p className="text-gray-500">
-                {menuItems.find((i) => i.id === activeTab)?.label} Content
-              </p>
+          )}
+
+          {activeTab === "security" && (
+            <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 sm:p-8">
+              <div className="mb-8">
+                <h3 className="text-lg font-bold text-[#0F1C0C]">
+                  Account Security
+                </h3>
+                <p className="text-sm text-gray-500">
+                  Update your password to keep your account secure.
+                </p>
+              </div>
+
+              <form
+                onSubmit={handleChangePassword}
+                className="space-y-6 max-w-md"
+              >
+                <div className="flex flex-col gap-2">
+                  <label className="text-sm font-medium text-[#0F1C0C]">
+                    Current Password
+                  </label>
+                  <input
+                    type={showPasswords ? "text" : "password"}
+                    required
+                    value={passwords.current_password}
+                    onChange={(e) =>
+                      setPasswords({
+                        ...passwords,
+                        current_password: e.target.value,
+                      })
+                    }
+                    className="w-full px-4 py-2.5 border border-[#E5E7EB] rounded-lg focus:ring-2 focus:ring-[#138601] outline-none"
+                  />
+                </div>
+
+                <div className="flex flex-col gap-2">
+                  <label className="text-sm font-medium text-[#0F1C0C]">
+                    New Password
+                  </label>
+                  <input
+                    type={showPasswords ? "text" : "password"}
+                    required
+                    value={passwords.new_password}
+                    onChange={(e) =>
+                      setPasswords({
+                        ...passwords,
+                        new_password: e.target.value,
+                      })
+                    }
+                    className="w-full px-4 py-2.5 border border-[#E5E7EB] rounded-lg focus:ring-2 focus:ring-[#138601] outline-none"
+                  />
+                </div>
+
+                <div className="flex flex-col gap-2">
+                  <label className="text-sm font-medium text-[#0F1C0C]">
+                    Confirm New Password
+                  </label>
+                  <input
+                    type={showPasswords ? "text" : "password"}
+                    required
+                    value={passwords.confirm_password}
+                    onChange={(e) =>
+                      setPasswords({
+                        ...passwords,
+                        confirm_password: e.target.value,
+                      })
+                    }
+                    className="w-full px-4 py-2.5 border border-[#E5E7EB] rounded-lg focus:ring-2 focus:ring-[#138601] outline-none"
+                  />
+                </div>
+
+                <div
+                  className="flex items-center gap-2 cursor-pointer"
+                  onClick={() => setShowPasswords(!showPasswords)}
+                >
+                  <input
+                    type="checkbox"
+                    checked={showPasswords}
+                    readOnly
+                    className="rounded border-gray-300 text-[#138601]"
+                  />
+                  <span className="text-sm text-gray-600">Show passwords</span>
+                </div>
+
+                <div className="pt-4">
+                  <button
+                    type="submit"
+                    disabled={loading}
+                    className="w-full sm:w-fit px-8 py-2.5 bg-[#138601] hover:bg-[#138601]/80 text-white text-sm font-bold rounded-lg transition-colors disabled:opacity-50"
+                  >
+                    {loading ? "Updating..." : "Update Password"}
+                  </button>
+                </div>
+              </form>
             </div>
           )}
         </div>
