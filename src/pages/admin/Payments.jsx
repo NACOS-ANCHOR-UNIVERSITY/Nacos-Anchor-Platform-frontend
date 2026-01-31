@@ -4,7 +4,9 @@ import {
   StatCards,
   PaymentsTable,
   RecordPaymentModal,
+  CreatePaymentModal,
 } from "../../features/admin/payments";
+// import CreatePaymentModal from "../../features/admin/payments/CreatePaymentModal";
 import { useAdminPayments } from "../../hooks";
 import Skeleton from "../../components/ui/Skeleton";
 import { AlertCircle, RefreshCw } from "lucide-react";
@@ -272,7 +274,7 @@ export default function AdminPaymentsPage() {
       />
       <CreatePaymentModal
         isOpen={isModalPaymentOpen}
-        onClose={() => setIsModalOpen(false)}
+        onClose={() => setIsModalPaymentOpen(false)} 
       />
     </div>
   );
