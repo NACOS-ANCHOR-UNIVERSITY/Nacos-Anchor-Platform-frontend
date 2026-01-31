@@ -11,8 +11,10 @@ export default function CreatePaymentModal({ isOpen, onClose }) {
     description: "",
     amount: "",
     type: "Compulsory",
+    buttonText: "Pay Levy",
+    statusBadge: "PENDING"
   });
-
+  const token = JSON.parse(localStorage.getItem("nacos-auth-storage")).state.token
   if (!isOpen) return null;
 
   const handleChange = (e) => {
@@ -29,10 +31,13 @@ export default function CreatePaymentModal({ isOpen, onClose }) {
         description: formData.description,
         amount: formData.amount,
         type: formData.type,
+        button_text: formData.buttonText,
+        status_badge: formData.statusBadge
       };
 
-      await client.post("/admin/create-payment", payload, {
-        headers: { "Content-Type": "application/json" },
+      await client.post("/admin/fees", payload, {
+        headers: { "Content-Type": "application/json", "Authorization": `Bearer ${token}` },
+
       });
 
       toast.success("Payment created successfully! Students can now pay.");
@@ -131,6 +136,22 @@ export default function CreatePaymentModal({ isOpen, onClose }) {
               <div className="flex flex-col gap-1.5">
                 <label className="text-xs font-bold text-slate-500 uppercase">
                   Fee Type
+                </label>
+                <select
+                  name="type"
+                  value={formData.type}
+                  onChange={handleChange}
+                  className="w-full px-3 py-2.5 border border-slate-200 rounded-xl focus:ring-2 focus:ring-green-500/20 outline-none text-sm bg-white"
+                  required
+                >
+                  <option value="Compulsory">Compulsory</option>
+                  <option value="Optional">Optional</option>
+                </select>
+              </div>
+
+              <div className="flex flex-col gap-1.5">
+                <label className="text-xs font-bold text-slate-500 uppercase">
+                  Button Text
                 </label>
                 <select
                   name="type"

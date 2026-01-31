@@ -9,7 +9,7 @@ import Skeleton from "../../../components/ui/Skeleton";
 import { AlertCircle, RefreshCw } from "lucide-react";
 
 // 1. FIX: Use the Proxy URL (Works on Vercel & Localhost)
-const BASE_URL = "/api/proxy/finance/dashboard";
+const BASE_URL = "/api/finance/dashboard";
 
 export default function StudentPaymentReceipt() {
   const [isOpen, setIsOpen] = useState(false);
@@ -18,7 +18,7 @@ export default function StudentPaymentReceipt() {
   const [error, setError] = useState(null);
 
   // 2. FIX: Check for BOTH token names (Admin uses 'token', Student often uses 'ACCESS_TOKEN')
-  const token = localStorage.getItem("token") || localStorage.getItem("ACCESS_TOKEN");
+  const token = JSON.parse(localStorage.getItem("nacos-auth-storage")).state.token
 
   const fetchFinanceData = async () => {
     setIsLoading(true);
