@@ -69,6 +69,7 @@ export default function AdminPaymentsPage() {
   const [statusFilter, setStatusFilter] = useState("All");
   const [dateFilter, setDateFilter] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isModalPaymentOpen, setIsModalPaymentOpen] = useState(false);
 
   const { data: apiResponse, isLoading, error, refetch } = useAdminPayments();
 
@@ -238,6 +239,13 @@ export default function AdminPaymentsPage() {
               <img src={recordPayment} alt="" className="h-4 w-5 shrink-0" />
               <span className="hidden sm:inline">Record Payment</span>
             </button>
+            <button
+              onClick={() => setIsModalPaymentOpen(true)}
+              className="inline-flex items-center gap-2 rounded-lg bg-[var(--color-brand-primary)] px-4 py-2 text-sm font-semibold text-white hover:opacity-95 cursor-pointer active:scale-95 transition-transform"
+            >
+              <img src={recordPayment} alt="" className="h-4 w-5 shrink-0" />
+              <span className="hidden sm:inline">Create Payment</span>
+            </button>
           </div>
         </div>
 
@@ -260,6 +268,10 @@ export default function AdminPaymentsPage() {
 
       <RecordPaymentModal
         isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+      />
+      <CreatePaymentModal
+        isOpen={isModalPaymentOpen}
         onClose={() => setIsModalOpen(false)}
       />
     </div>
