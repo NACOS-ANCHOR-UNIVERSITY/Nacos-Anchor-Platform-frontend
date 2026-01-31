@@ -560,7 +560,9 @@ export default function Portfolio() {
                 </div>
 
                 {/* Edit avatar trigger */}
+                {/* hidden for now... */}
                 <button
+                  hidden
                   type="button"
                   onClick={() => avatarInputRef.current?.click()}
                   className="absolute bottom-0 right-0 grid h-8 w-8 place-items-center rounded-full bg-brand-primary text-white shadow-md border-2 border-white hover:bg-brand-primary/90 transition-colors disabled:opacity-50"
