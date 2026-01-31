@@ -36,7 +36,7 @@ const Settings = () => {
 
   // 2. FIX: Check for BOTH token names so Students don't get kicked out
   const getAuthToken = () => {
-    return localStorage.getItem("token") || localStorage.getItem("ACCESS_TOKEN");
+    return JSON.parse(localStorage.getItem("nacos-auth-storage")).state.token 
   };
 
   useEffect(() => {
@@ -254,8 +254,8 @@ const Settings = () => {
                   key={item.id}
                   onClick={() => setActiveTab(item.id)}
                   className={`w-full flex items-center gap-3 px-3 py-2 h-10 rounded-lg text-sm font-semibold cursor-pointer transition-colors ${activeTab === item.id
-                      ? "bg-[#1386011A] text-[#138601]"
-                      : "text-[#0F1C0C] hover:bg-gray-50 hover:text-gray-900"
+                    ? "bg-[#1386011A] text-[#138601]"
+                    : "text-[#0F1C0C] hover:bg-gray-50 hover:text-gray-900"
                     }`}
                 >
                   <item.icon className={`size-4.5 ${activeTab === item.id ? "text-[#13860]" : "text-[#6B7280]"}`} />
