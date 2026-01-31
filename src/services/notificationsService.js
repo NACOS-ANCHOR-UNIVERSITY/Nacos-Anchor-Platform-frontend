@@ -5,3 +5,8 @@ export const getNotificationsData = async () => {
   return data.data;
 };
 
+// no endpoint yet tho...
+export const markNotificationAsRead = async (id) => {
+  const { data } = await client.patch(`/notifications/${id}/read`);
+  return data;
+};

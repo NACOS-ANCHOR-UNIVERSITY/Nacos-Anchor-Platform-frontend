@@ -17,40 +17,36 @@ import {
 import { toast } from "sonner";
 import { authService } from "@/services/authService";
 import useUserStore from "@/store/useUserStore";
-import { getNotificationsData } from "@/services/notificationsService";
+import useNotificationStore from "@/store/useNotificationStore";
+import { markNotificationAsRead } from "@/services/notificationsService";
 
 const StudentDashboardLayout = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [showNotifications, setShowNotifications] = useState(false);
   const [showProfileMenu, setShowProfileMenu] = useState(false);
-  const [notifications, setNotifications] = useState([]);
-  const [loading, setLoading] = useState(false);
 
-  const location = useLocation();
-  const navigate = useNavigate();
+  const {
+    notifications,
+    loading,
+    fetchNotifications,
+    getUnreadCount,
+    markAsRead,
+  } = useNotificationStore();
+  const unreadCount = getUnreadCount();
 
   // Get user data from Zustand store
   const { user } = useUserStore();
 
-  // Fetch Notifications
+  const location = useLocation();
+  const navigate = useNavigate();
+
   useEffect(() => {
-    const fetchNotifications = async () => {
-      try {
-        setLoading(true);
-        const data = await getNotificationsData();
-        setNotifications(data || []);
-      } catch (error) {
-        console.error("Failed to fetch notifications:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
     fetchNotifications();
-  }, []);
 
-  // Calculate unread count (assuming your API returns an 'is_read' boolean)
-  const unreadCount = notifications.filter((n) => !n.is_read).length;
+    // Optional: Poll for new notifications every 5 minutes
+    const interval = setInterval(fetchNotifications, 5 * 60 * 1000);
+    return () => clearInterval(interval);
+  }, [fetchNotifications]);
 
   // get initials (e.g., "Chukwuebuka Ezirim" -> "CE")
   const getInitials = () => {
@@ -64,6 +60,17 @@ const StudentDashboardLayout = () => {
     authService.logout();
     toast.success("Signed out successfully");
     navigate("/login");
+  };
+
+  const handleNotificationClick = async (notif) => {
+    if (!notif.is_read) {
+      // 1. Update UI immediately (Optimistic UI)
+      markAsRead(notif.id);
+      // 2. Update Backend
+      await markNotificationAsRead(notif.id);
+    }
+    // 3. Navigate if the notification has a link
+    if (notif.link) navigate(notif.link);
   };
 
   const navItems = [
@@ -205,12 +212,16 @@ const StudentDashboardLayout = () => {
                 <div className="absolute right-0 mt-3 w-80 bg-white rounded-xl shadow-xl border border-gray-100 p-4 z-50">
                   <div className="flex justify-between items-center mb-3">
                     <h4 className="font-bold text-sm">Notifications</h4>
-                    <button className="text-xs text-[#138601] hover:underline">
+                    <button
+                      type="button"
+                      onClick={handleNotificationClick}
+                      className="text-xs text-[#138601] hover:underline"
+                    >
                       Mark all read
                     </button>
                   </div>
 
-                  <div className="space-y-3 max-h-[300px] overflow-y-auto">
+                  <div className="space-y-3 max-h-75 overflow-y-auto">
                     {loading ? (
                       <p className="text-xs text-center py-4 text-gray-400">
                         Loading...
