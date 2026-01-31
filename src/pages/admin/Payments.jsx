@@ -18,14 +18,9 @@ const getInitials = (name) => {
   return (parts[0][0] + parts[parts.length - 1][0]).toUpperCase();
 };
 
-// Helper to format dates and handle invalid/null dates from the database
 const formatDate = (dateString) => {
   if (!dateString) return "N/A";
-
-  // Convert to string in case it's not
   const dateStr = String(dateString);
-
-  // Check for invalid date patterns like "0000-00-00" or dates with year -0001
   if (
     dateStr.includes("-0001") ||
     dateStr.includes("0000-00-00") ||
@@ -33,21 +28,13 @@ const formatDate = (dateString) => {
   ) {
     return "N/A";
   }
-
-  // Try to parse the date (handle MySQL datetime format: "2026-01-29 14:30:00")
   let date = new Date(dateStr.replace(" ", "T"));
-
-  // If that fails, try parsing directly
   if (isNaN(date.getTime())) {
     date = new Date(dateStr);
   }
-
-  // Check if date is valid and year is reasonable (after year 2000)
   if (isNaN(date.getTime()) || date.getFullYear() < 2000) {
     return "N/A";
   }
-
-  // Format as "Jan 28, 2026 1:28 PM"
   return date.toLocaleDateString("en-US", {
     month: "short",
     day: "numeric",
@@ -60,7 +47,6 @@ const formatDate = (dateString) => {
 
 const handleExportCSV = (data, filename = "payments-report.csv") => {
   if (!data || !data.length) return;
-
   const headers = Object.keys(data[0]).join(",");
   const rows = data.map((row) =>
     Object.values(row)
@@ -69,7 +55,6 @@ const handleExportCSV = (data, filename = "payments-report.csv") => {
   );
   const csvContent =
     "data:text/csv;charset=utf-8," + [headers, ...rows].join("\n");
-
   const encodedUri = encodeURI(csvContent);
   const link = document.createElement("a");
   link.setAttribute("href", encodedUri);
@@ -88,7 +73,10 @@ export default function AdminPaymentsPage() {
   const { data: apiResponse, isLoading, error, refetch } = useAdminPayments();
 
   const stats = useMemo(() => {
-    const metrics = apiResponse?.data?.metrics || {};
+    // 🛑 THE FIX: Access apiResponse.data.data.metrics (Double .data)
+    // 1st .data = Axios Wrapper
+    // 2nd .data = Your API "data" key
+    const metrics = apiResponse?.data?.data?.metrics || apiResponse?.data?.metrics || {};
 
     return [
       {
@@ -127,7 +115,9 @@ export default function AdminPaymentsPage() {
   }, [apiResponse]);
 
   const rows = useMemo(() => {
-    const transactions = apiResponse?.data?.transactions;
+    // 🛑 THE FIX: Access apiResponse.data.data.transactions
+    const transactions = apiResponse?.data?.data?.transactions || apiResponse?.data?.transactions;
+
     if (!transactions) return [];
 
     return transactions

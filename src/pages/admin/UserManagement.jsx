@@ -41,13 +41,22 @@ const UserManagement = () => {
 
   const fetchAllData = async () => {
     setLoading(true);
-    // Check for 'token' (Admin) OR 'ACCESS_TOKEN' (Student)
-    const token = localStorage.getItem("token") || localStorage.getItem("ACCESS_TOKEN");
 
-    // if (!token) {
-    //   window.location.href = "/login";
-    //   return;
-    // }
+    // 1. Get Token & User Info
+    const token = localStorage.getItem("token") || localStorage.getItem("ACCESS_TOKEN");
+    const user = JSON.parse(localStorage.getItem("user") || "{}");
+
+    // 2. Client-Side Role Check
+    if (user.role !== "admin") {
+      toast.error("Access Denied: You need Admin privileges.");
+      setLoading(false);
+      return;
+    }
+
+    if (!token) {
+      window.location.href = "/login";
+      return;
+    }
 
     const headers = {
       Authorization: `Bearer ${token}`,
@@ -55,14 +64,18 @@ const UserManagement = () => {
     };
 
     try {
-      const statsRes = await fetch("/api/proxy/admin/users/dashboard", {
-        headers,
-      });
+      const statsRes = await fetch("/api/proxy/admin/users/dashboard", { headers });
 
+      // 3. Handle 401 (Expired) vs 403 (Wrong Role)
       if (statsRes.status === 401) {
         localStorage.clear();
-        toast.error("Session expired. Please login again.");
         window.location.href = "/login";
+        return;
+      }
+
+      if (statsRes.status === 403) {
+        toast.error("You are not authorized to view this data.");
+        setLoading(false);
         return;
       }
 
@@ -71,7 +84,7 @@ const UserManagement = () => {
 
       const usersRes = await fetch(
         `/api/proxy/admin/users/list?page=${currentPage}&limit=${itemsPerPage}`,
-        { headers },
+        { headers }
       );
       const usersData = await usersRes.json();
 
@@ -98,10 +111,11 @@ const UserManagement = () => {
       if (logsData.status === "success") setLogs(logsData.data);
     } catch (error) {
       console.error("Fetch Error:", error);
+      toast.error("Failed to load data. Check connection.");
     } finally {
       setLoading(false);
     }
-  };
+  }; // <--- THIS BRACKET WAS MISSING IN YOUR CODE!
 
   useEffect(() => {
     fetchAllData();
@@ -193,6 +207,7 @@ const UserManagement = () => {
       </div>
 
       <div className="flex flex-col gap-6">
+        {/* STATS CARDS */}
         <div className="flex flex-col min-[900px]:flex-row gap-4 w-full">
           <div className="bg-white border-[#F1F5F9] flex-1 px-6 py-4 rounded-3xl shadow-sm">
             <div className="flex justify-between items-center mb-2">
@@ -210,7 +225,7 @@ const UserManagement = () => {
             <p className="font-medium text-[#64748B] text-[14px] my-2">
               Total Registration
             </p>
-            <h2 className="font-bold text-[24px] mb-2">2,450</h2>
+            <h2 className="font-bold text-[24px] mb-2">{stats.total_registration || 0}</h2>
             <span className="text-[#10B981] text-xs font-medium flex items-center gap-1">
               <ArrowUp className="w-3 h-3" />
               +12% vs last sem
@@ -230,9 +245,7 @@ const UserManagement = () => {
               </span>
             </div>
             <p className="text-gray-500 text-sm">Class Representatives</p>
-            <h2 className="font-bold text-2xl">
-              {stats.class_representatives}
-            </h2>
+            <h2 className="font-bold text-2xl">{stats.class_representatives || 0}</h2>
           </div>
 
           <div className="bg-white border-[#F1F5F9] flex-1 px-6 py-4 rounded-3xl shadow-sm">
@@ -249,10 +262,11 @@ const UserManagement = () => {
               </span>
             </div>
             <p className="text-gray-500 text-sm">Pending Approvals</p>
-            <h2 className="font-bold text-2xl">{stats.pending_approvals}</h2>
+            <h2 className="font-bold text-2xl">{stats.pending_approvals || 0}</h2>
           </div>
         </div>
 
+        {/* TABLE SECTION */}
         <div className="bg-white rounded-3xl shadow border border-[#E5E7EB]">
           <div className="p-4 flex flex-col md:flex-row justify-between items-center gap-4 border-b border-[#E5E7EB]">
             <div className="flex flex-col md:flex-row items-center gap-3 w-full md:w-auto text-[#64748B]">
@@ -318,18 +332,12 @@ const UserManagement = () => {
                           {user.name.charAt(0)}
                         </div>
                         <div>
-                          <p className="font-medium text-gray-900">
-                            {user.name}
-                          </p>
+                          <p className="font-medium text-gray-900">{user.name}</p>
                           <p className="text-gray-500 text-xs">{user.email}</p>
                         </div>
                       </td>
-                      <td className="p-4 text-[#64748B] text-[14px]">
-                        {user.matric}
-                      </td>
-                      <td className="p-4 text-[#64748B] text-[14px]">
-                        {user.level}
-                      </td>
+                      <td className="p-4 text-[#64748B] text-[14px]">{user.matric}</td>
+                      <td className="p-4 text-[#64748B] text-[14px]">{user.level}</td>
                       <td className="p-4">
                         <span
                           className={`px-3 py-1 rounded-full text-[12px] font-semibold ${user.role === "Class Rep"
@@ -465,9 +473,7 @@ const UserManagement = () => {
                         {log.status}
                       </span>
                     </td>
-                    <td
-                      className={`py-4 pr-6 text-right font-medium cursor-pointer ${log.actionColor}`}
-                    >
+                    <td className="py-4 pr-6 text-right font-medium cursor-pointer ${log.actionColor}">
                       {log.action}
                     </td>
                   </tr>
