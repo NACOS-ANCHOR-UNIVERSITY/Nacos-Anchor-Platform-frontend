@@ -39,11 +39,11 @@ function App() {
   const [showSplash, setShowSplash] = useState(true);
 
   useEffect(() => {
-    // If the store is hydrated, start the 2.5s timer to hide the splash
+    // If the store is hydrated, start the 2s timer to hide the splash
     if (hasHydrated) {
       const timer = setTimeout(() => {
         setShowSplash(false);
-      }, 2500);
+      }, 2000);
       return () => clearTimeout(timer);
     }
   }, [hasHydrated]);
