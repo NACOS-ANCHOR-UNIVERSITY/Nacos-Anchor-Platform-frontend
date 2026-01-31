@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link, useLocation, Outlet, useNavigate } from "react-router-dom";
 import { Menu, X, ChevronDown } from "lucide-react";
 import {
@@ -17,11 +17,14 @@ import {
 import { toast } from "sonner";
 import { authService } from "@/services/authService";
 import useUserStore from "@/store/useUserStore";
+import { getNotificationsData } from "@/services/notificationsService";
 
 const StudentDashboardLayout = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [showNotifications, setShowNotifications] = useState(false);
   const [showProfileMenu, setShowProfileMenu] = useState(false);
+  const [notifications, setNotifications] = useState([]);
+  const [loading, setLoading] = useState(false);
 
   const location = useLocation();
   const navigate = useNavigate();
@@ -29,7 +32,27 @@ const StudentDashboardLayout = () => {
   // Get user data from Zustand store
   const { user } = useUserStore();
 
-  // Helper to get initials (e.g., "Chukwuebuka Ezirim" -> "CE")
+  // Fetch Notifications
+  useEffect(() => {
+    const fetchNotifications = async () => {
+      try {
+        setLoading(true);
+        const data = await getNotificationsData();
+        setNotifications(data || []);
+      } catch (error) {
+        console.error("Failed to fetch notifications:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchNotifications();
+  }, []);
+
+  // Calculate unread count (assuming your API returns an 'is_read' boolean)
+  const unreadCount = notifications.filter((n) => !n.is_read).length;
+
+  // get initials (e.g., "Chukwuebuka Ezirim" -> "CE")
   const getInitials = () => {
     if (!user?.first_name) return "ST";
     return `${user.first_name[0]}${user.last_name ? user.last_name[0] : ""}`.toUpperCase();
@@ -173,27 +196,51 @@ const StudentDashboardLayout = () => {
                 }`}
               >
                 <NotificationIcon className="size-4.5" />
-                <span className="absolute top-2 right-2 size-2 bg-[#EF4444] rounded-full border-2 border-white"></span>
+                {unreadCount > 0 && (
+                  <span className="absolute top-2 right-2 size-2 bg-[#EF4444] rounded-full border-2 border-white"></span>
+                )}
               </button>
 
               {showNotifications && (
                 <div className="absolute right-0 mt-3 w-80 bg-white rounded-xl shadow-xl border border-gray-100 p-4 z-50">
-                  {/* ... Notification Content ... */}
                   <div className="flex justify-between items-center mb-3">
                     <h4 className="font-bold text-sm">Notifications</h4>
-                    <span className="text-xs text-[#138601] cursor-pointer">
+                    <button className="text-xs text-[#138601] hover:underline">
                       Mark all read
-                    </span>
+                    </button>
                   </div>
-                  <div className="space-y-3">
-                    <div className="p-3 bg-gray-50 rounded-lg text-sm text-gray-600">
-                      <p className="font-semibold text-gray-800">
-                        Meeting Reminder
+
+                  <div className="space-y-3 max-h-[300px] overflow-y-auto">
+                    {loading ? (
+                      <p className="text-xs text-center py-4 text-gray-400">
+                        Loading...
                       </p>
-                      <p className="text-xs mt-1">
-                        Departmental meeting starts in 15 mins.
+                    ) : notifications.length > 0 ? (
+                      notifications.map((notif) => (
+                        <div
+                          key={notif.id}
+                          className={`p-3 rounded-lg text-sm transition-colors ${
+                            notif.is_read
+                              ? "bg-white"
+                              : "bg-green-50/50 border-l-2 border-green-500"
+                          }`}
+                        >
+                          <p className="font-semibold text-gray-800">
+                            {notif.title}
+                          </p>
+                          <p className="text-xs mt-1 text-gray-600">
+                            {notif.message}
+                          </p>
+                          <span className="text-[10px] text-gray-400 mt-2 block">
+                            {new Date(notif.created_at).toLocaleDateString()}
+                          </span>
+                        </div>
+                      ))
+                    ) : (
+                      <p className="text-xs text-center py-4 text-gray-400">
+                        No new notifications
                       </p>
-                    </div>
+                    )}
                   </div>
                 </div>
               )}
