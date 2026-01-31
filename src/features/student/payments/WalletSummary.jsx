@@ -63,7 +63,7 @@ export default function WalletSummary({ overview }) {
           </h3>
         </div>
         {hasOutstanding ? (
-          <p className="text-xs text-red-500 font-medium"><span className="text-[#64748B]">Due by</span> Nov 30, 2023</p>
+          <p className="text-xs text-red-500 font-medium"><span className="text-[#64748B]">Due by</span> 5th Feb, 2026</p>
         ) : (
           <p className="text-xs text-green-600 font-medium">All dues cleared!</p>
         )}
