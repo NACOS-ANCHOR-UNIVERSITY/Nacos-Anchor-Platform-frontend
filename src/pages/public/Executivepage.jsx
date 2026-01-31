@@ -45,10 +45,10 @@ const mockExecutives = {
     },
     {
       name: "RAPHEAL FULFILLED",
-      position: "General Secretary, Department of Computing",
+      position: "General Secretary",
       image: Gen_Sec,
       icon: "/general_secretary_icon.svg",
-      bio: "Rapheal Fulfilled is a UI/UX Designer and the administrative lead for NACOS AUL, dedicated to precision, organizational efficiency, and clear communication. He ensures the department’s engine runs smoothly by managing the logistics and documentation that turn visionary ideas into reality.",
+      bio: "Rapheal Fulfilled is a UIX Designer and the administrative lead for NACOS AUL, dedicated to precision, organizational efficiency, and clear communication. He ensures the department’s engine runs smoothly by managing the logistics and documentation that turn visionary ideas into reality.",
       email: "general@nacos.edu",
       linkedin: "https://linkedin.com",
     },
