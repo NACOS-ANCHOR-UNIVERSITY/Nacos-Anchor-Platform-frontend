@@ -44,8 +44,8 @@ const UserManagement = () => {
 
     // 1. Get Token & User Info
     const token = localStorage.getItem("token") || localStorage.getItem("ACCESS_TOKEN");
-    const user = JSON.parse(localStorage.getItem("user") || "{}");
-
+    const user = JSON.parse(localStorage.getItem("nacos-auth-storage")).state.user
+    
     // 2. Client-Side Role Check
     if (user.role !== "admin") {
       toast.error("Access Denied: You need Admin privileges.");
@@ -341,8 +341,8 @@ const UserManagement = () => {
                       <td className="p-4">
                         <span
                           className={`px-3 py-1 rounded-full text-[12px] font-semibold ${user.role === "Class Rep"
-                              ? "bg-[#F3E8FF] text-[#6B21A8]"
-                              : "bg-[#F3F4F6] text-[#4B5563]"
+                            ? "bg-[#F3E8FF] text-[#6B21A8]"
+                            : "bg-[#F3F4F6] text-[#4B5563]"
                             }`}
                         >
                           {user.role}
@@ -351,10 +351,10 @@ const UserManagement = () => {
                       <td className="p-4">
                         <span
                           className={`px-3 py-1 rounded-full text-xs font-semibold ${user.status === "Active"
-                              ? "bg-green-100 text-green-700"
-                              : user.status === "Rejected"
-                                ? "bg-red-100 text-red-700"
-                                : "bg-amber-100 text-amber-700"
+                            ? "bg-green-100 text-green-700"
+                            : user.status === "Rejected"
+                              ? "bg-red-100 text-red-700"
+                              : "bg-amber-100 text-amber-700"
                             }`}
                         >
                           {user.status}
