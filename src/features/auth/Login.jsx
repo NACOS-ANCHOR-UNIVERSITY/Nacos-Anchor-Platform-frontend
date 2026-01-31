@@ -176,6 +176,14 @@ const Login = () => {
               {isLoading ? "Signing In..." : "Sign In"}
             </button>
           </form>
+          <div className="mt-6 text-center">
+            <Link
+              to="/signup"
+              className="inline-flex items-center justify-center w-full py-3 rounded-lg font-semibold border border-green-600 text-green-600 hover:bg-green-50 transition-colors"
+            >
+              Sign up
+            </Link>
+          </div>
         </div>
       </div>
     </div>
