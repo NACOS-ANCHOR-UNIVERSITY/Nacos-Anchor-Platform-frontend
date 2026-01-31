@@ -26,20 +26,32 @@ export default function CreatePaymentModal({ isOpen, onClose }) {
     e.preventDefault();
     setLoading(true);
 
+    const token = JSON.parse(localStorage.getItem("nacos-auth-storage"))?.state.token;
+
     try {
       const payload = {
         title: formData.title,
         description: formData.description,
-        amount: formData.amount,
+        amount: Number(formData.amount), // ensure number
         type: formData.type,
         button_text: formData.buttonText,
         status_badge: formData.statusBadge,
         levels: formData.levels
       };
 
-      await client.post("/admin/fees", payload, {
-        headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` }
+      const res = await fetch("http://nacos.nextgenerationones.org/api/admin/fees", { 
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`
+        },
+        body: JSON.stringify(payload)
       });
+
+      if (!res.ok) {
+        const errData = await res.json();
+        throw new Error(errData.message || "Failed to create payment.");
+      }
 
       toast.success("Payment created successfully! Students can now pay.");
 
@@ -55,9 +67,9 @@ export default function CreatePaymentModal({ isOpen, onClose }) {
 
       onClose();
       window.location.reload();
+
     } catch (error) {
-      const msg = error.response?.data?.message || "Failed to create payment.";
-      toast.error(msg);
+      toast.error(error.message);
     } finally {
       setLoading(false);
     }
