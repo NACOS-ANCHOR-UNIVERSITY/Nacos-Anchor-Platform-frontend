@@ -22,14 +22,15 @@ const Settings = () => {
   const [uploadingPhoto, setUploadingPhoto] = useState(false);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
-  console.log(userData)
+  console.log(userData);
 
   const menuItems = [
     { id: "profile", label: "Edit Profile", icon: UserIcon },
     { id: "security", label: "Account Security", icon: LockIcon },
-    { id: "notifications", label: "Notifications", icon: NotificationIcon },
-    { id: "appearance", label: "Appearance", icon: Eye },
-    { id: "billing", label: "Billing", icon: CreditCardIcon },
+    // coming soon...
+    // { id: "notifications", label: "Notifications", icon: NotificationIcon },
+    // { id: "appearance", label: "Appearance", icon: Eye },
+    // { id: "billing", label: "Billing", icon: CreditCardIcon },
   ];
 
   // Fetch user data on component mount
@@ -65,7 +66,7 @@ const Settings = () => {
       const data = await response.json();
 
       if (data.status === "success") {
-        console.log(data)
+        console.log(data);
         setUserData(data.data.user);
         setBioText(data.data.user.bio || "");
         setPhoneNumber(data.data.user.phone || "");
@@ -242,14 +243,16 @@ const Settings = () => {
                   type="button"
                   key={item.id}
                   onClick={() => setActiveTab(item.id)}
-                  className={`w-full flex items-center gap-3 px-3 py-2 h-10 rounded-lg text-sm font-semibold cursor-pointer transition-colors ${activeTab === item.id
-                    ? "bg-[#1386011A] text-[#138601]"
-                    : "text-[#0F1C0C] hover:bg-gray-50 hover:text-gray-900"
-                    }`}
+                  className={`w-full flex items-center gap-3 px-3 py-2 h-10 rounded-lg text-sm font-semibold cursor-pointer transition-colors ${
+                    activeTab === item.id
+                      ? "bg-[#1386011A] text-[#138601]"
+                      : "text-[#0F1C0C] hover:bg-gray-50 hover:text-gray-900"
+                  }`}
                 >
                   <item.icon
-                    className={`size-4.5 ${activeTab === item.id ? "text-[#13860]" : "text-[#6B7280]"
-                      }`}
+                    className={`size-4.5 ${
+                      activeTab === item.id ? "text-[#13860]" : "text-[#6B7280]"
+                    }`}
                   />
                   {item.label}
                 </button>
@@ -273,9 +276,10 @@ const Settings = () => {
                       }
                       alt="Profile"
                       className="size-32 rounded-full border-4 border-gray-50 bg-gray-200 object-cover"
-                      onError={(e)=>{
+                      onError={(e) => {
                         e.error = null;
-                        e.currentTarget.src = "https://api.dicebear.com/7.x/avataaars/svg?seed=Sue"
+                        e.currentTarget.src =
+                          "https://api.dicebear.com/7.x/avataaars/svg?seed=Sue";
                       }}
                     />
                     <button
@@ -494,10 +498,12 @@ const InputField = ({
       type={type}
       defaultValue={defaultValue}
       disabled={disabled}
-      className={`w-full px-4 py-2.5 border border-[#E5E7EB] rounded-lg focus:ring-2 focus:ring-[#138601] focus:border-transparent outline-none transition-all text-base text-[#0F1C0C] ${disabled ? "bg-gray-50 cursor-not-allowed" : ""
-        }`}
+      className={`w-full px-4 py-2.5 border border-[#E5E7EB] rounded-lg focus:ring-2 focus:ring-[#138601] focus:border-transparent outline-none transition-all text-base text-[#0F1C0C] ${
+        disabled ? "bg-gray-50 cursor-not-allowed" : ""
+      }`}
     />
   </div>
 );
 
 export default Settings;
+
