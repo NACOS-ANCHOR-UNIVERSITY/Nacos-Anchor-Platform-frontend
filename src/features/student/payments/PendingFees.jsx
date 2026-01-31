@@ -111,12 +111,11 @@ export default function PendingFees({ fees = [] }) {
 
   const handlePaymentSuccess = async (referenceObj, feeItem) => {
     toast.info("Verifying payment...");
-    console.log("Paystack Object:", referenceObj);
 
-    // 1. Clean the amount (Remove commas, ensure it's a number)
-    // Example: "15,000" -> 15000
+    // 1. Clean Data
     const cleanAmount = parseFloat(String(feeItem.amount).replace(/,/g, ""));
 
+    // 2. Get User Info
     const token =
       localStorage.getItem("token") || localStorage.getItem("ACCESS_TOKEN");
     const user = JSON.parse(localStorage.getItem("user") || "{}");
@@ -126,24 +125,17 @@ export default function PendingFees({ fees = [] }) {
       return;
     }
 
-    // 2. Log what we are sending (Check your Console F12 if it fails again)
+    // 3. Strict Payload (Only what is necessary)
     const payload = {
-      reference: referenceObj.reference, // Primary reference
-      reference_id: referenceObj.reference, // Backup name
-      ref: referenceObj.reference, // Backup name 2
-
-      user_id: user.id, // Student ID
-      email: user.email, // 🆕 ADDED: Backend often requires email
-
-      fee_id: feeItem.id, // 🆕 ADDED: To identify WHICH fee is paid
+      reference: referenceObj.reference, // The KEY field
+      user_id: user.id,
+      email: user.email,
       description: feeItem.title,
-
-      amount: cleanAmount, // Send as Number (15000)
-
+      amount: cleanAmount, // Number (e.g. 15000)
       status: "success",
-      date_paid: new Date().toISOString().split("T")[0],
     };
-    console.log("Sending Payload:", payload);
+
+    console.log("🚀 Sending Verification Payload:", payload);
 
     try {
       const response = await fetch("/api/proxy/payments/verify", {
@@ -161,9 +153,13 @@ export default function PendingFees({ fees = [] }) {
         toast.success("Payment Verified Successfully!");
         setTimeout(() => window.location.reload(), 2000);
       } else {
-        console.error("Backend Error:", data);
-        // Show the specific error if available
+        console.error("❌ Backend Error:", data);
         toast.error(data.message || "Verification failed.");
+
+        // DEBUG: Ask the user to check this log
+        console.log(
+          "To fix this, check the 'Network' tab -> 'Request' to see exactly what was sent.",
+        );
       }
     } catch (error) {
       console.error("Network Error:", error);
