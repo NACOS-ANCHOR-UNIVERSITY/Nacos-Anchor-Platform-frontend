@@ -43,9 +43,9 @@ const UserManagement = () => {
     setLoading(true);
 
     // 1. Get Token & User Info
-    const token = localStorage.getItem("token") || localStorage.getItem("ACCESS_TOKEN");
+    const token = JSON.parse(localStorage.getItem("nacos-auth-storage")).state.token || localStorage.getItem("ACCESS_TOKEN");
     const user = JSON.parse(localStorage.getItem("nacos-auth-storage")).state.user
-    
+
     // 2. Client-Side Role Check
     if (user.role !== "admin") {
       toast.error("Access Denied: You need Admin privileges.");
@@ -64,7 +64,7 @@ const UserManagement = () => {
     };
 
     try {
-      const statsRes = await fetch("/api/proxy/admin/users/dashboard", { headers });
+      const statsRes = await fetch("https://nacos.nextgenerationones.org/api/proxy/admin/users/dashboard", { headers });
 
       // 3. Handle 401 (Expired) vs 403 (Wrong Role)
       if (statsRes.status === 401) {
@@ -83,7 +83,7 @@ const UserManagement = () => {
       if (statsData.status === "success") setStats(statsData.data);
 
       const usersRes = await fetch(
-        `/api/proxy/admin/users/list?page=${currentPage}&limit=${itemsPerPage}`,
+        `https://nacos.nextgenerationones.org/api/proxy/admin/users/list?page=${currentPage}&limit=${itemsPerPage}`,
         { headers }
       );
       const usersData = await usersRes.json();
@@ -104,7 +104,7 @@ const UserManagement = () => {
         setTotalPages(usersData.total_pages || 1);
       }
 
-      const logsRes = await fetch(`/api/proxy/admin/users/logs?limit=10`, {
+      const logsRes = await fetch(`https://nacos.nextgenerationones.org/api/proxy/admin/users/logs?limit=10`, {
         headers,
       });
       const logsData = await logsRes.json();
