@@ -31,27 +31,48 @@ const Login = () => {
     return Object.keys(newErrors).length === 0;
   };
 
- const handleSubmit = async (e) => {
-   e.preventDefault();
+const handleSubmit = async (e) => {
+  e.preventDefault();
+  if (!validateForm()) return;
 
-   if (!validateForm()) return;
+  // 1. Clear old data
+  localStorage.clear();
+  sessionStorage.clear();
 
-   setIsLoading(true);
+  setIsLoading(true);
+  try {
+    // 2. Get the FULL response (not just user)
+    const response = await authService.login(formData);
 
-   try {
-     const {user} = await authService.login(formData);
+    console.log("Login Response:", response); // Check console to see what we got
 
-     toast.success(`Welcome back, ${user.first_name}!`);
+    // 3. FORCE SAVE the token (Check all possible names)
+    const token =
+      response.token || response.access_token || response.data?.token;
+    const user = response.user || response.data?.user;
 
-     navigate(
-       user.role === "admin" ? "/admin/dashboard" : "/student/dashboard",
-     );
-   } catch (error) {
-     toast.error(error.response?.data?.message || "Login failed");
-   } finally {
-     setIsLoading(false);
-   }
- }; 
+    if (token) {
+      localStorage.setItem("token", token); // For Admin
+      localStorage.setItem("ACCESS_TOKEN", token); // For Student
+    } else {
+      console.error("No token found in login response!");
+    }
+
+    // 4. Save User Data
+    if (user) {
+      localStorage.setItem("user", JSON.stringify(user));
+      toast.success(`Welcome back, ${user.first_name}!`);
+      navigate(
+        user.role === "admin" ? "/admin/dashboard" : "/student/dashboard",
+      );
+    }
+  } catch (error) {
+    console.error("Login Error:", error);
+    toast.error(error.response?.data?.message || "Login failed");
+  } finally {
+    setIsLoading(false);
+  }
+};
   return (
     <div className="min-h-screen bg-[#F6F7F8] flex">
       {/* --- LEFT SIDE (Illustration) --- */}
