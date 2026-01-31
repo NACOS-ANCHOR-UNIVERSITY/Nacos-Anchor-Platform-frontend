@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { toast } from "sonner";
-import { Eye } from "lucide-react";
+import { Eye, EyeOff } from "lucide-react";
 import {
   CameraIcon,
   CreditCardIcon,
@@ -24,6 +24,16 @@ const Settings = () => {
   const [uploadingPhoto, setUploadingPhoto] = useState(false);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
+  const [passwords, setPasswords] = useState({
+    current_password: "",
+    new_password: "",
+    confirm_password: "",
+  });
+  const [showPasswords, setShowPasswords] = useState({
+    current: false,
+    new: false,
+    confirm: false,
+  });
 
   const menuItems = [
     { id: "profile", label: "Edit Profile", icon: UserIcon },
@@ -36,7 +46,7 @@ const Settings = () => {
 
   // 2. FIX: Check for BOTH token names so Students don't get kicked out
   const getAuthToken = () => {
-    return JSON.parse(localStorage.getItem("nacos-auth-storage")).state.token 
+    return JSON.parse(localStorage.getItem("nacos-auth-storage")).state.token
   };
 
   useEffect(() => {
@@ -112,6 +122,7 @@ const Settings = () => {
       const data = await response.json();
 
       if (data.status === "success") {
+        toast.success("Profile updated successfully")
         setSuccess("Profile updated successfully");
         await fetchUserData();
         setTimeout(() => setSuccess(""), 3000);
@@ -188,6 +199,11 @@ const Settings = () => {
       return;
     }
 
+    if (passwords.new_password.length < 8) {
+      toast.error("New password must be at least 8 characters long");
+      return;
+    }
+
     setLoading(true);
 
     try {
@@ -222,6 +238,13 @@ const Settings = () => {
     } finally {
       setLoading(false);
     }
+  };
+
+  const togglePasswordVisibility = (field) => {
+    setShowPasswords(prev => ({
+      ...prev,
+      [field]: !prev[field]
+    }));
   };
 
   return (
@@ -399,6 +422,107 @@ const Settings = () => {
                 </form>
               </div>
             </>
+          ) : activeTab === "security" ? (
+            <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 sm:p-8">
+              <div className="mb-8">
+                <h3 className="text-lg font-bold text-[#0F1C0C]">Change Password</h3>
+                <p className="text-sm text-[#6B7280] mt-1">
+                  Update your password to keep your account secure
+                </p>
+              </div>
+
+              <form className="space-y-6" onSubmit={handleChangePassword}>
+                <div className="flex flex-col gap-2">
+                  <label htmlFor="current_password" className="text-sm font-medium text-[#0F1C0C]">
+                    Current Password
+                  </label>
+                  <div className="relative">
+                    <LockIcon className="absolute left-4 top-4 size-4 text-[#9CA3AF]" />
+                    <input
+                      type={showPasswords.current ? "text" : "password"}
+                      id="current_password"
+                      value={passwords.current_password}
+                      onChange={(e) => setPasswords({ ...passwords, current_password: e.target.value })}
+                      className="w-full pl-10 pr-12 py-2.5 border border-[#E5E7EB] rounded-lg focus:ring-2 focus:ring-[#138601] outline-none"
+                      required
+                    />
+                    <button
+                      type="button"
+                      onClick={() => togglePasswordVisibility('current')}
+                      className="absolute right-4 top-4 text-[#9CA3AF] hover:text-[#6B7280]"
+                    >
+                      {showPasswords.current ? <EyeOff className="size-4" /> : <Eye className="size-4" />}
+                    </button>
+                  </div>
+                </div>
+
+                <div className="flex flex-col gap-2">
+                  <label htmlFor="new_password" className="text-sm font-medium text-[#0F1C0C]">
+                    New Password
+                  </label>
+                  <div className="relative">
+                    <LockIcon className="absolute left-4 top-4 size-4 text-[#9CA3AF]" />
+                    <input
+                      type={showPasswords.new ? "text" : "password"}
+                      id="new_password"
+                      value={passwords.new_password}
+                      onChange={(e) => setPasswords({ ...passwords, new_password: e.target.value })}
+                      className="w-full pl-10 pr-12 py-2.5 border border-[#E5E7EB] rounded-lg focus:ring-2 focus:ring-[#138601] outline-none"
+                      required
+                    />
+                    <button
+                      type="button"
+                      onClick={() => togglePasswordVisibility('new')}
+                      className="absolute right-4 top-4 text-[#9CA3AF] hover:text-[#6B7280]"
+                    >
+                      {showPasswords.new ? <EyeOff className="size-4" /> : <Eye className="size-4" />}
+                    </button>
+                  </div>
+                  <p className="text-xs text-[#6B7280]">Must be at least 8 characters long</p>
+                </div>
+
+                <div className="flex flex-col gap-2">
+                  <label htmlFor="confirm_password" className="text-sm font-medium text-[#0F1C0C]">
+                    Confirm New Password
+                  </label>
+                  <div className="relative">
+                    <LockIcon className="absolute left-4 top-4 size-4 text-[#9CA3AF]" />
+                    <input
+                      type={showPasswords.confirm ? "text" : "password"}
+                      id="confirm_password"
+                      value={passwords.confirm_password}
+                      onChange={(e) => setPasswords({ ...passwords, confirm_password: e.target.value })}
+                      className="w-full pl-10 pr-12 py-2.5 border border-[#E5E7EB] rounded-lg focus:ring-2 focus:ring-[#138601] outline-none"
+                      required
+                    />
+                    <button
+                      type="button"
+                      onClick={() => togglePasswordVisibility('confirm')}
+                      className="absolute right-4 top-4 text-[#9CA3AF] hover:text-[#6B7280]"
+                    >
+                      {showPasswords.confirm ? <EyeOff className="size-4" /> : <Eye className="size-4" />}
+                    </button>
+                  </div>
+                </div>
+
+                <div className="flex items-center justify-end gap-4 pt-6 border-t border-[#F3F4F6]">
+                  <button
+                    type="button"
+                    onClick={() => setPasswords({ current_password: "", new_password: "", confirm_password: "" })}
+                    className="text-sm font-bold text-[#4B5563] hover:text-gray-900 bg-transparent hover:bg-gray-100 transition-colors rounded-lg py-2.5 px-6 cursor-pointer"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    type="submit"
+                    disabled={loading}
+                    className="px-6 py-2.5 bg-[#138601] hover:bg-[#138601]/80 text-white text-sm font-bold rounded-lg transition-colors drop-shadow-sm cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+                  >
+                    {loading ? "Updating..." : "Update Password"}
+                  </button>
+                </div>
+              </form>
+            </div>
           ) : (
             <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-12 flex items-center justify-center">
               <p className="text-gray-500">{menuItems.find((i) => i.id === activeTab)?.label} Content</p>
@@ -424,4 +548,3 @@ const InputField = ({ label, defaultValue, type = "text", id = "", disabled = fa
 );
 
 export default Settings;
-
