@@ -31,28 +31,27 @@ const Login = () => {
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    if (!validateForm()) return;
+ const handleSubmit = async (e) => {
+   e.preventDefault();
 
-    // 🛑 NUCLEAR FIX: Instantly wipe ALL old data before logging in.
-    // This prevents "Student Tokens" from blocking "Admin Access" later.
-    localStorage.clear();
-    sessionStorage.clear(); // Just to be safe
+   if (!validateForm()) return;
 
-    setIsLoading(true);
-    try {
-      const { user } = await authService.login(formData);
-      toast.success(`Welcome back, ${user.first_name}!`);
-      navigate(
-        user.role === "admin" ? "/admin/dashboard" : "/student/dashboard",
-      );
-    } catch (error) {
-      toast.error(error.response?.data?.message || "Login failed");
-    } finally {
-      setIsLoading(false);
-    }
-  };
+   setIsLoading(true);
+
+   try {
+     const {user} = await authService.login(formData);
+
+     toast.success(`Welcome back, ${user.first_name}!`);
+
+     navigate(
+       user.role === "admin" ? "/admin/dashboard" : "/student/dashboard",
+     );
+   } catch (error) {
+     toast.error(error.response?.data?.message || "Login failed");
+   } finally {
+     setIsLoading(false);
+   }
+ }; 
   return (
     <div className="min-h-screen bg-[#F6F7F8] flex">
       {/* --- LEFT SIDE (Illustration) --- */}
