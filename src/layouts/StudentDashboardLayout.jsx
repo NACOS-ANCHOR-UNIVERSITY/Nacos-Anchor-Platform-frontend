@@ -64,12 +64,12 @@ const StudentDashboardLayout = () => {
 
   const handleNotificationClick = async (notif) => {
     if (!notif.is_read) {
-      // 1. Update UI immediately (Optimistic UI)
+      // Update UI immediately (optimistic UI)
       markAsRead(notif.id);
-      // 2. Update Backend
+      // make reqyest to mark as read
       await markNotificationAsRead(notif.id);
     }
-    // 3. Navigate if the notification has a link
+    // Navigate if the notification has a link
     if (notif.link) navigate(notif.link);
   };
 
