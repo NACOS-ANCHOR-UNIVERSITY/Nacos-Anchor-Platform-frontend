@@ -118,9 +118,13 @@ export default function Signup() {
             }
 
             toast.dismiss(toastId);
-            toast.success("Registration Successful!");
+            toast.success("Registration Successful! Please check your email for further instructions.");
             sessionStorage.removeItem("signup_storage");
-            navigate("/login");
+            
+            // Delay navigation to give users time to read the message
+            setTimeout(() => {
+                navigate("/login");
+            }, 2000);
 
         } catch (error) {
             console.error("Fetch Error:", error);
