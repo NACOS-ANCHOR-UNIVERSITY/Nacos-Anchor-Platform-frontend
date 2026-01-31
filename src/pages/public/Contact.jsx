@@ -1,4 +1,4 @@
-// import {
+{/*// import {
 //   FaPhoneAlt,
 //   FaEnvelope,
 //   FaMapMarkerAlt,
@@ -149,9 +149,10 @@
 //     </section>
 //   );
 // }
-// Israel commented prev for understandability
+// Israel commented prev for understandability*/}
 import { useState } from "react";
 import { FaPhoneAlt, FaEnvelope, FaMapMarkerAlt, FaTwitter, FaInstagram, FaDiscord } from "react-icons/fa";
+import { Phone, Twitter, Instagram, MessageCircle } from "lucide-react";
 
 //This is just component for the inquiry side, no biggie
 function InquiryOptions({ value, onChange }) {
@@ -229,7 +230,7 @@ export default function Contact() {
 
           <div className="mt-8 space-y-5 text-sm">
             <div className="flex items-start gap-3">
-              <FaPhoneAlt className="mt-1 shrink-0" />
+              <Phone className="mt-1 shrink-0 w-4 h-4" />
               <span>+234 123 4567 890</span>
             </div>
 
@@ -246,13 +247,13 @@ export default function Contact() {
 
           <div className="flex gap-3 mt-10">
             <span className="bg-black p-2 rounded-full cursor-pointer">
-              <FaTwitter />
+              <Twitter className="w-4 h-4" />
             </span>
             <span className="bg-white text-black p-2 rounded-full cursor-pointer">
-              <FaInstagram />
+              <Instagram className="w-4 h-4" />
             </span>
             <span className="bg-black p-2 rounded-full cursor-pointer">
-              <FaDiscord />
+              <MessageCircle className="w-4 h-4" />
             </span>
           </div>
 

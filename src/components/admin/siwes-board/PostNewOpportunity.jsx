@@ -2,7 +2,7 @@ import { useState } from "react";
 import { toast } from "sonner";
 import { ChevronDown, PlusCircle, SendHorizonalIcon } from "lucide-react";
 import { MapPinIcon } from "../../../assets/icons";
-import { postSiwesOpportunity } from "@/features/admin/siwes/api";
+import { useCreateOpportunity } from "@/hooks/useAdmin";
 
 const initialState = {
   company_name: "",
@@ -13,8 +13,10 @@ const initialState = {
 };
 
 const PostNewOpportunity = ({ onSuccess }) => {
+  const { mutate: createOpportunity, isPending: loading } =
+    useCreateOpportunity();
   const [form, setForm] = useState(initialState);
-  const [loading, setLoading] = useState(false);
+  // const [loading, setLoading] = useState(false); // Handled by hook
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
   const [fieldErrors, setFieldErrors] = useState({});
@@ -55,21 +57,22 @@ const PostNewOpportunity = ({ onSuccess }) => {
     const errors = validate();
     setFieldErrors(errors);
     if (Object.keys(errors).length > 0) return;
-    setLoading(true);
-    try {
-      await postSiwesOpportunity(form);
-      setSuccess("Opportunity posted successfully!");
-      toast.success("Opportunity posted successfully!");
-      setForm(initialState);
-      setFieldErrors({});
-      if (typeof onSuccess === "function") onSuccess();
-    } catch (err) {
-      const msg = err?.response?.data?.message || "Failed to post opportunity.";
-      setError(msg);
-      toast.error(msg);
-    } finally {
-      setLoading(false);
-    }
+    // setLoading(true); // Handled by hook
+    createOpportunity(form, {
+      onSuccess: () => {
+        setSuccess("Opportunity posted successfully!");
+        toast.success("Opportunity posted successfully!");
+        setForm(initialState);
+        setFieldErrors({});
+        if (typeof onSuccess === "function") onSuccess();
+      },
+      onError: (err) => {
+        const msg =
+          err?.response?.data?.message || "Failed to post opportunity.";
+        setError(msg);
+        toast.error(msg);
+      },
+    });
   };
 
   const isInvalid = Object.keys(validate()).length > 0;
@@ -234,4 +237,3 @@ const PostNewOpportunity = ({ onSuccess }) => {
 };
 
 export default PostNewOpportunity;
-

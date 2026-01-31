@@ -1,17 +1,19 @@
 import axios from "axios";
-// 👇 Import your store here so Axios can talk to it
-import useUserStore from "../store/useUserStore";
+import useUserStore from "@/store/useUserStore";
+import { toast } from "sonner";
 
+// Use proxy in development (vite.config.js), real URL in production
 const client = axios.create({
-  baseURL:
-    import.meta.env.VITE_API_BASE_URL ||
-    "https://nacos.nextgenerationones.org/api",
+  // Use proxy in development (vite.config.js), real URL in production
+  baseURL: import.meta.env.DEV
+    ? "/api"
+    : import.meta.env.VITE_API_BASE_URL ||
+      "https://nacos.nextgenerationones.org/api",
 });
 
 client.interceptors.request.use((config) => {
-  const token = localStorage.getItem("ACCESS_TOKEN");
-
-  //const token = useUserStore.getState().token;
+  // Pull token from the store's current state
+  const token = useUserStore.getState().token;
 
   if (token) {
     config.headers.Authorization = `Bearer ${token}`;
@@ -22,12 +24,11 @@ client.interceptors.request.use((config) => {
 client.interceptors.response.use(
   (response) => response,
   (error) => {
-    const { response } = error;
-    if (response && response.status === 401) {
-
+    if (error.response?.status === 401) {
       useUserStore.getState().logout();
+      toast.error("Session expired. Please login again.");
     }
-    throw error;
+    return Promise.reject(error);
   },
 );
 

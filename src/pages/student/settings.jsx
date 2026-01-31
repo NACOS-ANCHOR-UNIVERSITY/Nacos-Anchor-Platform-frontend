@@ -11,7 +11,8 @@ import {
   UserIcon,
 } from "../../assets/icons";
 
-const BASE_URL = "https://nacos.nextgenerationones.org/api";
+// 1. FIX: Use Proxy URL (Fixes Network/CORS Errors)
+const BASE_URL = "/api/proxy";
 
 const Settings = () => {
   const [activeTab, setActiveTab] = useState("profile");
@@ -22,7 +23,6 @@ const Settings = () => {
   const [uploadingPhoto, setUploadingPhoto] = useState(false);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
-  console.log(userData)
 
   const menuItems = [
     { id: "profile", label: "Edit Profile", icon: UserIcon },
@@ -32,25 +32,24 @@ const Settings = () => {
     { id: "billing", label: "Billing", icon: CreditCardIcon },
   ];
 
-  // Fetch user data on component mount
+  // 2. FIX: Check for BOTH token names so Students don't get kicked out
+  const getAuthToken = () => {
+    return localStorage.getItem("token") || localStorage.getItem("ACCESS_TOKEN");
+  };
+
   useEffect(() => {
     fetchUserData();
   }, []);
-
-  const getAuthToken = () => {
-    return localStorage.getItem("token");
-  };
 
   const fetchUserData = async () => {
     try {
       const token = getAuthToken();
 
-      // Check if token exists
       if (!token) {
+        // If NO token is found at all, then redirect
         setError("You are not logged in. Please login to continue.");
-        // Redirect to login page after 2 seconds
         setTimeout(() => {
-          window.location.href = "/login"; // Update this path to your actual login route
+          window.location.href = "/login";
         }, 2000);
         return;
       }
@@ -62,26 +61,29 @@ const Settings = () => {
         },
       });
 
+      // Handle 401 specifically (Expired Session)
+      if (response.status === 401) {
+        setError("Your session has expired. Please login again.");
+        localStorage.clear();
+        setTimeout(() => {
+          window.location.href = "/login";
+        }, 2000);
+        return;
+      }
+
       const data = await response.json();
 
       if (data.status === "success") {
-        console.log(data)
         setUserData(data.data.user);
         setBioText(data.data.user.bio || "");
         setPhoneNumber(data.data.user.phone || "");
-      } else if (response.status === 401) {
-        // Token is invalid or expired
-        setError("Your session has expired. Please login again.");
-        localStorage.removeItem("token");
-        setTimeout(() => {
-          window.location.href = "/login"; // Update this path to your actual login route
-        }, 2000);
       } else {
         setError(data.message || "Failed to load user data");
       }
     } catch (err) {
       console.error("Error fetching user data:", err);
-      setError("Failed to load user data");
+      // Don't redirect on network error, just show message
+      setError("Network error. Please check your connection.");
     }
   };
 
@@ -93,11 +95,7 @@ const Settings = () => {
 
     try {
       const token = getAuthToken();
-
-      if (!token) {
-        setError("You are not logged in. Please login to continue.");
-        return;
-      }
+      if (!token) return;
 
       const response = await fetch(`${BASE_URL}/settings/profile`, {
         method: "PUT",
@@ -115,16 +113,8 @@ const Settings = () => {
 
       if (data.status === "success") {
         setSuccess("Profile updated successfully");
-        // Refresh user data
         await fetchUserData();
-        // Clear success message after 3 seconds
         setTimeout(() => setSuccess(""), 3000);
-      } else if (response.status === 401) {
-        setError("Your session has expired. Please login again.");
-        localStorage.removeItem("token");
-        setTimeout(() => {
-          window.location.href = "/login";
-        }, 2000);
       } else {
         setError(data.message || "Failed to update profile");
       }
@@ -140,7 +130,6 @@ const Settings = () => {
     const file = e.target.files[0];
     if (!file) return;
 
-    // Validate file type
     const allowedTypes = ["image/jpg", "image/jpeg", "image/png", "image/webp"];
     if (!allowedTypes.includes(file.type)) {
       setError("Only JPG, JPEG, PNG, and WEBP files are allowed");
@@ -153,12 +142,7 @@ const Settings = () => {
 
     try {
       const token = getAuthToken();
-
-      if (!token) {
-        setError("You are not logged in. Please login to continue.");
-        setUploadingPhoto(false);
-        return;
-      }
+      if (!token) return;
 
       const formData = new FormData();
       formData.append("profile_picture", file);
@@ -175,16 +159,8 @@ const Settings = () => {
 
       if (data.status === "success") {
         setSuccess("Profile picture updated successfully");
-        // Refresh user data to get new avatar URL
         await fetchUserData();
-        // Clear success message after 3 seconds
         setTimeout(() => setSuccess(""), 3000);
-      } else if (response.status === 401) {
-        setError("Your session has expired. Please login again.");
-        localStorage.removeItem("token");
-        setTimeout(() => {
-          window.location.href = "/login";
-        }, 2000);
       } else {
         setError(data.message || "Failed to upload photo");
       }
@@ -197,7 +173,6 @@ const Settings = () => {
   };
 
   const handleCancel = () => {
-    // Reset form to original user data
     if (userData) {
       setBioText(userData.bio || "");
       setPhoneNumber(userData.phone || "");
@@ -215,12 +190,10 @@ const Settings = () => {
       <div className="mb-8">
         <h1 className="text-4xl font-bold text-[#0F1C0C]">Account Settings</h1>
         <p className="text-[#52A046] text-base mt-1">
-          Manage your personal details, academic preferences, and secure your
-          account access.
+          Manage your personal details, academic preferences, and secure your account access.
         </p>
       </div>
 
-      {/* Error and Success Messages */}
       {error && (
         <div className="mb-4 p-4 bg-red-50 border border-red-200 rounded-lg">
           <p className="text-red-600 text-sm">{error}</p>
@@ -233,7 +206,6 @@ const Settings = () => {
       )}
 
       <div className="flex flex-col lg:flex-row gap-8">
-        {/* Tabs */}
         <div className="w-full lg:w-1/4">
           <div className="bg-white rounded-xl drop-shadow-sm border border-[#E8F4E6] p-4">
             <nav className="flex flex-col gap-1">
@@ -243,14 +215,11 @@ const Settings = () => {
                   key={item.id}
                   onClick={() => setActiveTab(item.id)}
                   className={`w-full flex items-center gap-3 px-3 py-2 h-10 rounded-lg text-sm font-semibold cursor-pointer transition-colors ${activeTab === item.id
-                    ? "bg-[#1386011A] text-[#138601]"
-                    : "text-[#0F1C0C] hover:bg-gray-50 hover:text-gray-900"
+                      ? "bg-[#1386011A] text-[#138601]"
+                      : "text-[#0F1C0C] hover:bg-gray-50 hover:text-gray-900"
                     }`}
                 >
-                  <item.icon
-                    className={`size-4.5 ${activeTab === item.id ? "text-[#13860]" : "text-[#6B7280]"
-                      }`}
-                  />
+                  <item.icon className={`size-4.5 ${activeTab === item.id ? "text-[#13860]" : "text-[#6B7280]"}`} />
                   {item.label}
                 </button>
               ))}
@@ -261,22 +230,18 @@ const Settings = () => {
         <div className="w-full lg:w-3/4 space-y-6">
           {activeTab === "profile" ? (
             <>
-              {/* Profile Header */}
               <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 flex flex-col sm:flex-row sm:items-center justify-between gap-6">
                 <div className="flex flex-col sm:flex-row items-center gap-6">
                   <div className="relative">
                     <img
                       src={
                         userData?.avatar_url
-                          ? `${BASE_URL}/${userData.avatar_url}`
+                          ? `${BASE_URL.replace('/api/proxy', 'https://nacos.nextgenerationones.org')}/${userData.avatar_url}`
                           : "https://api.dicebear.com/7.x/avataaars/svg?seed=Sue"
                       }
                       alt="Profile"
                       className="size-32 rounded-full border-4 border-gray-50 bg-gray-200 object-cover"
-                      onError={(e)=>{
-                        e.error = null;
-                        e.currentTarget.src = "https://api.dicebear.com/7.x/avataaars/svg?seed=Sue"
-                      }}
+                      onError={(e) => { e.error = null; e.currentTarget.src = "https://api.dicebear.com/7.x/avataaars/svg?seed=Sue" }}
                     />
                     <button
                       type="button"
@@ -296,13 +261,10 @@ const Settings = () => {
                   </div>
                   <div className="flex flex-col gap-1 items-center sm:items-start">
                     <h2 className="text-xl md:text-2xl font-bold text-[#0F1C0C]">
-                      {userData
-                        ? `${userData.first_name} ${userData.last_name}`
-                        : "Loading..."}
+                      {userData ? `${userData.first_name} ${userData.last_name}` : "Loading..."}
                     </h2>
                     <p className="text-[#52A046] font-medium">
-                      {userData?.department || "Computer Science"} -{" "}
-                      {userData?.level || "400"} Level
+                      {userData?.department || "Computer Science"} - {userData?.level || "400"} Level
                     </p>
                     <p className="text-sm text-[#6B7280]">
                       Matric No: {userData?.matric_no || "--------------"}
@@ -321,44 +283,23 @@ const Settings = () => {
                 </button>
               </div>
 
-              {/* Personal Information Form */}
               <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 sm:p-8 pb-12">
                 <div className="flex justify-between items-center mb-8">
-                  <h3 className="text-lg font-bold text-[#0F1C0C]">
-                    Personal Information
-                  </h3>
-                  <button
-                    type="button"
-                    className="text-[#138601] text-sm font-medium hover:text-[#138601]/80 cursor-pointer"
-                  >
+                  <h3 className="text-lg font-bold text-[#0F1C0C]">Personal Information</h3>
+                  <button type="button" className="text-[#138601] text-sm font-medium hover:text-[#138601]/80 cursor-pointer">
                     Download Data
                   </button>
                 </div>
 
                 <form className="space-y-6" onSubmit={handleProfileUpdate}>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <InputField
-                      id="firstName"
-                      label="First Name"
-                      defaultValue={userData?.first_name || ""}
-                      disabled={true}
-                    />
-                    <InputField
-                      id="lastName"
-                      label="Last Name"
-                      defaultValue={userData?.last_name || ""}
-                      disabled={true}
-                    />
+                    <InputField id="firstName" label="First Name" defaultValue={userData?.first_name || ""} disabled={true} />
+                    <InputField id="lastName" label="Last Name" defaultValue={userData?.last_name || ""} disabled={true} />
                   </div>
 
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div className="flex flex-col gap-2">
-                      <label
-                        htmlFor="email"
-                        className="text-sm font-medium text-[#0F1C0C]"
-                      >
-                        Email Address
-                      </label>
+                      <label htmlFor="email" className="text-sm font-medium text-[#0F1C0C]">Email Address</label>
                       <div className="relative">
                         <MailIcon className="absolute left-4 top-4 size-4 text-[#9CA3AF]" />
                         <input
@@ -372,12 +313,7 @@ const Settings = () => {
                     </div>
 
                     <div className="flex flex-col gap-2">
-                      <label
-                        htmlFor="phone"
-                        className="text-sm font-medium text-[#0F1C0C]"
-                      >
-                        Phone Number
-                      </label>
+                      <label htmlFor="phone" className="text-sm font-medium text-[#0F1C0C]">Phone Number</label>
                       <div className="relative">
                         <PhoneIcon className="absolute left-4 top-4 size-4 text-[#9CA3AF]" />
                         <input
@@ -392,45 +328,16 @@ const Settings = () => {
                   </div>
 
                   <div className="bg-[#F8FCF8] border border-dashed border-[#D1D5DB] rounded-lg p-4">
-                    <p className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-4">
-                      Academic Details (Read-only)
-                    </p>
-
+                    <p className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-4">Academic Details (Read-only)</p>
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                      <div>
-                        <p className="text-xs text-[#6B7280] block mb-1">
-                          Matric Number
-                        </p>
-                        <p className="text-sm font-semibold text-[#0F1C0C]">
-                          {userData?.matric_no || "--------------"}
-                        </p>
-                      </div>
-                      <div>
-                        <p className="text-xs text-[#6B7280] block mb-1">
-                          Department
-                        </p>
-                        <p className="text-sm font-semibold text-[#0F1C0C]">
-                          {userData?.department || "--------------"}
-                        </p>
-                      </div>
-                      <div>
-                        <p className="text-xs text-[#6B7280] block mb-1">
-                          Current Level
-                        </p>
-                        <p className="text-sm font-semibold text-[#0F1C0C]">
-                          {userData?.level + " Level" || "---------------"}
-                        </p>
-                      </div>
+                      <div><p className="text-xs text-[#6B7280] block mb-1">Matric Number</p><p className="text-sm font-semibold text-[#0F1C0C]">{userData?.matric_no || "--------------"}</p></div>
+                      <div><p className="text-xs text-[#6B7280] block mb-1">Department</p><p className="text-sm font-semibold text-[#0F1C0C]">{userData?.department || "--------------"}</p></div>
+                      <div><p className="text-xs text-[#6B7280] block mb-1">Current Level</p><p className="text-sm font-semibold text-[#0F1C0C]">{userData?.level ? userData.level + " Level" : "---------------"}</p></div>
                     </div>
                   </div>
 
                   <div className="flex flex-col gap-2">
-                    <label
-                      htmlFor="bio"
-                      className="text-sm font-medium text-[#0F1C0C]"
-                    >
-                      Bio
-                    </label>
+                    <label htmlFor="bio" className="text-sm font-medium text-[#0F1C0C]">Bio</label>
                     <textarea
                       id="bio"
                       rows="4"
@@ -440,24 +347,12 @@ const Settings = () => {
                       value={bioText}
                       onChange={(e) => setBioText(e.target.value)}
                     ></textarea>
-                    <p className="text-right text-xs text-[#6B7280]">
-                      {bioText.length}/300 characters
-                    </p>
+                    <p className="text-right text-xs text-[#6B7280]">{bioText.length}/300 characters</p>
                   </div>
 
                   <div className="flex items-center justify-end gap-4 pt-6 border-t border-[#F3F4F6]">
-                    <button
-                      type="button"
-                      onClick={handleCancel}
-                      className="text-sm font-bold text-[#4B5563] hover:text-gray-900 bg-transparent hover:bg-gray-100 transition-colors rounded-lg py-2.5 px-6 cursor-pointer"
-                    >
-                      Cancel
-                    </button>
-                    <button
-                      type="submit"
-                      disabled={loading}
-                      className="px-6 py-2.5 bg-[#138601] hover:bg-[#138601]/80 text-white text-sm font-bold rounded-lg transition-colors drop-shadow-sm cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
-                    >
+                    <button type="button" onClick={handleCancel} className="text-sm font-bold text-[#4B5563] hover:text-gray-900 bg-transparent hover:bg-gray-100 transition-colors rounded-lg py-2.5 px-6 cursor-pointer">Cancel</button>
+                    <button type="submit" disabled={loading} className="px-6 py-2.5 bg-[#138601] hover:bg-[#138601]/80 text-white text-sm font-bold rounded-lg transition-colors drop-shadow-sm cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed">
                       {loading ? "Saving..." : "Save Changes"}
                     </button>
                   </div>
@@ -465,11 +360,8 @@ const Settings = () => {
               </div>
             </>
           ) : (
-            //   placeholder content for tabs
             <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-12 flex items-center justify-center">
-              <p className="text-gray-500">
-                {menuItems.find((i) => i.id === activeTab)?.label} Content
-              </p>
+              <p className="text-gray-500">{menuItems.find((i) => i.id === activeTab)?.label} Content</p>
             </div>
           )}
         </div>
@@ -478,24 +370,15 @@ const Settings = () => {
   );
 };
 
-const InputField = ({
-  label,
-  defaultValue,
-  type = "text",
-  id = "",
-  disabled = false,
-}) => (
+const InputField = ({ label, defaultValue, type = "text", id = "", disabled = false }) => (
   <div className="flex flex-col gap-2">
-    <label htmlFor={id} className="text-sm font-medium text-[#0F1C0C]">
-      {label}
-    </label>
+    <label htmlFor={id} className="text-sm font-medium text-[#0F1C0C]">{label}</label>
     <input
       id={id}
       type={type}
       defaultValue={defaultValue}
       disabled={disabled}
-      className={`w-full px-4 py-2.5 border border-[#E5E7EB] rounded-lg focus:ring-2 focus:ring-[#138601] focus:border-transparent outline-none transition-all text-base text-[#0F1C0C] ${disabled ? "bg-gray-50 cursor-not-allowed" : ""
-        }`}
+      className={`w-full px-4 py-2.5 border border-[#E5E7EB] rounded-lg focus:ring-2 focus:ring-[#138601] focus:border-transparent outline-none transition-all text-base text-[#0F1C0C] ${disabled ? "bg-gray-50 cursor-not-allowed" : ""}`}
     />
   </div>
 );

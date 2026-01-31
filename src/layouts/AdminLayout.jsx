@@ -3,7 +3,7 @@ import { Outlet, Link, useLocation } from "react-router-dom";
 import {
   LayoutDashboard,
   Users,
-  FileText,
+  FileCheck,
   CreditCard,
   Calendar,
   Briefcase,
@@ -13,27 +13,38 @@ import {
   ChevronDown,
   Menu,
   X,
+  Home,
+  Search,
 } from "lucide-react";
-import { Briefcase2Icon } from "../assets/icons";
 import profileImg from "../assets/images/profile.png";
-import Logo from "../assets/images/nacos-logo.svg";
+import { authService } from "@/services/authService";
+import { toast } from "sonner";
+import { Navigate } from "react-router-dom";
 
 const AdminLayout = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const location = useLocation();
 
+  const handleLogout = () => {
+    authService.logout();
+    // ^ This clears Zustand state, clears LocalStorage, and wipes the Axios token.
+
+    toast.success("Signed out successfully");
+    Navigate("/login");
+  };
+
   // Sidebar Navigation Data
   const mainLinks = [
     { name: "Dashboard", path: "/admin/dashboard", icon: LayoutDashboard },
     { name: "User Management", path: "/admin/users", icon: Users },
-    { name: "Content Moderation", path: "/admin/moderation", icon: FileText },
+    { name: "Content Moderation", path: "/moderation", icon: FileCheck },
     { name: "Payments", path: "/admin/payments", icon: CreditCard },
   ];
 
   const moduleLinks = [
     { name: "Events & Polls", path: "/admin/events", icon: Calendar },
     { name: "SIWES Board", path: "/admin/siwes", icon: Briefcase },
-    { name: "Voting System", path: "/admin/voting", icon: Vote },
+    { name: "Voting System", path: "/voting", icon: Vote },
   ];
 
   const renderLink = (item) => {
@@ -45,11 +56,10 @@ const AdminLayout = () => {
         key={item.name}
         to={item.path}
         onClick={() => setIsSidebarOpen(false)} // Close sidebar on mobile click
-        className={`flex items-center gap-3 px-4 py-3 text-sm font-medium rounded-xl transition-all mb-1 ${
-          isActive
+        className={`flex items-center gap-3 px-4 py-3 text-sm font-medium rounded-xl transition-all mb-1 ${isActive
             ? "bg-[#138601] text-white shadow-sm" // Active styles from your responsive layout
             : "text-[#475569] hover:bg-gray-50 hover:text-gray-900"
-        }`}
+          }`}
       >
         <item.icon
           className={`w-5 h-5 ${isActive ? "text-white" : "text-gray-500"}`}
@@ -79,13 +89,8 @@ const AdminLayout = () => {
         `}
       >
         {/* Sidebar Header */}
-        <div className="h-20 flex items-center px-6 border-b border-gray-100 justify-between">
+        <div className="h-20 flex items-center px-6 justify-between">
           <div className="flex items-center gap-3">
-            {/* <img src={Logo} alt="Logo" className="w-6 h-6" /> */}
-            <div className="w-12 h-12 rounded-full bg-[#E8F3E6] flex items-center justify-center">
-              <img src={Logo} alt="Nacos Logo" className="w-6 h-6" />
-            </div>
-
             <div>
               <h1 className="font-bold text-[#0F172A] leading-tight">NACOS</h1>
               <p className="text-xs text-[#64748B]">Admin Console</p>
@@ -104,7 +109,7 @@ const AdminLayout = () => {
         <nav className="flex-1 p-4 overflow-y-auto custom-scrollbar">
           <div className="space-y-1">{mainLinks.map(renderLink)}</div>
 
-          <div className="mt-6 mb-2 px-4 border-t border-gray-100 pt-4">
+          <div className="mt-6 mb-2 px-4 pt-4">
             <p className="text-xs font-bold text-gray-400 uppercase tracking-wider">
               Modules
             </p>
@@ -113,8 +118,12 @@ const AdminLayout = () => {
         </nav>
 
         {/* Sidebar Footer (Logout) */}
-        <div className="p-4 border-t border-gray-100">
-          <button className="flex items-center gap-3 text-red-600 w-full px-4 py-3 text-sm font-medium hover:bg-red-50 rounded-lg transition-colors">
+        <div className="p-4">
+          <button
+            type="button"
+            onClick={handleLogout}
+            className="flex items-center gap-3 text-red-600 w-full px-4 py-3 text-sm font-medium hover:bg-red-50 rounded-lg transition-colors cursor-pointer"
+          >
             <LogOut className="w-5 h-5" />
             Logout
           </button>
@@ -139,12 +148,12 @@ const AdminLayout = () => {
                 to="/student/dashboard"
                 className="hover:text-[#1E293B] transition-colors"
               >
-                <Briefcase2Icon className="size-4.5" />
+                <Home className="w-4 h-4" />
               </Link>
               <span className="mx-2">/</span>
               <span className="text-[#1E293B] font-medium capitalize text-sm sm:text-base">
                 {[...mainLinks, ...moduleLinks].find((link) =>
-                  location.pathname.startsWith(link.path)
+                  location.pathname.startsWith(link.path),
                 )?.name || "Dashboard"}
               </span>
             </div>
@@ -154,10 +163,11 @@ const AdminLayout = () => {
           <div className="flex items-center gap-4 md:gap-6">
             {/* Search Bar */}
             <div className="hidden md:block relative">
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
               <input
                 type="text"
-                placeholder="Search..."
-                className="pl-4 pr-4 py-2 bg-[#F1F5F9] rounded-full text-sm focus:ring-2 focus:ring-green-500 outline-none w-64 transition-all"
+                placeholder="Search events..."
+                className="pl-10 pr-4 py-2 bg-[#F1F5F9] rounded-full text-sm focus:ring-2 focus:ring-green-500 outline-none w-64 transition-all"
               />
             </div>
 
@@ -182,7 +192,6 @@ const AdminLayout = () => {
                 <p className="text-sm font-semibold text-[#1E293B] leading-none">
                   Admin User
                 </p>
-                <p className="text-xs text-gray-500 mt-1">Super Admin</p>
               </div>
               <ChevronDown className="w-4 h-4 text-gray-400" />
             </div>

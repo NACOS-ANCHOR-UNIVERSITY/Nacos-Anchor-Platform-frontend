@@ -12,21 +12,13 @@ import {
 import Navbar from "@/components/shared/Navbar";
 import Footer from "@/components/shared/Footer";
 import president from "@/assets/images/president_image.jpeg";
-// import vice_president from '@/assets/images/vice_president_image.png';
-// import software_director from '@/assets/images/software_director_image.png';
-// import general_secretary from '@/assets/images/general_secretary_image.png';
-// import financial_secretary from '@/assets/images/financial_secretary_image.jpeg';
-// import legislative_officer from '@/assets/images/legislative_officer_image.png';
-import sportsDirector from "@/assets/images/director_sports_image.jpeg";
-// import welfare_director from '@/assets/images/welfare_director_image.png';
-// import treasurer from '@/assets/images/treasurer_image.png';
-// import client from '@/config/axios-client'; // Uncomment when API is ready
+import software_director from "@/assets/images/software_director_image.png";
+import avatar from "@/assets/images/avatar.svg";
 
-// Mock data for development (remove when API is ready)
 const mockExecutives = {
   president: {
     name: "OMOSIGHO GODSWILL",
-    image: { president },
+    image: president,
     bio: "A visionary leader committed to growth, innovation and excellence. Focused on empowering members, strengthening collaboration and driving the department toward greater heights through strategic leadership and collective effort.",
     email: "president@nacos.edu",
     linkedin: "https://linkedin.com",
@@ -35,16 +27,16 @@ const mockExecutives = {
     {
       name: "JULIA FRANCES",
       position: "Vice President",
-      image: "/vice_president_image.png",
+      image: avatar,
       icon: "/vice_president_icon.svg",
-      bio: "Ensuring smooth operations and suppodting welfare initiatives across all levels.",
+      bio: "Ensuring smooth operations and supporting welfare initiatives across all levels.",
       email: "vp@nacos.edu",
       linkedin: "https://linkedin.com",
     },
     {
       name: "EZIRIM KINGDOM",
       position: "Software Director",
-      image: "src/assets/images/software_director_image.png",
+      image: software_director,
       icon: "/software_director_icon.svg",
       bio: "Ezirim Chukwuebuka Kingdom is a full-stack software developer and tech leader, currently serving as Software Director of NACOS, Anchor University Lagos. He is the Face of Rivers Tech Award recipient and a Top 4 finalist at the NCS Tertiary Institutions Competition. Kingdom is passionate about building industry-ready students through hands-on projects, mentorship, and real-world exposure.",
       email: "secretary@nacos.edu",
@@ -53,7 +45,7 @@ const mockExecutives = {
     {
       name: "RAPHEAL FULFILLED",
       position: "General Secretary",
-      image: "src/assets/images/general_secretary_image.png",
+      image: avatar,
       icon: "/general_secretary_icon.svg",
       bio: "Driven by efficiency and precision. Responsible for the administrative backbone of the department, ensuring that every decision is documented and every plan is executed with clarity and speed. Promoting a culture of transparency and organized leadership.",
       email: "general@nacos.edu",
@@ -62,7 +54,7 @@ const mockExecutives = {
     {
       name: "IYANDA JERRIE",
       position: "Financial Secretary",
-      image: "src/assets/images/financial_secretary_image.jpeg",
+      image: avatar,
       icon: "/financial_secretary_icon.svg",
       bio: "I'm just that guy that loves money, loves making money bend to my desires - particularly helping the department manage funds in a fun, yet impactful way. On a deeper level, I'm a UI/UX designer and an aspiring automated AI/Cloud Engineer.",
       email: "finance@nacos.edu",
@@ -71,7 +63,7 @@ const mockExecutives = {
     {
       name: "FAITHFUL",
       position: "Legislative Officer I",
-      image: "/legislative_officer_image.png",
+      image: avatar,
       icon: "/legislative_officer_icon.svg",
       bio: "Public Relations Officer handling media and external communications.",
       email: "legislative@nacos.edu",
@@ -80,15 +72,15 @@ const mockExecutives = {
     {
       name: "NORUWA CALEB",
       position: "Director of Sports",
-      image: { sportsDirector },
+      image: avatar,
       icon: "/director_sports_icon.svg",
-      bio: "A 400-level Information Technology student in the Computing Department at Anchor University, Lagos. I currently serve as the department\’s Social and Sports Director. My interests include football, chess, student engagement, recreational activities, and fostering positive interaction within the department.",
+      bio: "A 400-level Information Technology student in the Computing Department at Anchor University, Lagos. I currently serve as the department's Social and Sports Director. My interests include football, chess, student engagement, recreational activities, and fostering positive interaction within the department.",
       email: "sports@nacos.edu",
     },
     {
       name: "OKEOGHENE",
       position: "Welfare Director",
-      image: "/welfare_director_image.png",
+      image: avatar,
       icon: "/welfare_director_icon.svg",
       bio: "Ensuring the wellbeing and welfare of all NACOS members.",
       email: "welfare@nacos.edu",
@@ -97,7 +89,7 @@ const mockExecutives = {
     {
       name: "TREASURE",
       position: "Treasurer",
-      image: "/treasurer_image.png",
+      image: avatar,
       icon: "/treasurer_icon.svg",
       bio: "Coordinating sports activities and inter-departmental competitions.",
       email: "treasure@nacos.edu",
@@ -106,13 +98,7 @@ const mockExecutives = {
   ],
 };
 
-// Fetch executives data
 const fetchExecutives = async () => {
-  // TODO: Uncomment when API is ready
-  // const response = await client.get('/executives');
-  // return response.data;
-
-  // Using mock data for now
   return new Promise((resolve) => {
     setTimeout(() => resolve(mockExecutives), 500);
   });
@@ -157,9 +143,7 @@ const Executivepage = () => {
         </div>
       </section>
 
-      {/* Main Content */}
       <div className="max-w-6xl mx-auto px-4 py-12">
-        {/* Loading State */}
         {isLoading && (
           <div className="text-center py-12">
             <div className="inline-block w-12 h-12 border-4 border-[#128401] border-t-transparent rounded-full animate-spin"></div>
@@ -167,7 +151,6 @@ const Executivepage = () => {
           </div>
         )}
 
-        {/* Error State */}
         {error && (
           <div className="bg-red-50 border border-red-200 text-red-700 px-6 py-4 rounded-lg">
             <p className="font-semibold">Error loading executives</p>
@@ -175,7 +158,6 @@ const Executivepage = () => {
           </div>
         )}
 
-        {/* President Section */}
         {executives?.president && (
           <section className="mb-16 mr-5 pr-9">
             <div className="flex items-center gap-3 mb-8">
@@ -187,7 +169,6 @@ const Executivepage = () => {
 
             <div className="bg-white rounded-2xl shadow-sm border border-gray-200 p-8 max-w-5xl ">
               <div className="flex flex-col md:flex-row gap-8 items-start">
-                {/* President Image */}
                 <div className="relative flex-shrink-0">
                   <div className="w-64 h-64 rounded-3xl overflow-hidden bg-gradient-to-br from-gray-100 to-gray-200">
                     <img
@@ -198,7 +179,6 @@ const Executivepage = () => {
                   </div>
                 </div>
 
-                {/* President Info */}
                 <div className="flex-1">
                   <h3 className="text-3xl font-bold text-gray-900 ">
                     {executives.president.name}
@@ -245,7 +225,6 @@ const Executivepage = () => {
           </section>
         )}
 
-        {/* Executive Council Section */}
         {executives?.council && executives.council.length > 0 && (
           <section>
             <div className="flex items-center justify-between mb-8">
@@ -269,7 +248,6 @@ const Executivepage = () => {
                   key={index}
                   className="bg-white rounded-2xl shadow-sm border border-gray-200 p-6 hover:shadow-lg transition-all duration-300 hover:-translate-y-1"
                 >
-                  {/* Profile Image with Online Status */}
                   <div className="relative mb-4">
                     <div className="w-32 h-32 mx-auto rounded-full overflow-hidden bg-gradient-to-br from-gray-100 to-gray-200 border-4 border-white shadow-md">
                       <img
@@ -278,14 +256,12 @@ const Executivepage = () => {
                         className="w-full h-full object-cover"
                       />
                     </div>
-                    {/* Online Status Indicator */}
 
                     <div className="absolute bottom-2 right-1/2 transform translate-x-12 w-8 h-8 rounded-full border-4 flex items-center justify-center">
                       <img src={member.icon} />
                     </div>
                   </div>
 
-                  {/* Member Info */}
                   <h3 className="text-lg font-bold text-gray-900 text-center mb-1">
                     {member.name}
                   </h3>
@@ -302,7 +278,6 @@ const Executivepage = () => {
                     </p>
                   )}
 
-                  {/* Social Icons */}
                   <div className="flex gap-2 justify-center pt-4 border-t border-gray-100">
                     {member.email && (
                       <a
@@ -347,4 +322,3 @@ const Executivepage = () => {
 };
 
 export default Executivepage;
-

@@ -8,36 +8,52 @@ import PageHeader from "../../../components/ui/PageHeader";
 import Skeleton from "../../../components/ui/Skeleton";
 import { AlertCircle, RefreshCw } from "lucide-react";
 
-const BASE_URL = "https://nacos.nextgenerationones.org/api";
+// 1. FIX: Use the Proxy URL (Works on Vercel & Localhost)
+const BASE_URL = "/api/proxy/finance/dashboard";
 
 export default function StudentPaymentReceipt() {
   const [isOpen, setIsOpen] = useState(false);
   const [financeData, setFinanceData] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
-  const token = localStorage.getItem("token")
-  console.log(financeData)
+
+  // 2. FIX: Check for BOTH token names (Admin uses 'token', Student often uses 'ACCESS_TOKEN')
+  const token = localStorage.getItem("token") || localStorage.getItem("ACCESS_TOKEN");
 
   const fetchFinanceData = async () => {
     setIsLoading(true);
     setError(null);
-    
+
+    // Safety Check: If no token found, don't even try to fetch
+    if (!token) {
+      setError({ message: "No authentication token found. Please login again." });
+      setIsLoading(false);
+      return;
+    }
+
     try {
-      const response = await fetch(`${BASE_URL}/finance/dashboard`, {
+      // 3. FIX: Fetch directly from the Proxy URL defined above
+      const response = await fetch(BASE_URL, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
-          // Add authentication header if needed
           'Authorization': `Bearer ${token}`,
         },
       });
+
+      // Handle 401 specifically (Expired Session)
+      if (response.status === 401) {
+        localStorage.clear();
+        window.location.href = "/login";
+        return;
+      }
 
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
 
       const result = await response.json();
-      
+
       if (result.status === 'success') {
         setFinanceData(result.data);
       } else {
@@ -109,7 +125,7 @@ export default function StudentPaymentReceipt() {
               </p>
               <button
                 onClick={fetchFinanceData}
-                className="flex items-center gap-2 px-5 py-2.5 bg-[#138601] text-white rounded-lg font-medium hover:bg-[#0e6001] transition"
+                className="cursor-pointer flex items-center gap-2 px-5 py-2.5 bg-[#138601] text-white rounded-lg font-medium hover:bg-[#0e6001] transition"
               >
                 <RefreshCw className="w-4 h-4" />
                 Try Again
@@ -123,8 +139,6 @@ export default function StudentPaymentReceipt() {
 
   return (
     <main className="flex-1 relative">
-      {/* <Sidebar {...{ isOpen, setIsOpen, active: "Payments" }} /> */}
-      {/* <PageHeader {...{ isOpen, setIsOpen, location: "Payments" }} /> */}
       <div className="flex justify-center">
         <div className="container">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-8">

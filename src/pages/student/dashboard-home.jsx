@@ -1,12 +1,9 @@
-import React, { useState, useEffect } from "react"; // Added imports
-// import useUserStore from "../../store/useUserStore"; // 🛑 Commented out to prevent conflicts
+import React, { useState } from "react";
+import useUserStore from "@/store/useUserStore";
 
-import {
-  Plus,
-} from "lucide-react";
+import { Plus } from "lucide-react";
 import {
   ActiveIcon,
-  AlertIcon,
   BookIcon,
   Briefcase2Icon,
   CheckMarkIcon,
@@ -19,18 +16,19 @@ import {
   WalletIcon,
 } from "../../assets/icons";
 
+import UploadResourceModal from "../../features/library/components/UploadResourceModal";
+
 const DashboardHome = () => {
-  // 1. GET USER DIRECTLY FROM STORAGE (Matches your Login Logic)
-  const [user, setUser] = useState(() => {
-    const savedUser = localStorage.getItem("user");
-    return savedUser ? JSON.parse(savedUser) : {
-      first_name: "Student",
-      last_name: "",
-      department: "Computer Science",
-      level: "100",
-      matric_number: "AUL/SCI/24/000"
-    };
-  });
+  const [isUploadModalOpen, setIsUploadModalOpen] = useState(false);
+  const { user } = useUserStore();
+
+  const displayUser = user || {
+    first_name: "Student",
+    last_name: "",
+    department: "Computer Science",
+    level: "100",
+    matric_number: "AUL/SCI/24/000",
+  };
 
   return (
     <div className="flex flex-col gap-8 pb-10">
@@ -38,11 +36,11 @@ const DashboardHome = () => {
       <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
         <div>
           <h2 className="text-2xl md:text-3xl font-bold text-gray-900">
-            {/* 👇 FIXED: Uses first_name instead of name */}
-            Welcome back, {user?.first_name || "Student"} 👋
+            Welcome back, {displayUser.first_name} 👋
           </h2>
           <p className="text-[#64748B] mt-1 text-sm md:text-base">
-            {user?.department || "Computer Science"} • {user?.level || "100"} Level • 2024/2025 Session
+            {displayUser.department || "Computer Science"} •{" "}
+            {displayUser.level || "100"} Level • 2024/2025 Session
           </p>
         </div>
         <div className="flex gap-3">
@@ -88,21 +86,20 @@ const DashboardHome = () => {
 
             <div className="flex items-center gap-4 sm:gap-2.5 md:gap-4 z-10">
               <div className="size-24! rounded-2xl bg-[#5d8b83] drop-shadow-sm drop-shadow-[#0000001A] border-3 border-white/30 flex items-center justify-center text-white text-2xl font-bold uppercase">
-                {user?.first_name?.[0]}{user?.last_name?.[0]}
+                {displayUser.first_name?.[0]}
+                {displayUser.last_name?.[0]}
               </div>
 
               <div>
                 <h3 className="text-xl font-bold">
-                  {/* 👇 FIXED: Shows First + Last Name */}
-                  {user?.first_name} {user?.last_name}
+                  {displayUser.first_name} {displayUser.last_name}
                 </h3>
                 <p className="text-xs text-white/70 mt-1 uppercase">
-                  {/* 👇 FIXED: Shows Real Matric Number */}
-                  {user?.matric_number || "AUL/SCI/24/..."}
+                  {displayUser.matric_number || "AUL/SCI/24/..."}
                 </p>
                 <div className="flex gap-2 pt-2">
                   <span className="bg-white/20 text-white border border-white/10 text-[10px] font-bold px-2 py-1 h-5.25 flex items-center justify-center rounded-lg">
-                    {user?.level || "100"} LVL
+                    {displayUser.level || "100"} LVL
                   </span>
                   <span className="bg-[#22C55ECC] text-white border border-[#4ADE8033] text-[10px] font-bold px-2 py-1 h-5.25 flex items-center justify-center rounded-lg">
                     ACTIVE
@@ -115,7 +112,7 @@ const DashboardHome = () => {
               <div>
                 <p className="opacity-70 uppercase text-[9px]">Department</p>
                 <p className="font-medium text-white text-xs">
-                  {user?.department || "Computer Science"}
+                  {displayUser.department || "Computer Science"}
                 </p>
               </div>
               <div className="text-right">
@@ -257,7 +254,10 @@ const DashboardHome = () => {
               Submit assignments and project files.
             </p>
             <div className="mt-4">
-              <button className="w-full py-2 border border-dashed border-[#CBD5E1] rounded-lg text-sm font-medium text-[#64748B] hover:bg-gray-50 flex items-center justify-center gap-2 cursor-pointer">
+              <button
+                onClick={() => setIsUploadModalOpen(true)}
+                className="w-full py-2 border border-dashed border-[#CBD5E1] rounded-lg text-sm font-medium text-[#64748B] hover:bg-gray-50 flex items-center justify-center gap-2 cursor-pointer"
+              >
                 <Plus size={14} /> New Upload
               </button>
             </div>
@@ -273,7 +273,10 @@ const DashboardHome = () => {
               <NotificationIcon className="text-[#138601] size-5" /> Recent
               Notifications
             </h3>
-            <a href="#" className="text-sm font-medium text-[#138601] hover:underline">
+            <a
+              href="#"
+              className="text-sm font-medium text-[#138601] hover:underline"
+            >
               View All
             </a>
           </div>
@@ -339,8 +342,13 @@ const DashboardHome = () => {
           </button>
         </div>
       </div>
+      <UploadResourceModal
+        isOpen={isUploadModalOpen}
+        onClose={() => setIsUploadModalOpen(false)}
+      />
     </div>
   );
 };
 
 export default DashboardHome;
+

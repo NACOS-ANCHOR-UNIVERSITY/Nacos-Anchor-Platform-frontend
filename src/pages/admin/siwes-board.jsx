@@ -1,50 +1,34 @@
 import {
-  Briefcase3Icon,
-  CheckMark2Icon,
-  DownloadIcon,
-  EnvelopeIcon,
-  LogbookIcon,
-  PendingLogsIcon,
-  SettingsIcon,
-} from "../../assets/icons";
+  Briefcase,
+  CheckCircle,
+  Download,
+  Mail,
+  BookOpen,
+  Clock,
+  Settings,
+} from "lucide-react";
 import { Link } from "react-router-dom";
 
 import ManageListings from "@/components/admin/siwes-board/ManageListing";
 import PostNewOpportunity from "@/components/admin/siwes-board/PostNewOpportunity";
 import ModerationQueue from "@/components/admin/siwes-board/ModerationQueue";
-import { useEffect, useState } from "react";
-import { getSiwesBoardData } from "@/features/admin/siwes/api";
+import { useAdminSiwesBoard } from "@/hooks/useAdmin";
 import Skeleton from "@/components/ui/Skeleton";
 
 const SiwesBoardMgt = () => {
-  const [loading, setLoading] = useState(true);
-  const [metrics, setMetrics] = useState({
+  const { data: boardData, isLoading: loading, refetch } = useAdminSiwesBoard();
+
+  const metrics = boardData?.data?.metrics || {
     active_opportunities: 0,
     pending_logs: 0,
     placed_students: 0,
-  });
-  const [moderationQueue, setModerationQueue] = useState([]);
-  const [listings, setListings] = useState([]);
-
-  const fetchBoardData = () => {
-    setLoading(true);
-    getSiwesBoardData()
-      .then((res) => {
-        if (res?.status === "success" && res.data) {
-          setMetrics(res.data.metrics || {});
-          setModerationQueue(res.data.moderation_queue || []);
-          setListings(res.data.listings || []);
-        }
-      })
-      .finally(() => setLoading(false));
   };
+  const moderationQueue = boardData?.data?.moderation_queue || [];
+  const listings = boardData?.data?.listings || [];
 
-  useEffect(() => {
-    const fetchData = async () => {
-      await fetchBoardData();
-    };
-    fetchData();
-  }, []);
+  const handleSuccess = () => {
+    refetch();
+  };
 
   return (
     <div className="flex flex-col gap-6">
@@ -64,7 +48,7 @@ const SiwesBoardMgt = () => {
           type="button"
           className="flex items-center w-max gap-2 py-2 px-4 border border-[#E2E8F0] bg-white rounded-xl text-sm text-[#334155] font-medium transition-all active:scale-95 duration-150 cursor-pointer"
         >
-          <DownloadIcon />
+          <Download className="w-4 h-4" />
           Export Report
         </button>
       </div>
@@ -73,7 +57,7 @@ const SiwesBoardMgt = () => {
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         <div className="bg-white border border-[#F1F5F9] drop-shadow-sm hover:drop-shadow-none transition-all duration-100 flex items-center gap-4 p-6 rounded-3xl">
           <span className="size-12 rounded-2xl flex items-center justify-center bg-[#EFF6FF]">
-            <Briefcase3Icon className="text-[#2563EB]" />
+            <Briefcase className="w-5 h-5 text-[#2563EB]" />
           </span>
           <span>
             <p className="text-[#64748B] font-bold uppercase">
@@ -90,7 +74,7 @@ const SiwesBoardMgt = () => {
         </div>
         <div className="bg-white border border-[#F1F5F9] drop-shadow-sm hover:drop-shadow-none transition-all duration-100 flex items-center gap-4 p-6 rounded-3xl">
           <span className="size-12 rounded-2xl flex items-center justify-center bg-[#FFF7ED]">
-            <PendingLogsIcon className="text-[#EA580C]" />
+            <Clock className="w-5 h-5 text-[#EA580C]" />
           </span>
           <span>
             <p className="text-[#64748B] font-bold uppercase">Pending Logs</p>
@@ -105,7 +89,7 @@ const SiwesBoardMgt = () => {
         </div>
         <div className="bg-white border border-[#F1F5F9] drop-shadow-sm hover:drop-shadow-none transition-all duration-100 flex items-center gap-4 p-6 rounded-3xl">
           <span className="size-12 rounded-2xl flex items-center justify-center bg-[#1386011A]">
-            <CheckMark2Icon className="text-[#138601]" />
+            <CheckCircle className="w-5 h-5 text-[#138601]" />
           </span>
           <span>
             <p className="text-[#64748B] font-bold uppercase">
@@ -127,12 +111,12 @@ const SiwesBoardMgt = () => {
         {/* column 1 */}
         <div className="flex-1 w-full flex flex-col gap-6">
           {/* post new opportunity */}
-          <PostNewOpportunity onSuccess={fetchBoardData} />
+          <PostNewOpportunity onSuccess={handleSuccess} />
           {/* manage listing */}
           <ManageListings
             listings={listings}
             loading={loading}
-            onSuccess={fetchBoardData}
+            onSuccess={handleSuccess}
           />
         </div>
 
@@ -142,7 +126,7 @@ const SiwesBoardMgt = () => {
           <ModerationQueue
             queue={moderationQueue}
             loading={loading}
-            onSuccess={fetchBoardData}
+            onSuccess={handleSuccess}
           />
 
           {/* quick actions */}
@@ -153,7 +137,7 @@ const SiwesBoardMgt = () => {
 
             <div className="flex flex-col gap-4 text-[#475569] text-xs font-medium">
               <div className="flex items-center gap-2 py-2 px-3">
-                <LogbookIcon className="size-3.5 text-[#16A34A]" />
+                <BookOpen className="w-3.5 h-3.5 text-[#16A34A]" />
 
                 <Link
                   to="#"
@@ -163,7 +147,7 @@ const SiwesBoardMgt = () => {
                 </Link>
               </div>
               <div className="flex items-center gap-2 py-2 px-3">
-                <EnvelopeIcon className="size-3.5 text-[#2563EB]" />
+                <Mail className="w-3.5 h-3.5 text-[#2563EB]" />
 
                 <Link
                   to="#"
@@ -173,7 +157,7 @@ const SiwesBoardMgt = () => {
                 </Link>
               </div>
               <div className="flex items-center gap-2 py-2 px-3">
-                <SettingsIcon className="size-3.5 text-[#9333EA]" />
+                <Settings className="w-3.5 h-3.5 text-[#9333EA]" />
 
                 <Link
                   to="#"
@@ -191,4 +175,3 @@ const SiwesBoardMgt = () => {
 };
 
 export default SiwesBoardMgt;
-
