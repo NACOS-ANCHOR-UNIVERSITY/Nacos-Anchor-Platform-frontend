@@ -112,10 +112,9 @@ export default function PendingFees({ fees = [] }) {
   const handlePaymentSuccess = async (referenceObj, feeItem) => {
     toast.info("Verifying payment...");
 
-    // 1. Clean the Amount
+    // 1. Clean the Amount (Ensure it is a Number)
     const cleanAmount = parseFloat(String(feeItem.amount).replace(/,/g, ""));
 
-    // 2. Get User Info
     const token =
       localStorage.getItem("token") || localStorage.getItem("ACCESS_TOKEN");
     const user = JSON.parse(localStorage.getItem("user") || "{}");
@@ -125,27 +124,18 @@ export default function PendingFees({ fees = [] }) {
       return;
     }
 
-    // 3. 🛑 PREPARE THE ROBUST PAYLOAD
+    // 2. 🛑 The Exact Schema Payload
+    // (reference_id, user_id, description, amount, status, date_paid)
     const payload = {
-      // Send ALL reference variations (Backend might want 'reference_id')
-      reference: referenceObj.reference,
-      reference_id: referenceObj.reference,
-      ref: referenceObj.reference,
-
-      user_id: user.id,
-      email: user.email,
-
-      // 🛑 CRITICAL: Send the Fee ID so the backend knows what this is for
-      fee_id: feeItem.id,
-      payment_id: feeItem.id, // Send as payment_id too, just in case
-
-      description: feeItem.title,
-      amount: cleanAmount,
-      status: "success",
-      date_paid: new Date().toISOString().split("T")[0],
+      reference_id: referenceObj.reference, // Matches backend schema
+      user_id: user.id, // Matches backend schema
+      description: feeItem.title, // Matches backend schema
+      amount: cleanAmount, // Matches backend schema
+      status: "success", // Matches backend schema
+      date_paid: new Date().toISOString().split("T")[0], // Matches backend schema
     };
 
-    console.log("🚀 Sending FULL Payload:", payload);
+    console.log("🚀 Sending Exact Schema:", payload);
 
     try {
       const response = await fetch("/api/proxy/payments/verify", {
