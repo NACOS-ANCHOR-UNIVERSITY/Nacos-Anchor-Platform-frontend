@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { toast } from "sonner";
 import { Eye } from "lucide-react";
 import {
   CameraIcon,
@@ -20,8 +21,6 @@ const Settings = () => {
   const [phoneNumber, setPhoneNumber] = useState("");
   const [loading, setLoading] = useState(false);
   const [uploadingPhoto, setUploadingPhoto] = useState(false);
-  const [error, setError] = useState("");
-  const [success, setSuccess] = useState("");
   const [passwords, setPasswords] = useState({
     current_password: "",
     new_password: "",
@@ -38,7 +37,6 @@ const Settings = () => {
     // { id: "billing", label: "Billing", icon: CreditCardIcon },
   ];
 
-  // Fetch user data on component mount
   useEffect(() => {
     fetchUserData();
   }, []);
@@ -50,11 +48,8 @@ const Settings = () => {
   const fetchUserData = async () => {
     try {
       const token = getAuthToken();
-
-      // Check if token exists
       if (!token) {
-        setError("You are not logged in. Please login to continue.");
-        // Redirect to login page after 2 seconds
+        toast.error("You are not logged in. Please login to continue.");
         setTimeout(() => {
           window.location.href = "/login";
         }, 2000);
@@ -71,40 +66,28 @@ const Settings = () => {
       const data = await response.json();
 
       if (data.status === "success") {
-        console.log(data);
         setUserData(data.data.user);
         setBioText(data.data.user.bio || "");
         setPhoneNumber(data.data.user.phone || "");
       } else if (response.status === 401) {
-        // Token is invalid or expired
-        setError("Your session has expired. Please login again.");
+        toast.error("Your session has expired. Please login again.");
         localStorage.removeItem("token");
         setTimeout(() => {
-          window.location.href = "/login"; // Update this path to your actual login route
+          window.location.href = "/login";
         }, 2000);
-      } else {
-        setError(data.message || "Failed to load user data");
       }
     } catch (err) {
       console.error("Error fetching user data:", err);
-      setError("Failed to load user data");
+      toast.error("Failed to load user data");
     }
   };
 
   const handleProfileUpdate = async (e) => {
     e.preventDefault();
     setLoading(true);
-    setError("");
-    setSuccess("");
 
     try {
       const token = getAuthToken();
-
-      if (!token) {
-        setError("You are not logged in. Please login to continue.");
-        return;
-      }
-
       const response = await fetch(`${BASE_URL}/settings/profile`, {
         method: "PUT",
         headers: {
@@ -120,23 +103,14 @@ const Settings = () => {
       const data = await response.json();
 
       if (data.status === "success") {
-        setSuccess("Profile updated successfully");
-        // Refresh user data
+        toast.success("Profile updated successfully");
         await fetchUserData();
-        // Clear success message after 3 seconds
-        setTimeout(() => setSuccess(""), 3000);
-      } else if (response.status === 401) {
-        setError("Your session has expired. Please login again.");
-        localStorage.removeItem("token");
-        setTimeout(() => {
-          window.location.href = "/login";
-        }, 2000);
       } else {
-        setError(data.message || "Failed to update profile");
+        toast.error(data.message || "Failed to update profile");
       }
     } catch (err) {
       console.error("Error updating profile:", err);
-      setError("An error occurred while updating profile");
+      toast.error("An error occurred while updating profile");
     } finally {
       setLoading(false);
     }
@@ -146,26 +120,15 @@ const Settings = () => {
     const file = e.target.files[0];
     if (!file) return;
 
-    // Validate file type
     const allowedTypes = ["image/jpg", "image/jpeg", "image/png", "image/webp"];
     if (!allowedTypes.includes(file.type)) {
-      setError("Only JPG, JPEG, PNG, and WEBP files are allowed");
+      toast.error("Only JPG, JPEG, PNG, and WEBP files are allowed");
       return;
     }
 
     setUploadingPhoto(true);
-    setError("");
-    setSuccess("");
-
     try {
       const token = getAuthToken();
-
-      if (!token) {
-        setError("You are not logged in. Please login to continue.");
-        setUploadingPhoto(false);
-        return;
-      }
-
       const formData = new FormData();
       formData.append("profile_picture", file);
 
@@ -180,36 +143,24 @@ const Settings = () => {
       const data = await response.json();
 
       if (data.status === "success") {
-        setSuccess("Profile picture updated successfully");
-        // Refresh user data to get new avatar URL
+        toast.success("Profile picture updated successfully");
         await fetchUserData();
-        // Clear success message after 3 seconds
-        setTimeout(() => setSuccess(""), 3000);
-      } else if (response.status === 401) {
-        setError("Your session has expired. Please login again.");
-        localStorage.removeItem("token");
-        setTimeout(() => {
-          window.location.href = "/login";
-        }, 2000);
       } else {
-        setError(data.message || "Failed to upload photo");
+        toast.error(data.message || "Failed to upload photo");
       }
     } catch (err) {
       console.error("Error uploading photo:", err);
-      setError("An error occurred while uploading photo");
+      toast.error("An error occurred while uploading photo");
     } finally {
       setUploadingPhoto(false);
     }
   };
 
   const handleCancel = () => {
-    // Reset form to original user data
     if (userData) {
       setBioText(userData.bio || "");
       setPhoneNumber(userData.phone || "");
     }
-    setError("");
-    setSuccess("");
   };
 
   const triggerFileInput = () => {
@@ -220,13 +171,11 @@ const Settings = () => {
     e.preventDefault();
 
     if (passwords.new_password !== passwords.confirm_password) {
-      setError("New passwords do not match");
+      toast.error("New passwords do not match");
       return;
     }
 
     setLoading(true);
-    setError("");
-    setSuccess("");
 
     try {
       const token = getAuthToken();
@@ -245,18 +194,18 @@ const Settings = () => {
       const data = await response.json();
 
       if (data.status === "success") {
-        setSuccess("Password updated successfully");
+        toast.success("Password updated successfully");
         setPasswords({
           current_password: "",
           new_password: "",
           confirm_password: "",
         });
       } else {
-        setError(data.message || "Failed to update password");
+        toast.error(data.message || "Current password incorrect");
       }
     } catch (err) {
-      console.error("Error updating password:", err);
-      setError("An error occurred. Please try again.");
+      console.error("Error changing password:", err);
+      toast.error("An error occurred. Please try again.");
     } finally {
       setLoading(false);
     }
@@ -271,18 +220,6 @@ const Settings = () => {
           account access.
         </p>
       </div>
-
-      {/* Error and Success Messages */}
-      {error && (
-        <div className="mb-4 p-4 bg-red-50 border border-red-200 rounded-lg">
-          <p className="text-red-600 text-sm">{error}</p>
-        </div>
-      )}
-      {success && (
-        <div className="mb-4 p-4 bg-green-50 border border-green-200 rounded-lg">
-          <p className="text-green-600 text-sm">{success}</p>
-        </div>
-      )}
 
       <div className="flex flex-col lg:flex-row gap-8">
         {/* Tabs */}
@@ -420,7 +357,7 @@ const Settings = () => {
                           id="email"
                           defaultValue={userData?.email || ""}
                           disabled={true}
-                          className="w-full pl-10 pr-4 py-2.5 border border-[#E5E7EB] rounded-lg bg-gray-50 cursor-not-allowed outline-none"
+                          className="w-full pl-10 pr-4 py-2.5 border border-[#E5E7EB] rounded-lg focus:ring-2 focus:ring-[#138601] outline-none bg-gray-50 cursor-not-allowed"
                         />
                       </div>
                     </div>
@@ -445,6 +382,39 @@ const Settings = () => {
                     </div>
                   </div>
 
+                  {/* Academic Details block */}
+                  <div className="bg-[#F8FCF8] border border-dashed border-[#D1D5DB] rounded-lg p-4">
+                    <p className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-4">
+                      Academic Details (Read-only)
+                    </p>
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                      <div>
+                        <p className="text-xs text-[#6B7280] block mb-1">
+                          Matric Number
+                        </p>
+                        <p className="text-sm font-semibold text-[#0F1C0C]">
+                          {userData?.matric_no || "--------------"}
+                        </p>
+                      </div>
+                      <div>
+                        <p className="text-xs text-[#6B7280] block mb-1">
+                          Department
+                        </p>
+                        <p className="text-sm font-semibold text-[#0F1C0C]">
+                          {userData?.department || "--------------"}
+                        </p>
+                      </div>
+                      <div>
+                        <p className="text-xs text-[#6B7280] block mb-1">
+                          Current Level
+                        </p>
+                        <p className="text-sm font-semibold text-[#0F1C0C]">
+                          {userData?.level + " Level" || "---------------"}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+
                   <div className="flex flex-col gap-2">
                     <label
                       htmlFor="bio"
@@ -455,6 +425,7 @@ const Settings = () => {
                     <textarea
                       id="bio"
                       rows="4"
+                      placeholder="Write a short bio about yourself..."
                       className="w-full p-4 border border-[#E5E7EB] rounded-lg focus:ring-2 focus:ring-[#138601] outline-none resize-none h-32.5"
                       maxLength="300"
                       value={bioText}
@@ -469,14 +440,14 @@ const Settings = () => {
                     <button
                       type="button"
                       onClick={handleCancel}
-                      className="text-sm font-bold text-[#4B5563] hover:bg-gray-100 rounded-lg py-2.5 px-6"
+                      className="w-full sm:w-fit text-sm font-bold text-[#4B5563] hover:bg-gray-100 rounded-lg py-2.5 px-6"
                     >
                       Cancel
                     </button>
                     <button
                       type="submit"
                       disabled={loading}
-                      className="px-6 py-2.5 bg-[#138601] text-white text-sm font-bold rounded-lg disabled:opacity-50"
+                      className="w-full sm:w-fit px-6 py-2.5 bg-[#138601] hover:bg-[#138601]/80 text-white text-sm font-bold rounded-lg transition-colors disabled:opacity-50 cursor-pointer"
                     >
                       {loading ? "Saving..." : "Save Changes"}
                     </button>
@@ -502,11 +473,15 @@ const Settings = () => {
                 className="space-y-6 max-w-md"
               >
                 <div className="flex flex-col gap-2">
-                  <label className="text-sm font-medium text-[#0F1C0C]">
+                  <label
+                    htmlFor="current_password"
+                    className="text-sm font-medium text-[#0F1C0C]"
+                  >
                     Current Password
                   </label>
                   <input
                     type={showPasswords ? "text" : "password"}
+                    id="current_password"
                     required
                     value={passwords.current_password}
                     onChange={(e) =>
@@ -520,11 +495,15 @@ const Settings = () => {
                 </div>
 
                 <div className="flex flex-col gap-2">
-                  <label className="text-sm font-medium text-[#0F1C0C]">
+                  <label
+                    htmlFor="new_password"
+                    className="text-sm font-medium text-[#0F1C0C]"
+                  >
                     New Password
                   </label>
                   <input
                     type={showPasswords ? "text" : "password"}
+                    id="new_password"
                     required
                     value={passwords.new_password}
                     onChange={(e) =>
@@ -538,11 +517,15 @@ const Settings = () => {
                 </div>
 
                 <div className="flex flex-col gap-2">
-                  <label className="text-sm font-medium text-[#0F1C0C]">
+                  <label
+                    htmlFor="confirm_password"
+                    className="text-sm font-medium text-[#0F1C0C]"
+                  >
                     Confirm New Password
                   </label>
                   <input
                     type={showPasswords ? "text" : "password"}
+                    id="confirm_password"
                     required
                     value={passwords.confirm_password}
                     onChange={(e) =>
@@ -572,7 +555,7 @@ const Settings = () => {
                   <button
                     type="submit"
                     disabled={loading}
-                    className="w-full sm:w-fit px-8 py-2.5 bg-[#138601] hover:bg-[#138601]/80 text-white text-sm font-bold rounded-lg transition-colors disabled:opacity-50"
+                    className="w-full sm:w-fit px-8 py-2.5 bg-[#138601] hover:bg-[#138601]/80 text-white text-sm font-bold rounded-lg transition-colors disabled:opacity-50 cursor-pointer"
                   >
                     {loading ? "Updating..." : "Update Password"}
                   </button>
