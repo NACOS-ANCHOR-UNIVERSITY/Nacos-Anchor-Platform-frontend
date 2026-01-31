@@ -80,7 +80,8 @@ const getBadgeStyle = (status) => {
 export default function PendingFees({ fees = [] }) {
   const user = JSON.parse(localStorage.getItem("user") || "{}");
   const userEmail = user.email || "student@aul.edu.ng";
-  const token = localStorage.getItem("token");
+  const token = JSON.parse(localStorage.getItem("nacos-auth-storage")).state.token
+
 
   const formatAmount = (amount, currency = "₦") => {
     if (!amount) return `${currency}0`;
@@ -109,22 +110,12 @@ export default function PendingFees({ fees = [] }) {
     };
   };
 
-  const handlePaymentSuccess = async (referenceObj, feeItem) => {
+  const handlePaymentSuccess = async (referenceObj) => {
     toast.info("Verifying payment...");
     console.log("Paystack Object:", referenceObj);
 
-    // 1. Get Authentication
-    const token = localStorage.getItem("token") || localStorage.getItem("ACCESS_TOKEN");
-    const user = JSON.parse(localStorage.getItem("user") || "{}");
-
-    // Safety check
-    if (!user.id) {
-      toast.error("User ID missing. Please relogin.");
-      return;
-    }
-
     try {
-      const response = await fetch("/api/proxy/payments/verify", {
+      const response = await fetch("/api/payments/verify", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -132,15 +123,7 @@ export default function PendingFees({ fees = [] }) {
         },
 
         body: JSON.stringify({
-          reference: referenceObj.reference,    // Backend likely wants this
-          reference_id: referenceObj.reference, // Or this (as backup)
-          ref: referenceObj.reference,          // Or this (common abbreviation)
-
-          user_id: user.id,
-          description: feeItem.title,
-          amount: feeItem.amount,
-          status: "success",
-          date_paid: new Date().toISOString().split('T')[0]
+          reference: referenceObj.reference,    // Israel: If anyone touch this thing ehhh, EHHHH....
         }),
       });
 
