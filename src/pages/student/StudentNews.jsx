@@ -133,12 +133,18 @@ const StudentNews = () => {
               key={post.id}
               className="bg-white rounded-2xl border border-gray-100 shadow-sm hover:shadow-md transition-all duration-300 overflow-hidden flex flex-col group"
             >
-              {post.image_url && (
+              {(post.image_url || post.image_path) && (
                 <div className="h-48 w-full bg-gray-100 overflow-hidden">
                   <img
-                    src={post.image_url}
+                    src={
+                      post.image_url ||
+                      `${import.meta.env.VITE_API_URL || ""}${post.image_path}`
+                    }
                     alt={post.title}
                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                    onError={(e) => {
+                      e.target.style.display = "none";
+                    }}
                   />
                 </div>
               )}

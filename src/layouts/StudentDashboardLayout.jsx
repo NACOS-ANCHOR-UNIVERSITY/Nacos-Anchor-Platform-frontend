@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link, useLocation, Outlet, useNavigate } from "react-router-dom";
 import { Menu, X, ChevronDown } from "lucide-react";
 import {
@@ -17,19 +17,38 @@ import {
 import { toast } from "sonner";
 import { authService } from "@/services/authService";
 import useUserStore from "@/store/useUserStore";
+import useNotificationStore from "@/store/useNotificationStore";
+import { markNotificationAsRead } from "@/services/notificationsService";
 
 const StudentDashboardLayout = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [showNotifications, setShowNotifications] = useState(false);
   const [showProfileMenu, setShowProfileMenu] = useState(false);
 
-  const location = useLocation();
-  const navigate = useNavigate();
+  const {
+    notifications,
+    loading,
+    fetchNotifications,
+    getUnreadCount,
+    markAsRead,
+  } = useNotificationStore();
+  const unreadCount = getUnreadCount();
 
   // Get user data from Zustand store
   const { user } = useUserStore();
 
-  // Helper to get initials (e.g., "Chukwuebuka Ezirim" -> "CE")
+  const location = useLocation();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    fetchNotifications();
+
+    // Poll for new notifications every 5 minutes
+    const interval = setInterval(fetchNotifications, 5 * 60 * 1000);
+    return () => clearInterval(interval);
+  }, [fetchNotifications]);
+
+  // get initials (e.g., "Chukwuebuka Ezirim" -> "CE")
   const getInitials = () => {
     if (!user?.first_name) return "ST";
     return `${user.first_name[0]}${user.last_name ? user.last_name[0] : ""}`.toUpperCase();
@@ -41,6 +60,17 @@ const StudentDashboardLayout = () => {
     authService.logout();
     toast.success("Signed out successfully");
     navigate("/login");
+  };
+
+  const handleNotificationClick = async (notif) => {
+    if (!notif.is_read) {
+      // Update UI immediately (optimistic UI)
+      markAsRead(notif.id);
+      // make reqyest to mark as read
+      await markNotificationAsRead(notif.id);
+    }
+    // Navigate if the notification has a link
+    if (notif.link) navigate(notif.link);
   };
 
   const navItems = [
@@ -173,27 +203,55 @@ const StudentDashboardLayout = () => {
                 }`}
               >
                 <NotificationIcon className="size-4.5" />
-                <span className="absolute top-2 right-2 size-2 bg-[#EF4444] rounded-full border-2 border-white"></span>
+                {unreadCount > 0 && (
+                  <span className="absolute top-2 right-2 size-2 bg-[#EF4444] rounded-full border-2 border-white"></span>
+                )}
               </button>
 
               {showNotifications && (
                 <div className="absolute right-0 mt-3 w-80 bg-white rounded-xl shadow-xl border border-gray-100 p-4 z-50">
-                  {/* ... Notification Content ... */}
                   <div className="flex justify-between items-center mb-3">
                     <h4 className="font-bold text-sm">Notifications</h4>
-                    <span className="text-xs text-[#138601] cursor-pointer">
+                    <button
+                      type="button"
+                      onClick={handleNotificationClick}
+                      className="text-xs text-[#138601] hover:underline"
+                    >
                       Mark all read
-                    </span>
+                    </button>
                   </div>
-                  <div className="space-y-3">
-                    <div className="p-3 bg-gray-50 rounded-lg text-sm text-gray-600">
-                      <p className="font-semibold text-gray-800">
-                        Meeting Reminder
+
+                  <div className="space-y-3 max-h-75 overflow-y-auto">
+                    {loading ? (
+                      <p className="text-xs text-center py-4 text-gray-400">
+                        Loading...
                       </p>
-                      <p className="text-xs mt-1">
-                        Departmental meeting starts in 15 mins.
+                    ) : notifications.length > 0 ? (
+                      notifications.map((notif) => (
+                        <div
+                          key={notif.id}
+                          className={`p-3 rounded-lg text-sm transition-colors ${
+                            notif.is_read
+                              ? "bg-white"
+                              : "bg-green-50/50 border-l-2 border-green-500"
+                          }`}
+                        >
+                          <p className="font-semibold text-gray-800">
+                            {notif.title}
+                          </p>
+                          <p className="text-xs mt-1 text-gray-600">
+                            {notif.message}
+                          </p>
+                          <span className="text-[10px] text-gray-400 mt-2 block">
+                            {new Date(notif.created_at).toLocaleDateString()}
+                          </span>
+                        </div>
+                      ))
+                    ) : (
+                      <p className="text-xs text-center py-4 text-gray-400">
+                        No new notifications
                       </p>
-                    </div>
+                    )}
                   </div>
                 </div>
               )}
@@ -234,6 +292,7 @@ const StudentDashboardLayout = () => {
                   </div>
                   <Link
                     to="/student/profile"
+                    onClick={() => setShowProfileMenu(false)}
                     className="block px-4 py-2 text-sm text-gray-600 hover:bg-gray-50 hover:text-green-600"
                   >
                     View Profile

@@ -4,7 +4,7 @@ import { GavelIcon, IDCardIcon } from "@/assets/icons";
 import { FileText, Laptop, QrCode, CheckCircle, XCircle } from "lucide-react";
 import Spinner from "@/components/ui/Spinner";
 import Skeleton from "@/components/ui/Skeleton";
-import { moderateSiwesItem } from "@/features/admin/siwes/api";
+import { moderateSiwesItem } from "@/services/adminSiwesService";
 
 const ModerationQueue = ({ queue = [], loading, onSuccess }) => {
   const [processingId, setProcessingId] = useState(null);
