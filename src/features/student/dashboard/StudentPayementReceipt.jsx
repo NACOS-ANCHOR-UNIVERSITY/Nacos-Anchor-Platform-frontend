@@ -9,7 +9,7 @@ import Skeleton from "../../../components/ui/Skeleton";
 import {AlertCircle, RefreshCw} from "lucide-react";
 
 // 1. FIX: Use the Proxy URL (Works on Vercel & Localhost)
-const BASE_URL = "/api/finance/dashboard";
+const BASE_URL = "https://nacos.nextgenerationones.org/api/finance/dashboard";
 
 export default function StudentPaymentReceipt() {
   const [isOpen, setIsOpen] = useState(false);

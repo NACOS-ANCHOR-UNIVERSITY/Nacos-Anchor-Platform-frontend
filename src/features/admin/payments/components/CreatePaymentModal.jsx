@@ -39,7 +39,7 @@ export default function CreatePaymentModal({ isOpen, onClose }) {
         levels: formData.levels
       };
 
-      const res = await fetch("http://nacos.nextgenerationones.org/api/admin/fees", { 
+      const res = await fetch("https://nacos.nextgenerationones.org/api/admin/fees", { 
         method: "POST",
         headers: {
           "Content-Type": "application/json",
