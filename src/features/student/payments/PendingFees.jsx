@@ -127,7 +127,8 @@ export default function PendingFees({ fees = [] }) {
     // 2. 🛑 The Exact Schema Payload
     // (reference_id, user_id, description, amount, status, date_paid)
     const payload = {
-      reference_id: referenceObj.reference, // Matches backend schema
+      reference_id: referenceObj.reference,
+      reference: referenceObj.reference,
       user_id: user.id, // Matches backend schema
       description: feeItem.title, // Matches backend schema
       amount: cleanAmount, // Matches backend schema
@@ -135,7 +136,7 @@ export default function PendingFees({ fees = [] }) {
       date_paid: new Date().toISOString().split("T")[0], // Matches backend schema
     };
 
-    console.log("🚀 Sending Exact Schema:", payload);
+    console.log("Sending Exact Schema:", payload);
 
     try {
       const response = await fetch("/api/proxy/payments/verify", {
@@ -153,7 +154,7 @@ export default function PendingFees({ fees = [] }) {
         toast.success("Payment Verified & Recorded!");
         setTimeout(() => window.location.reload(), 2000);
       } else {
-        console.error("❌ Backend Rejected:", data);
+        console.error("Backend Rejected:", data);
         toast.error(data.message || "Verification failed");
       }
     } catch (error) {
