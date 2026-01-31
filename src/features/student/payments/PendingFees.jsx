@@ -124,12 +124,11 @@ export default function PendingFees({ fees = [] }) {
       return;
     }
 
-    // 2. 🛑 The "Hybrid" Payload
-    // We send BOTH 'reference' (for API validation) and 'reference_id' (for Database)
+    
     const payload = {
       reference: referenceObj.reference, // <--- API Validator likely wants this!
       reference_id: referenceObj.reference, // <--- Database likely wants this
-
+      ref: referenceObj.reference,
       user_id: user.id,
       description: feeItem.title,
       amount: cleanAmount,
