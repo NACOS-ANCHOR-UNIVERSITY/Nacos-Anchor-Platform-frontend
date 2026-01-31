@@ -132,7 +132,7 @@ const DashboardHome = () => {
             <div className="flex items-center gap-4 sm:gap-2.5 md:gap-4 z-10">
               {displayUser.avatar_url ? (
                 <img
-                  src={`https://nacos.nextgenerationones.org/${displayUser.avatar_url}`}
+                  src={`https://nacos.nextgenerationones.org/api/${displayUser.avatar_url}`}
                   alt={`${displayUser.first_name} ${displayUser.last_name}`}
                   className="size-24 rounded-2xl bg-[#5d8b83] drop-shadow-sm border-3 border-white/30 object-cover"
                   onError={(e) => {
