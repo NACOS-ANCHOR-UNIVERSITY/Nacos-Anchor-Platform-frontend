@@ -56,11 +56,10 @@ const AdminLayout = () => {
         key={item.name}
         to={item.path}
         onClick={() => setIsSidebarOpen(false)} // Close sidebar on mobile click
-        className={`flex items-center gap-3 px-4 py-3 text-sm font-medium rounded-xl transition-all mb-1 ${
-          isActive
+        className={`flex items-center gap-3 px-4 py-3 text-sm font-medium rounded-xl transition-all mb-1 ${isActive
             ? "bg-[#138601] text-white shadow-sm" // Active styles from your responsive layout
             : "text-[#475569] hover:bg-gray-50 hover:text-gray-900"
-        }`}
+          }`}
       >
         <item.icon
           className={`w-5 h-5 ${isActive ? "text-white" : "text-gray-500"}`}

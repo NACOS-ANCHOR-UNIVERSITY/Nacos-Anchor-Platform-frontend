@@ -4,7 +4,9 @@ import {
   StatCards,
   PaymentsTable,
   RecordPaymentModal,
+  CreatePaymentModal,
 } from "../../features/admin/payments";
+// import CreatePaymentModal from "../../features/admin/payments/CreatePaymentModal";
 import { useAdminPayments } from "../../hooks";
 import Skeleton from "../../components/ui/Skeleton";
 import { AlertCircle, RefreshCw } from "lucide-react";
@@ -18,14 +20,9 @@ const getInitials = (name) => {
   return (parts[0][0] + parts[parts.length - 1][0]).toUpperCase();
 };
 
-// Helper to format dates and handle invalid/null dates from the database
 const formatDate = (dateString) => {
   if (!dateString) return "N/A";
-
-  // Convert to string in case it's not
   const dateStr = String(dateString);
-
-  // Check for invalid date patterns like "0000-00-00" or dates with year -0001
   if (
     dateStr.includes("-0001") ||
     dateStr.includes("0000-00-00") ||
@@ -33,21 +30,13 @@ const formatDate = (dateString) => {
   ) {
     return "N/A";
   }
-
-  // Try to parse the date (handle MySQL datetime format: "2026-01-29 14:30:00")
   let date = new Date(dateStr.replace(" ", "T"));
-
-  // If that fails, try parsing directly
   if (isNaN(date.getTime())) {
     date = new Date(dateStr);
   }
-
-  // Check if date is valid and year is reasonable (after year 2000)
   if (isNaN(date.getTime()) || date.getFullYear() < 2000) {
     return "N/A";
   }
-
-  // Format as "Jan 28, 2026 1:28 PM"
   return date.toLocaleDateString("en-US", {
     month: "short",
     day: "numeric",
@@ -60,7 +49,6 @@ const formatDate = (dateString) => {
 
 const handleExportCSV = (data, filename = "payments-report.csv") => {
   if (!data || !data.length) return;
-
   const headers = Object.keys(data[0]).join(",");
   const rows = data.map((row) =>
     Object.values(row)
@@ -69,7 +57,6 @@ const handleExportCSV = (data, filename = "payments-report.csv") => {
   );
   const csvContent =
     "data:text/csv;charset=utf-8," + [headers, ...rows].join("\n");
-
   const encodedUri = encodeURI(csvContent);
   const link = document.createElement("a");
   link.setAttribute("href", encodedUri);
@@ -84,16 +71,20 @@ export default function AdminPaymentsPage() {
   const [statusFilter, setStatusFilter] = useState("All");
   const [dateFilter, setDateFilter] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isModalPaymentOpen, setIsModalPaymentOpen] = useState(false);
 
   const { data: apiResponse, isLoading, error, refetch } = useAdminPayments();
+  console.log(apiResponse)
 
   const stats = useMemo(() => {
-    const metrics = apiResponse?.data?.metrics || {};
+    // 🛑 THE FIX: We check 'apiResponse.data.data.metrics' first.
+    // This handles the nesting: Axios -> API Response -> Data Object -> Metrics
+    const metrics = apiResponse?.data?.data?.metrics || apiResponse?.data?.metrics || {};
 
     return [
       {
         label: "Total Revenue",
-        value: metrics.total_revenue || "₦ 0",
+        value: metrics.total_revenue || "₦ 0", // Ensure this matches your API key exactly
         delta: "+12%",
         deltaLabel: "vs last month",
         deltaTone: "up",
@@ -127,7 +118,9 @@ export default function AdminPaymentsPage() {
   }, [apiResponse]);
 
   const rows = useMemo(() => {
-    const transactions = apiResponse?.data?.transactions;
+    // 🛑 THE FIX: Same fix here for transactions
+    const transactions = apiResponse?.data?.data?.transactions || apiResponse?.data?.transactions;
+
     if (!transactions) return [];
 
     return transactions
@@ -249,6 +242,13 @@ export default function AdminPaymentsPage() {
               <img src={recordPayment} alt="" className="h-4 w-5 shrink-0" />
               <span className="hidden sm:inline">Record Payment</span>
             </button>
+            <button
+              onClick={() => setIsModalPaymentOpen(true)}
+              className="inline-flex items-center gap-2 rounded-lg bg-[var(--color-brand-primary)] px-4 py-2 text-sm font-semibold text-white hover:opacity-95 cursor-pointer active:scale-95 transition-transform"
+            >
+              <img src={recordPayment} alt="" className="h-4 w-5 shrink-0" />
+              <span className="hidden sm:inline">Create Payment</span>
+            </button>
           </div>
         </div>
 
@@ -272,6 +272,10 @@ export default function AdminPaymentsPage() {
       <RecordPaymentModal
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
+      />
+      <CreatePaymentModal
+        isOpen={isModalPaymentOpen}
+        onClose={() => setIsModalPaymentOpen(false)} 
       />
     </div>
   );

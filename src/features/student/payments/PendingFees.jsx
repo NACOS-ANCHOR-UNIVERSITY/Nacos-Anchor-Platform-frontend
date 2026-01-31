@@ -80,7 +80,8 @@ const getBadgeStyle = (status) => {
 export default function PendingFees({ fees = [] }) {
   const user = JSON.parse(localStorage.getItem("user") || "{}");
   const userEmail = user.email || "student@aul.edu.ng";
-  const token = localStorage.getItem("token");
+  const token = JSON.parse(localStorage.getItem("nacos-auth-storage")).state.token
+
 
   const formatAmount = (amount, currency = "₦") => {
     if (!amount) return `${currency}0`;
@@ -109,43 +110,23 @@ export default function PendingFees({ fees = [] }) {
     };
   };
 
-  const handlePaymentSuccess = async (referenceObj, feeItem) => {
+  const handlePaymentSuccess = async (referenceObj) => {
     toast.info("Verifying payment...");
 
     // 1. Clean the Amount
     const cleanAmount = parseFloat(String(feeItem.amount).replace(/,/g, ""));
 
-    const token =
-      localStorage.getItem("token") || localStorage.getItem("ACCESS_TOKEN");
-    const user = JSON.parse(localStorage.getItem("user") || "{}");
-
-    if (!user.id) {
-      toast.error("User ID missing. Please relogin.");
-      return;
-    }
-
-    
-    const payload = {
-      reference: referenceObj.reference, // <--- API Validator likely wants this!
-      reference_id: referenceObj.reference, // <--- Database likely wants this
-      ref: referenceObj.reference,
-      user_id: user.id,
-      description: feeItem.title,
-      amount: cleanAmount,
-      status: "success",
-      date_paid: new Date().toISOString().split("T")[0],
-    };
-
-    console.log("Sending Final Payload:", payload);
-
     try {
-      const response = await fetch("/api/proxy/payments/verify", {
+      const response = await fetch("/api/payments/verify", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify(payload),
+
+        body: JSON.stringify({
+          reference: referenceObj.reference,    // Israel: If anyone touch this thing ehhh, EHHHH....
+        }),
       });
 
       const data = await response.json();
@@ -239,7 +220,7 @@ export default function PendingFees({ fees = [] }) {
                 </div>
 
                 <PaymentComponent
-                  amount={fee.amount}
+                  amount={(parseInt(fee.amount) + 375)}
                   email={userEmail}
                   purpose={fee.title}
                   btnText={buttonProps.text}

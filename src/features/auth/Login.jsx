@@ -35,44 +35,29 @@ const handleSubmit = async (e) => {
   e.preventDefault();
   if (!validateForm()) return;
 
-  // 1. Clear old data
-  localStorage.clear();
-  sessionStorage.clear();
+    // 🛑 THE FIX: Clear old data immediately so "Student" and "Admin" 
+    // tokens never mix. This runs BEFORE we get the new token.
+    localStorage.clear();
+    sessionStorage.clear();
 
-  setIsLoading(true);
-  try {
-    // 2. Get the FULL response (not just user)
-    const response = await authService.login(formData);
+    setIsLoading(true);
+    try {
+      // Now we fetch the NEW, CLEAN token
+      const { user } = await authService.login(formData);
 
-    console.log("Login Response:", response); // Check console to see what we got
-
-    // 3. FORCE SAVE the token (Check all possible names)
-    const token =
-      response.token || response.access_token || response.data?.token;
-    const user = response.user || response.data?.user;
-
-    if (token) {
-      localStorage.setItem("token", token); // For Admin
-      localStorage.setItem("ACCESS_TOKEN", token); // For Student
-    } else {
-      console.error("No token found in login response!");
-    }
-
-    // 4. Save User Data
-    if (user) {
-      localStorage.setItem("user", JSON.stringify(user));
       toast.success(`Welcome back, ${user.first_name}!`);
+
+      // Navigate based on the NEW role
       navigate(
         user.role === "admin" ? "/admin/dashboard" : "/student/dashboard",
       );
+    } catch (error) {
+      toast.error(error.response?.data?.message || "Login failed");
+    } finally {
+      setIsLoading(false);
     }
-  } catch (error) {
-    console.error("Login Error:", error);
-    toast.error(error.response?.data?.message || "Login failed");
-  } finally {
-    setIsLoading(false);
-  }
-};
+  };
+
   return (
     <div className="min-h-screen bg-[#F6F7F8] flex">
       {/* --- LEFT SIDE (Illustration) --- */}
@@ -191,6 +176,14 @@ const handleSubmit = async (e) => {
               {isLoading ? "Signing In..." : "Sign In"}
             </button>
           </form>
+          <div className="mt-6 text-center">
+            <Link
+              to="/signup"
+              className="inline-flex items-center justify-center w-full py-3 rounded-lg font-semibold border border-green-600 text-green-600 hover:bg-green-50 transition-colors"
+            >
+              Sign up
+            </Link>
+          </div>
         </div>
       </div>
     </div>

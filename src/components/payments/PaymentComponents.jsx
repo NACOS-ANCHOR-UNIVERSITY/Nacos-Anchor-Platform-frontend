@@ -3,8 +3,9 @@ import { PaystackButton } from 'react-paystack';
 import { toast } from 'sonner';
 
 const PaymentComponent = ({ amount, email, purpose, onSuccess, btnText, className }) => {
-    const publicKey =
-      "pk_live_779b7cc3646c8a0f1a076ae73d7f549671648e91"; //<--- we should probably let this come from env or the backend....
+    console.log("amount", amount)
+    const publicKey = 'pk_live_779b7cc3646c8a0f1a076ae73d7f549671648e91'; //<--- we should probably let this come from env or the backend....
+    // const publicKey = 'pk_test_b8b0d9577163a02f73b9362d2a64f0f637cffa1c'; //<--- we should probably let this come from env or the backend....
 
     if (!publicKey) {
         console.error("Paystack public key is missing!");

@@ -8,8 +8,8 @@ import PageHeader from "../../../components/ui/PageHeader";
 import Skeleton from "../../../components/ui/Skeleton";
 import {AlertCircle, RefreshCw} from "lucide-react";
 
-// 1. FIX: Use Proxy URL to avoid CORS/Network errors
-const BASE_URL = "/api/proxy";
+// 1. FIX: Use the Proxy URL (Works on Vercel & Localhost)
+const BASE_URL = "/api/finance/dashboard";
 
 export default function StudentPaymentReceipt() {
   const [isOpen, setIsOpen] = useState(false);
@@ -17,37 +17,35 @@ export default function StudentPaymentReceipt() {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  // 2. FIX: Check for BOTH 'token' (Admin) and 'ACCESS_TOKEN' (Student)
-  const token =
-    localStorage.getItem("token") || localStorage.getItem("ACCESS_TOKEN");
-
-  // Debugging: Check if token exists
-  console.log("Current Token:", token);
+  // 2. FIX: Check for BOTH token names (Admin uses 'token', Student often uses 'ACCESS_TOKEN')
+  const token = JSON.parse(localStorage.getItem("nacos-auth-storage")).state.token
 
   const fetchFinanceData = async () => {
     setIsLoading(true);
     setError(null);
 
-    // Safety Check: Don't fetch if not logged in
+    // Safety Check: If no token found, don't even try to fetch
     if (!token) {
-      setError({message: "Authentication missing. Please login again."});
+      setError({ message: "No authentication token found. Please login again." });
       setIsLoading(false);
       return;
     }
 
     try {
-      // 3. FIX: Use the proxy URL correctly
-      const response = await fetch(`${BASE_URL}/finance/dashboard`, {
-        method: "GET",
+      // 3. FIX: Fetch directly from the Proxy URL defined above
+      const response = await fetch(BASE_URL, {
+        method: 'GET',
         headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,
         },
       });
 
-      // Handle specific auth errors
+      // Handle 401 specifically (Expired Session)
       if (response.status === 401) {
-        throw new Error("Session expired. Please login again.");
+        localStorage.clear();
+        window.location.href = "/login";
+        return;
       }
 
       if (!response.ok) {
@@ -130,7 +128,7 @@ export default function StudentPaymentReceipt() {
               </p>
               <button
                 onClick={fetchFinanceData}
-                className="flex items-center gap-2 px-5 py-2.5 bg-[#138601] text-white rounded-lg font-medium hover:bg-[#0e6001] transition cursor-pointer"
+                className="cursor-pointer flex items-center gap-2 px-5 py-2.5 bg-[#138601] text-white rounded-lg font-medium hover:bg-[#0e6001] transition"
               >
                 <RefreshCw className="w-4 h-4" />
                 Try Again

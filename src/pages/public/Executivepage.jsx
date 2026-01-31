@@ -13,6 +13,7 @@ import Navbar from "@/components/shared/Navbar";
 import Footer from "@/components/shared/Footer";
 import president from "@/assets/images/president_image.jpeg";
 import software_director from "@/assets/images/software_director_image.png";
+import Gen_Sec from "@/assets/images/Gen Sec.png";
 import avatar from "@/assets/images/avatar.svg";
 
 const mockExecutives = {
@@ -45,9 +46,9 @@ const mockExecutives = {
     {
       name: "RAPHEAL FULFILLED",
       position: "General Secretary",
-      image: avatar,
+      image: Gen_Sec,
       icon: "/general_secretary_icon.svg",
-      bio: "Driven by efficiency and precision. Responsible for the administrative backbone of the department, ensuring that every decision is documented and every plan is executed with clarity and speed. Promoting a culture of transparency and organized leadership.",
+      bio: "Rapheal Fulfilled is a UIX Designer and the administrative lead for NACOS AUL, dedicated to precision, organizational efficiency, and clear communication. He ensures the department’s engine runs smoothly by managing the logistics and documentation that turn visionary ideas into reality.",
       email: "general@nacos.edu",
       linkedin: "https://linkedin.com",
     },

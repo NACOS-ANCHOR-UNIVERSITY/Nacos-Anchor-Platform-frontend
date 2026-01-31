@@ -183,5 +183,5 @@ export default function UploadResourcePage() {
         </div>
       </form>
     </div>
-  );
+  ); 
 } 
