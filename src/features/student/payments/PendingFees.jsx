@@ -111,13 +111,19 @@ export default function PendingFees({ fees = [] }) {
 
   const handlePaymentSuccess = async (referenceObj, feeItem) => {
     toast.info("Verifying payment...");
-    console.log("Paystack Object:", referenceObj);
 
-    // 1. Get Authentication
-    const token = localStorage.getItem("token") || localStorage.getItem("ACCESS_TOKEN");
+    // 1. Convert "15,000" or "15000" string -> 15000 (Number)
+    const cleanAmount = parseFloat(String(feeItem.amount).replace(/,/g, ""));
+
+    console.log("Sending Verification:", {
+      reference: referenceObj.reference,
+      amount: cleanAmount,
+    });
+
+    const token =
+      localStorage.getItem("token") || localStorage.getItem("ACCESS_TOKEN");
     const user = JSON.parse(localStorage.getItem("user") || "{}");
 
-    // Safety check
     if (!user.id) {
       toast.error("User ID missing. Please relogin.");
       return;
@@ -128,19 +134,22 @@ export default function PendingFees({ fees = [] }) {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          "Authorization": `Bearer ${token}`,
+          Authorization: `Bearer ${token}`,
         },
-
         body: JSON.stringify({
-          reference: referenceObj.reference,    // Backend likely wants this
-          reference_id: referenceObj.reference, // Or this (as backup)
-          ref: referenceObj.reference,          // Or this (common abbreviation)
+          // Send ALL reference name variations to be safe
+          reference: referenceObj.reference,
+          reference_id: referenceObj.reference,
+          ref: referenceObj.reference,
 
           user_id: user.id,
           description: feeItem.title,
-          amount: feeItem.amount,
+
+          // 🛑 FIX: Send as a pure Number, not a string
+          amount: cleanAmount,
+
           status: "success",
-          date_paid: new Date().toISOString().split('T')[0]
+          date_paid: new Date().toISOString().split("T")[0],
         }),
       });
 
@@ -148,11 +157,11 @@ export default function PendingFees({ fees = [] }) {
 
       if (response.ok) {
         toast.success("Payment Verified Successfully!");
+        // Reload to show the updated status
         setTimeout(() => window.location.reload(), 2000);
       } else {
-        // Show the exact error from the backend
-        toast.error(data.message || "Verification failed.");
         console.error("Backend Error:", data);
+        toast.error(data.message || "Verification failed.");
       }
     } catch (error) {
       console.error("Network Error:", error);
