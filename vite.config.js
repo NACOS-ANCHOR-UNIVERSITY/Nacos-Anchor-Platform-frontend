@@ -15,6 +15,7 @@ export default defineConfig({
         target: "https://nacos.nextgenerationones.org",
         changeOrigin: true,
         secure: true,
+        rewrite: (path) => path.replace(/^\/api/, "/api"),
       },
     },
   },
