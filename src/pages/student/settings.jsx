@@ -13,7 +13,7 @@ import {
 } from "../../assets/icons";
 
 // 1. FIX: Use Proxy URL (Fixes Network/CORS Errors)
-const BASE_URL = "/api/proxy";
+const BASE_URL = "https://nacos.nextgenerationones.org/api"
 
 const Settings = () => {
   const [activeTab, setActiveTab] = useState("profile");
