@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import useUserStore from "@/store/useUserStore";
 
 import { Plus } from "lucide-react";
@@ -20,15 +20,60 @@ import UploadResourceModal from "../../features/library/components/UploadResourc
 
 const DashboardHome = () => {
   const [isUploadModalOpen, setIsUploadModalOpen] = useState(false);
-  const { user } = useUserStore();
+  const [user, setUser] = useState(null)
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    fetchUserData();
+  }, []);
+
+  const fetchUserData = async () => {
+    try {
+      const token = JSON.parse(localStorage.getItem("nacos-auth-storage"))?.state?.token;
+
+      if (!token) {
+        console.error("No token found");
+        setLoading(false);
+        return;
+      }
+
+      const response = await fetch("https://nacos.nextgenerationones.org/api/auth/me", {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`
+        }
+      });
+
+      const data = await response.json();
+
+      if (data.status === "success" && data.data?.user) {
+        // Update the user store with fresh data
+        setUser(data.data.user);
+        console.log("User data fetched:", data.data.user);
+      }
+    } catch (error) {
+      console.error("Error fetching user data:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const displayUser = user || {
     first_name: "Student",
     last_name: "",
     department: "Computer Science",
     level: "100",
-    matric_number: "AUL/SCI/24/000",
+    matric_no: "AUL/SCI/24/000",
   };
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#138601]"></div>
+      </div>
+    );
+  }
 
   return (
     <div className="flex flex-col gap-8 pb-10">
@@ -85,7 +130,21 @@ const DashboardHome = () => {
             </div>
 
             <div className="flex items-center gap-4 sm:gap-2.5 md:gap-4 z-10">
-              <div className="size-24! rounded-2xl bg-[#5d8b83] drop-shadow-sm drop-shadow-[#0000001A] border-3 border-white/30 flex items-center justify-center text-white text-2xl font-bold uppercase">
+              {displayUser.avatar_url ? (
+                <img
+                  src={`https://nacos.nextgenerationones.org/${displayUser.avatar_url}`}
+                  alt={`${displayUser.first_name} ${displayUser.last_name}`}
+                  className="size-24 rounded-2xl bg-[#5d8b83] drop-shadow-sm border-3 border-white/30 object-cover"
+                  onError={(e) => {
+                    e.currentTarget.style.display = 'none';
+                    e.currentTarget.nextElementSibling.style.display = 'flex';
+                  }}
+                />
+              ) : null}
+              <div
+                className="size-24 rounded-2xl bg-[#5d8b83] drop-shadow-sm border-3 border-white/30 flex items-center justify-center text-white text-2xl font-bold uppercase"
+                style={{ display: displayUser.avatar_url ? 'none' : 'flex' }}
+              >
                 {displayUser.first_name?.[0]}
                 {displayUser.last_name?.[0]}
               </div>
@@ -95,14 +154,14 @@ const DashboardHome = () => {
                   {displayUser.first_name} {displayUser.last_name}
                 </h3>
                 <p className="text-xs text-white/70 mt-1 uppercase">
-                  {displayUser.matric_number || "AUL/SCI/24/..."}
+                  {displayUser.matric_no || "AUL/SCI/24/..."}
                 </p>
                 <div className="flex gap-2 pt-2">
                   <span className="bg-white/20 text-white border border-white/10 text-[10px] font-bold px-2 py-1 h-5.25 flex items-center justify-center rounded-lg">
                     {displayUser.level || "100"} LVL
                   </span>
                   <span className="bg-[#22C55ECC] text-white border border-[#4ADE8033] text-[10px] font-bold px-2 py-1 h-5.25 flex items-center justify-center rounded-lg">
-                    ACTIVE
+                    {displayUser.status?.toUpperCase() || "ACTIVE"}
                   </span>
                 </div>
               </div>
@@ -129,11 +188,11 @@ const DashboardHome = () => {
               Complete your profile
             </h3>
             <p className="text-xs text-[#64748B] mt-1">
-              Add your bio and skills to reach 100%
+              {displayUser.bio ? "Great! Keep updating your profile" : "Add your bio and skills to reach 100%"}
             </p>
             <div className="overflow-hidden mt-3 h-2 text-xs flex rounded-full bg-[#F1F5F9]">
               <div
-                style={{ width: "75%" }}
+                style={{ width: `${calculateProfileCompletion(displayUser)}%` }}
                 className="shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center bg-[#138601] rounded-full transition-all duration-500 ease-out"
               />
             </div>
@@ -154,16 +213,16 @@ const DashboardHome = () => {
                 cx="48"
                 cy="48"
                 r="40"
-                // stroke="#138601"
+                stroke="#138601"
                 strokeWidth="8"
                 fill="none"
                 strokeDasharray="251.2"
-                strokeDashoffset="62.8"
+                strokeDashoffset={251.2 - (251.2 * calculateProfileCompletion(displayUser)) / 100}
                 strokeLinecap="round"
               />
             </svg>
             <div className="absolute inset-0 flex items-center justify-center">
-              <span className="text-xs font-bold text-[#138601]">75%</span>
+              <span className="text-xs font-bold text-[#138601]">{calculateProfileCompletion(displayUser)}%</span>
             </div>
           </div>
         </div>
@@ -350,5 +409,27 @@ const DashboardHome = () => {
   );
 };
 
-export default DashboardHome;
+// Helper function to calculate profile completion percentage
+const calculateProfileCompletion = (user) => {
+  if (!user) return 0;
 
+  const fields = [
+    user.first_name,
+    user.last_name,
+    user.email,
+    user.phone,
+    user.department,
+    user.level,
+    user.matric_no,
+    user.bio,
+    user.avatar_url,
+    user.github_url,
+    user.linkedin_url,
+    user.portfolio_url,
+  ];
+
+  const filledFields = fields.filter(field => field && field.toString().trim() !== '').length;
+  return Math.round((filledFields / fields.length) * 100);
+};
+
+export default DashboardHome;
