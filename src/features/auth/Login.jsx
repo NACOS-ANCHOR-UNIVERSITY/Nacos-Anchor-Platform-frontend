@@ -116,7 +116,7 @@ const handleSubmit = async (e) => {
           <form onSubmit={handleSubmit} className="space-y-5">
             <div>
               <label className="block text-sm font-medium text-gray-900 mb-2">
-                Matric Number / Email
+                Email
               </label>
               <div className="relative">
                 <input
