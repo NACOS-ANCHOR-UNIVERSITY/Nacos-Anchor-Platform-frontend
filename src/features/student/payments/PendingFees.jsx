@@ -114,7 +114,7 @@ export default function PendingFees({ fees = [] }) {
     toast.info("Verifying payment...");
 
     try {
-      const response = await fetch("/api/payments/verify", {
+      const response = await fetch("https://nacos.nextgenerationones.org/api/payments/verify", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -140,7 +140,7 @@ export default function PendingFees({ fees = [] }) {
       toast.error("Could not reach the server.");
     }
   };
-  // handlePaymentSuccess({reference:"T858011181889368"})
+  // handlePaymentSuccess({reference:"T525239026062481"})
   if (!fees || fees.length === 0) {
     return (
       <div className="mb-8">
