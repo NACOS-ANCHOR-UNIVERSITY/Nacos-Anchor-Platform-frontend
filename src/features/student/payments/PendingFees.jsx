@@ -78,7 +78,7 @@ const getBadgeStyle = (status) => {
 };
 
 export default function PendingFees({ fees = [] }) {
-  const user = JSON.parse(localStorage.getItem("user") || "{}");
+  const user =  (JSON.parse(localStorage.getItem("nacos-auth-storage")).state.user || "{}");
   const userEmail = user.email || "student@aul.edu.ng";
   const token = JSON.parse(localStorage.getItem("nacos-auth-storage")).state.token
 
@@ -121,7 +121,7 @@ export default function PendingFees({ fees = [] }) {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
+          "Authorization": `Bearer ${token}`,
         },
 
         body: JSON.stringify({

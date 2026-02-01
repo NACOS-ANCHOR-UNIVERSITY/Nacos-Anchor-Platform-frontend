@@ -61,7 +61,7 @@ export default function CreatePaymentModal({ isOpen, onClose }) {
         amount: "",
         type: "Compulsory",
         buttonText: "Pay Levy",
-        statusBadge: "PENDING",
+        statusBadge: "NEW",
         levels: [100, 200, 300, 400]
       });
 
