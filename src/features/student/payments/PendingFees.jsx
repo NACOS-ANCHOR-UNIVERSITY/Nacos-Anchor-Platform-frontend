@@ -114,7 +114,6 @@ export default function PendingFees({ fees = [] }) {
     toast.info("Verifying payment...");
 
     // 1. Clean the Amount
-    const cleanAmount = parseFloat(String(feeItem.amount).replace(/,/g, ""));
 
     try {
       const response = await fetch("/api/payments/verify", {
