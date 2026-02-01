@@ -113,8 +113,6 @@ export default function PendingFees({ fees = [] }) {
   const handlePaymentSuccess = async (referenceObj) => {
     toast.info("Verifying payment...");
 
-    // 1. Clean the Amount
-
     try {
       const response = await fetch("/api/payments/verify", {
         method: "POST",
@@ -142,6 +140,7 @@ export default function PendingFees({ fees = [] }) {
       toast.error("Could not reach the server.");
     }
   };
+  // handlePaymentSuccess({reference:"T858011181889368"})
   if (!fees || fees.length === 0) {
     return (
       <div className="mb-8">
