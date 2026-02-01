@@ -275,7 +275,7 @@ export default function AdminPaymentsPage() {
       />
       <CreatePaymentModal
         isOpen={isModalPaymentOpen}
-        onClose={() => setIsModalPaymentOpen(false)} 
+        onClose={() => setIsModalPaymentOpen(false)}
       />
     </div>
   );
