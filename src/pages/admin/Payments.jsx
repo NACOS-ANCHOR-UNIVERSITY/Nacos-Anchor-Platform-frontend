@@ -74,17 +74,17 @@ export default function AdminPaymentsPage() {
   const [isModalPaymentOpen, setIsModalPaymentOpen] = useState(false);
 
   const { data: apiResponse, isLoading, error, refetch } = useAdminPayments();
-  console.log(apiResponse)
+  console.log(JSON.stringify(apiResponse))
 
   const stats = useMemo(() => {
     // 🛑 THE FIX: We check 'apiResponse.data.data.metrics' first.
     // This handles the nesting: Axios -> API Response -> Data Object -> Metrics
-    const metrics = apiResponse?.data?.data?.metrics || apiResponse?.data?.metrics || {};
+    const metrics = apiResponse?.data?.summary || apiResponse?.data?.metrics || {};
 
     return [
       {
         label: "Total Revenue",
-        value: metrics.total_revenue || "₦ 0", // Ensure this matches your API key exactly
+        value: metrics.total_revenue || "₦ 0",
         delta: "+12%",
         deltaLabel: "vs last month",
         deltaTone: "up",
@@ -280,3 +280,4 @@ export default function AdminPaymentsPage() {
     </div>
   );
 }
+yy
