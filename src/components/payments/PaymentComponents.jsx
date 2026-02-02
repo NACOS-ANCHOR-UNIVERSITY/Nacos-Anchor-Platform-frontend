@@ -24,7 +24,7 @@ const PaymentComponent = ({ amount, email, purpose, onSuccess, btnText, classNam
                     display_name: "Payment For",
                     variable_name: "payment_for",
                     value: purpose,
-                },
+                }, 
             ],
         },
         publicKey,
