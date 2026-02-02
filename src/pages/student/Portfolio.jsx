@@ -11,6 +11,8 @@ import {
   Plus,
   Loader2,
   Image as ImageIcon,
+  Link,
+  ArrowUpRightFromSquareIcon,
 } from "lucide-react";
 import { toast } from "sonner";
 
@@ -500,7 +502,7 @@ export default function Portfolio() {
       />
 
       {/* Header */}
-      <div className="mb-6 flex items-start justify-between">
+      <div className="mb-6 flex flex-col sm:flex-row gap-4 sm:items-start justify-between">
         <div>
           <h1 className="mt-2 text-3xl font-bold text-slate-900">
             My Portfolio
@@ -517,7 +519,7 @@ export default function Portfolio() {
           <button
             type="button"
             onClick={handlePreviewProfile}
-            className={`inline-flex items-center gap-2 rounded-lg px-4 py-2 text-sm font-semibold text-white shadow-sm transition ${
+            className={`inline-flex w-fit items-center gap-2 rounded-lg px-4 py-2 text-sm font-semibold text-white shadow-sm transition ${
               isPublic
                 ? "bg-brand-primary hover:opacity-95"
                 : "cursor-not-allowed bg-slate-300"
@@ -692,7 +694,7 @@ export default function Portfolio() {
                   disabled={isSaving}
                   className="grid size-10 place-items-center rounded-full border border-slate-200 bg-slate-50 text-slate-700 hover:bg-white disabled:opacity-50 transition-colors"
                 >
-                  <Upload className="h-5 w-5" />
+                  <Upload className="size-5" />
                 </button>
 
                 <button
@@ -717,7 +719,7 @@ export default function Portfolio() {
             {resume ? (
               <div className="mt-3 flex items-center justify-between rounded-lg border border-slate-200 bg-white px-3 py-2">
                 <div className="flex items-center gap-2 overflow-hidden">
-                  <FileText className="h-5 w-5 shrink-0 text-red-500" />
+                  <FileText className="size-5 shrink-0 text-red-500" />
                   <a
                     href={resume.url}
                     target="_blank"
@@ -727,6 +729,15 @@ export default function Portfolio() {
                     {resume.name}
                   </a>
                 </div>
+
+                <a
+                  href={resume.url}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="truncate text-xs font-semibold text-slate-800 hover:text-brand-primary hover:underline"
+                >
+                  <ArrowUpRightFromSquareIcon className="size-4" />
+                </a>
               </div>
             ) : null}
           </Card>
@@ -880,13 +891,24 @@ export default function Portfolio() {
                           className="h-full w-full object-cover transition-transform group-hover:scale-105"
                         />
                       </div>
-                      <div className="p-4">
-                        <div className="text-sm font-semibold text-slate-900 truncate">
-                          {p.title}
+                      <div className="p-4 flex gap-4 items-start justify-between">
+                        <div>
+                          <p className="text-sm font-semibold text-slate-900 truncate">
+                            {p.title}
+                          </p>
+                          <p className="mt-1 text-xs text-slate-600 line-clamp-2">
+                            {p.description}
+                          </p>
                         </div>
-                        <div className="mt-1 text-xs text-slate-600 line-clamp-2">
-                          {p.description}
-                        </div>
+
+                        <a
+                          href={p.project_url}
+                          target="_blank"
+                          rel="noreferrer"
+                          className="text-xs font-semibold text-slate-800 hover:text-brand-primary hover:underline"
+                        >
+                          <ArrowUpRightFromSquareIcon className="size-4" />
+                        </a>
                       </div>
                     </div>
                   ))}
@@ -894,7 +916,7 @@ export default function Portfolio() {
                     onClick={() => setIsProjectModalOpen(true)}
                     className="flex min-h-30 flex-col items-center justify-center rounded-xl border border-dashed border-slate-300 bg-slate-50 transition-colors hover:bg-slate-100"
                   >
-                    <Plus className="h-5 w-5 text-slate-600" />
+                    <Plus className="size-5 text-slate-600" />
                     <div className="mt-2 text-sm font-semibold text-slate-900">
                       Add New Project
                     </div>
