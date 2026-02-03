@@ -74,7 +74,8 @@ export default function AdminPaymentsPage() {
   const [isModalPaymentOpen, setIsModalPaymentOpen] = useState(false);
 
   const { data: apiResponse, isLoading, error, refetch } = useAdminPayments();
-  console.log(JSON.stringify(apiResponse))
+  console.log(apiResponse)
+  // console.log(JSON.stringify(apiResponse))
 
   const stats = useMemo(() => {
     // 🛑 THE FIX: We check 'apiResponse.data.data.metrics' first.
@@ -142,7 +143,7 @@ export default function AdminPaymentsPage() {
       })
       .map((t) => ({
         id: t.id,
-        name: t.full_name,
+        name: t.first_name + " " +t.last_name ,
         matric: t.matric_no,
         avatar: t.avatar_url?.startsWith("http") ? t.avatar_url : null,
         transaction: t.description,
@@ -150,9 +151,9 @@ export default function AdminPaymentsPage() {
         date: formatDate(
           t.date || t.created_at || t.date_paid || t.formatted_date,
         ),
-        amount: t.formatted_amount,
-        status: t.status === "Successful" ? "Approved" : t.status,
-        initials: getInitials(t.full_name),
+        amount: t.amount,
+        status: t.status /*=== "Successful" ? "Approved" : t.status*/,
+        initials: t.first_name[0].toLocaleUpperCase()+t.last_name[0].toLocaleUpperCase(),
         avatarTone: "neutral",
       }));
   }, [apiResponse, searchTerm, statusFilter, dateFilter]);
