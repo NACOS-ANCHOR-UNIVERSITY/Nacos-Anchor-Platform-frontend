@@ -36,16 +36,16 @@ const PaymentComponent = ({ amount, email, purpose, onSuccess, btnText, classNam
     };
 
     return (
-        <PaystackButton
-            {...componentProps}
-            // We use the className prop so it looks EXACTLY like your design
-            className={className}
-        />
-        // <div className='flex cursor-pointer' onClick={()=>{
-        //     toast.info("Down for maintenance")
-        // }}>
-        //     Pay now
-        // </div>
+        // <PaystackButton
+        //     {...componentProps}
+        //     // We use the className prop so it looks EXACTLY like your design
+        //     className={className}
+        // />
+        <div className='flex cursor-pointer' onClick={()=>{
+            toast.info("Down for maintenance")
+        }}>
+            Pay now
+        </div>
     );
 };
 
