@@ -14,6 +14,8 @@ import {
   Filter,
 } from "lucide-react";
 
+const BASE_URL = "https://nacos.nextgenerationones.org/api";
+
 const getAvatarColor = (name) => {
   const colors = [
     "bg-blue-100 text-blue-600",
@@ -43,18 +45,20 @@ const UserManagement = () => {
     setLoading(true);
 
     // 1. Get Token & User Info
-    const token = JSON.parse(localStorage.getItem("nacos-auth-storage")).state.token || localStorage.getItem("ACCESS_TOKEN");
-    const user = JSON.parse(localStorage.getItem("nacos-auth-storage")).state.user
+    const authStorage = JSON.parse(localStorage.getItem("nacos-auth-storage"));
+    const token = authStorage?.state?.token;
+    const user = authStorage?.state?.user;
 
-    // 2. Client-Side Role Check
-    if (user.role !== "admin") {
-      toast.error("Access Denied: You need Admin privileges.");
-      setLoading(false);
+    // 2. Guard: no token → redirect to login
+    if (!token) {
+      window.location.href = "/login";
       return;
     }
 
-    if (!token) {
-      window.location.href = "/login";
+    // 3. Client-Side Role Check
+    if (user?.role !== "admin") {
+      toast.error("Access Denied: You need Admin privileges.");
+      setLoading(false);
       return;
     }
 
@@ -64,9 +68,9 @@ const UserManagement = () => {
     };
 
     try {
-      const statsRes = await fetch("https://nacos.nextgenerationones.org/api/proxy/admin/users/dashboard", { headers });
+      // --- Stats ---
+      const statsRes = await fetch(`${BASE_URL}/admin/users/dashboard`, { headers });
 
-      // 3. Handle 401 (Expired) vs 403 (Wrong Role)
       if (statsRes.status === 401) {
         localStorage.clear();
         window.location.href = "/login";
@@ -82,40 +86,47 @@ const UserManagement = () => {
       const statsData = await statsRes.json();
       if (statsData.status === "success") setStats(statsData.data);
 
+      // --- Users List ---
       const usersRes = await fetch(
-        `https://nacos.nextgenerationones.org/api/proxy/admin/users/list?page=${currentPage}&limit=${itemsPerPage}`,
+        `${BASE_URL}/admin/users/list?page=${currentPage}&limit=${itemsPerPage}`,
         { headers }
       );
+
+      if (!usersRes.ok) throw new Error(`Users list failed: ${usersRes.status}`);
+
       const usersData = await usersRes.json();
 
       if (usersData.status === "success") {
-        const mappedUsers = usersData.data.map((user) => ({
-          id: user.id,
-          name: user.name,
-          email: user.email,
-          matric: user.matric_no || "N/A",
-          level: user.level || "N/A",
-          role: user.role || "Student",
-          status: user.status || "Pending",
-          avatarColor: getAvatarColor(user.name),
+        const mappedUsers = usersData.data.map((u) => ({
+          id: u.id,
+          name: u.name,
+          email: u.email,
+          matric: u.matric_no || "N/A",
+          level: u.level || "N/A",
+          role: u.role || "Student",
+          status: u.status || "Pending",
+          avatarColor: getAvatarColor(u.name),
           selected: false,
         }));
         setUsers(mappedUsers);
         setTotalPages(usersData.total_pages || 1);
       }
 
-      const logsRes = await fetch(`https://nacos.nextgenerationones.org/api/proxy/admin/users/logs?limit=10`, {
-        headers,
-      });
+      // --- Logs ---
+      const logsRes = await fetch(`${BASE_URL}/admin/users/logs?limit=10`, { headers });
+
+      if (!logsRes.ok) throw new Error(`Logs fetch failed: ${logsRes.status}`);
+
       const logsData = await logsRes.json();
       if (logsData.status === "success") setLogs(logsData.data);
+
     } catch (error) {
       console.error("Fetch Error:", error);
-      toast.error("Failed to load data. Check connection.");
+      toast.error("Failed to load data. Check your connection.");
     } finally {
       setLoading(false);
     }
-  }; // <--- THIS BRACKET WAS MISSING IN YOUR CODE!
+  };
 
   useEffect(() => {
     fetchAllData();
@@ -126,29 +137,23 @@ const UserManagement = () => {
   };
 
   const toggleSelectUser = (id) => {
-    setUsers(
-      users.map((user) =>
-        user.id === id ? { ...user, selected: !user.selected } : user,
-      ),
-    );
+    setUsers(users.map((u) => (u.id === id ? { ...u, selected: !u.selected } : u)));
   };
 
   const toggleSelectAll = () => {
-    const isAllSelected = users.every((user) => user.selected);
-    setUsers(users.map((user) => ({ ...user, selected: !isAllSelected })));
+    const isAllSelected = users.every((u) => u.selected);
+    setUsers(users.map((u) => ({ ...u, selected: !isAllSelected })));
   };
 
   const filteredUsers = users.filter(
-    (user) =>
-      user.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      user.matric.toLowerCase().includes(searchQuery.toLowerCase()),
+    (u) =>
+      u.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      u.matric.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
   const selectedCount = users.filter((u) => u.selected).length;
-  const isHeaderCheckboxChecked =
-    users.length > 0 && users.every((user) => user.selected);
+  const isHeaderCheckboxChecked = users.length > 0 && users.every((u) => u.selected);
 
-  // Placeholder for recent logs
   const recentLogs = logs.map((log) => ({
     ...log,
     statusColor:
@@ -160,36 +165,52 @@ const UserManagement = () => {
   }));
 
   const bulkApprover = () => {
-    setUsers(
-      users.map((user) =>
-        user.selected ? { ...user, status: "Active" } : user,
-      ),
-    );
+    setUsers(users.map((u) => (u.selected ? { ...u, status: "Active" } : u)));
   };
 
-  const approveUser = (id) => {
-    setUsers(
-      users.map((user) =>
-        user.id === id ? { ...user, status: "Active" } : user,
-      ),
-    );
-    toast.success("User approved");
+  const approveUser = async (id) => {
+    const authStorage = JSON.parse(localStorage.getItem("nacos-auth-storage"));
+    const token = authStorage?.state?.token;
+
+    try {
+      // Optimistic update
+      setUsers(users.map((u) => (u.id === id ? { ...u, status: "Active" } : u)));
+      toast.success("User approved");
+
+      // Uncomment when the approve endpoint is known:
+      // await fetch(`${BASE_URL}/admin/users/${id}/approve`, {
+      //   method: "POST",
+      //   headers: { Authorization: `Bearer ${token}`, "Content-Type": "application/json" },
+      // });
+    } catch (error) {
+      toast.error("Failed to approve user");
+      fetchAllData(); // revert on failure
+    }
   };
 
-  const rejectUser = (id) => {
-    setUsers(
-      users.map((user) =>
-        user.id === id ? { ...user, status: "Rejected" } : user,
-      ),
-    );
-    toast.success("User rejected");
+  const rejectUser = async (id) => {
+    const authStorage = JSON.parse(localStorage.getItem("nacos-auth-storage"));
+    const token = authStorage?.state?.token;
+
+    try {
+      // Optimistic update
+      setUsers(users.map((u) => (u.id === id ? { ...u, status: "Rejected" } : u)));
+      toast.success("User rejected");
+
+      // Uncomment when the reject endpoint is known:
+      // await fetch(`${BASE_URL}/admin/users/${id}/reject`, {
+      //   method: "POST",
+      //   headers: { Authorization: `Bearer ${token}`, "Content-Type": "application/json" },
+      // });
+    } catch (error) {
+      toast.error("Failed to reject user");
+      fetchAllData(); // revert on failure
+    }
   };
 
   if (loading && users.length === 0) {
     return (
-      <div className="p-10 text-center animate-pulse">
-        Loading Dashboard Data...
-      </div>
+      <div className="p-10 text-center animate-pulse">Loading Dashboard Data...</div>
     );
   }
 
@@ -222,9 +243,7 @@ const UserManagement = () => {
                 Live
               </span>
             </div>
-            <p className="font-medium text-[#64748B] text-[14px] my-2">
-              Total Registration
-            </p>
+            <p className="font-medium text-[#64748B] text-[14px] my-2">Total Registration</p>
             <h2 className="font-bold text-[24px] mb-2">{stats.total_registration || 0}</h2>
             <span className="text-[#10B981] text-xs font-medium flex items-center gap-1">
               <ArrowUp className="w-3 h-3" />
@@ -281,11 +300,13 @@ const UserManagement = () => {
               </button>
             </div>
             <div className="flex items-center justify-between w-full md:w-auto gap-4">
-              <span className="text-sm text-[#374151]">
-                {selectedCount} selected
-              </span>
+              <span className="text-sm text-[#374151]">{selectedCount} selected</span>
               <button
-                className={`bg-[#F3F4F6] text-[#374151] px-4 py-2 rounded-md text-sm font-medium transition ${selectedCount === 0 ? " opacity-50 cursor-not-allowed" : " hover:bg-gray-200 cursor-pointer"}`}
+                className={`bg-[#F3F4F6] text-[#374151] px-4 py-2 rounded-md text-sm font-medium transition ${
+                  selectedCount === 0
+                    ? "opacity-50 cursor-not-allowed"
+                    : "hover:bg-gray-200 cursor-pointer"
+                }`}
                 onClick={bulkApprover}
                 disabled={selectedCount === 0}
               >
@@ -311,6 +332,7 @@ const UserManagement = () => {
                   <th className="p-4">Level</th>
                   <th className="p-4">Role</th>
                   <th className="p-4">Status</th>
+                  <th className="p-4">Actions</th>
                 </tr>
               </thead>
               <tbody className="text-sm">
@@ -325,37 +347,41 @@ const UserManagement = () => {
                           className="w-4 h-4"
                         />
                       </td>
-                      <td className="p-4 flex items-center gap-3">
-                        <div
-                          className={`w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold ${user.avatarColor}`}
-                        >
-                          {user.name.charAt(0)}
-                        </div>
-                        <div>
-                          <p className="font-medium text-gray-900">{user.name}</p>
-                          <p className="text-gray-500 text-xs">{user.email}</p>
+                      <td className="p-4">
+                        <div className="flex items-center gap-3">
+                          <div
+                            className={`w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold ${user.avatarColor}`}
+                          >
+                            {user.name.charAt(0)}
+                          </div>
+                          <div>
+                            <p className="font-medium text-gray-900">{user.name}</p>
+                            <p className="text-gray-500 text-xs">{user.email}</p>
+                          </div>
                         </div>
                       </td>
                       <td className="p-4 text-[#64748B] text-[14px]">{user.matric}</td>
                       <td className="p-4 text-[#64748B] text-[14px]">{user.level}</td>
                       <td className="p-4">
                         <span
-                          className={`px-3 py-1 rounded-full text-[12px] font-semibold ${user.role === "Class Rep"
-                            ? "bg-[#F3E8FF] text-[#6B21A8]"
-                            : "bg-[#F3F4F6] text-[#4B5563]"
-                            }`}
+                          className={`px-3 py-1 rounded-full text-[12px] font-semibold ${
+                            user.role === "Class Rep"
+                              ? "bg-[#F3E8FF] text-[#6B21A8]"
+                              : "bg-[#F3F4F6] text-[#4B5563]"
+                          }`}
                         >
                           {user.role}
                         </span>
                       </td>
                       <td className="p-4">
                         <span
-                          className={`px-3 py-1 rounded-full text-xs font-semibold ${user.status === "Active"
-                            ? "bg-green-100 text-green-700"
-                            : user.status === "Rejected"
+                          className={`px-3 py-1 rounded-full text-xs font-semibold ${
+                            user.status === "Active"
+                              ? "bg-green-100 text-green-700"
+                              : user.status === "Rejected"
                               ? "bg-red-100 text-red-700"
                               : "bg-amber-100 text-amber-700"
-                            }`}
+                          }`}
                         >
                           {user.status}
                         </span>
@@ -395,7 +421,7 @@ const UserManagement = () => {
                   ))
                 ) : (
                   <tr>
-                    <td colSpan="6" className="p-8 text-center text-gray-500">
+                    <td colSpan="7" className="p-8 text-center text-gray-500">
                       No users found
                     </td>
                   </tr>
@@ -427,7 +453,7 @@ const UserManagement = () => {
           </div>
         </div>
 
-        {/* --- RECENT USER MANAGEMENT LOGS SECTION -- */}
+        {/* RECENT USER MANAGEMENT LOGS */}
         <div className="bg-white rounded-3xl shadow border border-[#E5E7EB] mb-10">
           <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 px-6 pt-6 gap-4">
             <h2 className="text-[18px] font-bold text-[#0F172A] flex items-center gap-2">
@@ -456,28 +482,32 @@ const UserManagement = () => {
                 </tr>
               </thead>
               <tbody className="text-[14px]">
-                {recentLogs.map((log) => (
-                  <tr
-                    key={log.id}
-                    className="border-b border-[#F1F5F9] last:border-0 hover:bg-gray-50 transition"
-                  >
-                    <td className="py-4 pl-6 font-medium text-[#0F172A]">
-                      {log.activity}
-                    </td>
-                    <td className="py-4 px-4 text-[#64748B]">{log.admin}</td>
-                    <td className="py-4 px-4 text-[#64748B]">{log.date}</td>
-                    <td className="py-4 px-4">
-                      <span
-                        className={`px-3 py-1 rounded-full text-xs font-medium ${log.statusColor}`}
-                      >
-                        {log.status}
-                      </span>
-                    </td>
-                    <td className="py-4 pr-6 text-right font-medium cursor-pointer ${log.actionColor}">
-                      {log.action}
+                {recentLogs.length > 0 ? (
+                  recentLogs.map((log) => (
+                    <tr
+                      key={log.id}
+                      className="border-b border-[#F1F5F9] last:border-0 hover:bg-gray-50 transition"
+                    >
+                      <td className="py-4 pl-6 font-medium text-[#0F172A]">{log.activity}</td>
+                      <td className="py-4 px-4 text-[#64748B]">{log.admin}</td>
+                      <td className="py-4 px-4 text-[#64748B]">{log.date}</td>
+                      <td className="py-4 px-4">
+                        <span className={`px-3 py-1 rounded-full text-xs font-medium ${log.statusColor}`}>
+                          {log.status}
+                        </span>
+                      </td>
+                      <td className={`py-4 pr-6 text-right font-medium cursor-pointer ${log.actionColor}`}>
+                        {log.action}
+                      </td>
+                    </tr>
+                  ))
+                ) : (
+                  <tr>
+                    <td colSpan="5" className="p-8 text-center text-gray-500">
+                      No logs available
                     </td>
                   </tr>
-                ))}
+                )}
               </tbody>
             </table>
           </div>
