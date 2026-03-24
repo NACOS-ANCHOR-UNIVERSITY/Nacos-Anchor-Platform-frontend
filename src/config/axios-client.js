@@ -14,9 +14,22 @@ const client = axios.create({
 
 client.interceptors.request.use((config) => {
   const token =
-    localStorage.getItem("token") || localStorage.getItem("ACCESS_TOKEN");
-
-  //const token = useUserStore.getState().token;
+    // Prefer token from the Zustand store (persisted) so we stay in sync with app state
+    useUserStore.getState().token ||
+    // Fallback: some flows may store a raw token directly in localStorage
+    localStorage.getItem("token") ||
+    localStorage.getItem("ACCESS_TOKEN") ||
+    // Final fallback: check the persisted Zustand storage key (nacos-auth-storage)
+    (() => {
+      try {
+        const raw = localStorage.getItem("nacos-auth-storage");
+        if (!raw) return null;
+        const parsed = JSON.parse(raw);
+        return parsed?.state?.token || null;
+      } catch (e) {
+        return null;
+      }
+    })();
 
   if (token) {
     config.headers.Authorization = `Bearer ${token}`;

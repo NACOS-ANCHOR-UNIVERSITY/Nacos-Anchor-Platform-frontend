@@ -49,10 +49,13 @@ const transformEvent = (apiEvent) => {
   const { month, day } = parseEventDate(apiEvent.event_date);
   const tab = getEventTab(apiEvent.event_date);
   const isUpcoming = tab === "upcoming";
-
+  // dateVariant controls compact / neutral styles for the date badge
+  // mark sold-out events as 'neutral' so they render appropriately
+  const dateVariant = apiEvent.is_sold_out ? "neutral" : undefined;
   return {
     id: apiEvent.id,
     tab,
+    dateVariant,
     month,
     day,
     badge: apiEvent.is_sold_out ? "Sold Out" : isUpcoming ? "Registration Open" : "Concluded",
@@ -374,7 +377,11 @@ export default function EventsAndPolls() {
         getEvents(),
       ]);
       setDashboardStats(statsData);
-      setEvents(eventsData.map(transformEvent));
+      // transform and ensure latest-first ordering by `created_at` (fallback to event_date)
+      const transformed = eventsData
+        .map(transformEvent)
+        .sort((a, b) => new Date(b.created_at || b.event_date) - new Date(a.created_at || a.event_date));
+      setEvents(transformed);
     } catch (err) {
       setError(err.response?.data?.message || "Failed to fetch data");
       console.error("Error fetching events data:", err);

@@ -14,7 +14,8 @@ export default defineConfig({
       "/api": {
         target: "https://nacos.nextgenerationones.org",
         changeOrigin: true,
-        secure: true,
+        // use secure:false if backend uses self-signed certs in dev
+        secure: false,
       },
     },
   },
@@ -23,13 +24,5 @@ export default defineConfig({
       "@": path.resolve(__dirname, "./src"),
     },
   },
-  server: {
-    proxy: {
-      '/api': {
-        target: 'https://nacos.nextgenerationones.org',
-        changeOrigin: true,
-        secure: false,
-      },
-    },
-  },
+  // server block defined above
 })
