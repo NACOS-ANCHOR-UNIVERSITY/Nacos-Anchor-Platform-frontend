@@ -49,6 +49,31 @@ export const adminService = {
     const response = await client.post("/admin/opportunities", data);
     return response.data;
   },
+
+  getEventsDashboard: async () => {
+    const response = await client.get("/admin/events/dashboard");
+    return response.data;
+  },
+
+  getEvents: async () => {
+    const response = await client.get("/admin/events");
+    return response.data;
+  },
+
+  createEvent: async (payload) => {
+    const response = await client.post("/admin/events", payload);
+    return response.data;
+  },
+
+  updateEvent: async ({ id, payload }) => {
+    const response = await client.put(`/admin/events/update?id=${id}`, payload);
+    return response.data;
+  },
+
+  deleteEvent: async (id) => {
+    const response = await client.delete(`/admin/events/delete?id=${id}`);
+    return response.data;
+  },
 };
 
 export default adminService;
