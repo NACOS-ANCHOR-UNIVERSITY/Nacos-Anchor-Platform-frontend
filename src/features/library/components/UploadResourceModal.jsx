@@ -1,9 +1,9 @@
-import React, { useState } from "react";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { z } from "zod";
-import { Upload, FileText, X, Trash2, SendHorizontal } from "lucide-react";
-import { toast } from "sonner";
+import React, {useState} from "react";
+import {useForm} from "react-hook-form";
+import {zodResolver} from "@hookform/resolvers/zod";
+import {z} from "zod";
+import {Upload, FileText, X, Trash2, SendHorizontal} from "lucide-react";
+import {toast} from "sonner";
 
 // 1. Validation Schema
 const uploadSchema = z.object({
@@ -17,7 +17,7 @@ const uploadSchema = z.object({
     .refine((files) => files?.[0]?.size <= 15000000, "Max file size is 15MB"),
 });
 
-const UploadResourceModal = ({ isOpen, onClose }) => {
+const UploadResourceModal = ({isOpen, onClose}) => {
   const [filePreview, setFilePreview] = useState(null);
 
   const {
@@ -26,7 +26,7 @@ const UploadResourceModal = ({ isOpen, onClose }) => {
     setValue,
     watch,
     reset,
-    formState: { errors, isSubmitting },
+    formState: {errors, isSubmitting},
   } = useForm({
     resolver: zodResolver(uploadSchema),
     defaultValues: {
@@ -55,34 +55,68 @@ const UploadResourceModal = ({ isOpen, onClose }) => {
     setValue("file", null);
   };
 
-  // --- SUBMIT FUNCTION (DIRECT FETCH) ---
+  // --- SUBMIT FUNCTION (UPDATED WITH SMART TOKEN EXTRACTOR) ---
   const onSubmit = async (data) => {
     const toastId = toast.loading("Uploading document...");
 
     try {
-      // 1. Get Token
-      const token =
+      // 1. 🧠 SMART TOKEN EXTRACTOR
+      let token =
         localStorage.getItem("ACCESS_TOKEN") || localStorage.getItem("token");
-      if (!token) throw new Error("Please login to upload files.");
+
+      // Dig into the 'nacos-auth' JSON object if simple keys fail
+      if (!token || token === "null") {
+        try {
+          // Find the exact key name (e.g., 'nacos-auth-store' or 'nacos-auth')
+          const authKey = Object.keys(localStorage).find((key) =>
+            key.startsWith("nacos-au"),
+          );
+
+          if (authKey) {
+            const authData = JSON.parse(localStorage.getItem(authKey));
+
+            // It's usually inside .state.token, .state.user.token, or directly on the object
+            token =
+              authData?.state?.token ||
+              authData?.state?.user?.token ||
+              authData?.token;
+          }
+        } catch (e) {
+          console.error("Failed to parse auth storage:", e);
+        }
+      }
+
+      console.log(
+        "🔍 DEBUG - Smart Token Found:",
+        token ? "YES (Hidden in JSON)" : "STILL NULL",
+      );
+
+      if (!token || token === "null" || token === "undefined") {
+        throw new Error("Missing Token. Please log out and log back in.");
+      }
 
       // 2. Prepare FormData
       const formData = new FormData();
       formData.append("course_code", data.courseCode);
-      formData.append("level", data.level);
+      // Clean up the level to match DB (e.g. "300L" -> "300")
+      formData.append("level", data.level.replace("L", ""));
       formData.append("title", data.title);
       formData.append("description", data.description);
       formData.append("resource_file", data.file[0]);
 
-      console.log("Uploading file via Fetch...");
+      console.log(
+        " Uploading to Proxy: https://nacos.nextgenerationones.org/api/upload/submit",
+      );
 
       // 3. Send Request
       const response = await fetch(
-        "https://nacos.nextgenerationones.org/api/resources",
+        "https://nacos.nextgenerationones.org/api/upload/submit",
         {
           method: "POST",
           headers: {
             Authorization: `Bearer ${token}`,
             Accept: "application/json",
+            // DO NOT manually set Content-Type for FormData
           },
           body: formData,
         },
@@ -93,22 +127,27 @@ const UploadResourceModal = ({ isOpen, onClose }) => {
         result = await response.json();
       } catch (err) {
         throw new Error(
-          `Server Error: ${response.status} ${response.statusText}`,
+          `Server crashed: ${response.status} ${response.statusText}`,
         );
       }
 
+      console.log("📥 Backend Response:", result);
+
       if (!response.ok) {
-        throw new Error(result.message || "Upload failed");
+        throw new Error(`Backend says: ${result.message || "Upload failed"}`);
       }
 
       // 4. Success
       toast.dismiss(toastId);
-      toast.success("Document uploaded successfully!");
+      toast.success(result.message || "Document uploaded successfully!");
       reset();
       setFilePreview(null);
       onClose(); // Close modal on success
+
+      // Reload the library page to show the new file
+      setTimeout(() => window.location.reload(), 1500);
     } catch (error) {
-      console.error("Upload Error:", error);
+      console.error("❌ Upload Error:", error);
       toast.dismiss(toastId);
       toast.error(error.message || "Upload failed. Check your connection.");
     }
