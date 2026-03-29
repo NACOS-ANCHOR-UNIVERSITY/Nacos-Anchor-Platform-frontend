@@ -10,6 +10,8 @@ export const adminKeys = {
   payments: () => [...adminKeys.all, "payments"],
   siwesBoard: () => [...adminKeys.all, "siwes-board"],
   dashboard: () => [...adminKeys.all, "dashboard"],
+  eventsDashboard: () => [...adminKeys.all, "events-dashboard"],
+  events: () => [...adminKeys.all, "events"],
 };
 
 // ===== ADMIN MAIN DASHBOARD =====
@@ -146,6 +148,144 @@ export const useCreateOpportunity = () => {
     onSuccess: () => {
       // Invalidate SIWES board query to refetch updated data
       queryClient.invalidateQueries({ queryKey: adminKeys.siwesBoard() });
+    },
+  });
+};
+
+// ===== ADMIN EVENTS DASHBOARD =====
+
+/**
+ * Hook to get admin events dashboard data
+ * Endpoint: GET /admin/events/dashboard
+ *
+ * Returns: metrics (total_events, upcoming_events, past_events, draft_events)
+ *
+ * @example
+ * const { data, isLoading, error } = useAdminEventsDashboard();
+ * const { total_events, upcoming_events, past_events, draft_events } = data?.data || {};
+ */
+export const useAdminEventsDashboard = (options = {}) => {
+  return useQuery({
+    queryKey: adminKeys.eventsDashboard(),
+    queryFn: adminService.getEventsDashboard,
+    staleTime: 2 * 60 * 1000,
+    retry: false,
+    ...options,
+  });
+};
+
+/**
+ * Hook to fetch all events
+ * Endpoint: GET /admin/events
+ *
+ * Returns: array of events with full details (id, title, category, image_url, event_date, etc.)
+ *
+ * @example
+ * const { data, isLoading, error } = useAdminEvents();
+ * const events = data?.data || [];
+ */
+export const useAdminEvents = (options = {}) => {
+  return useQuery({
+    queryKey: adminKeys.events(),
+    queryFn: adminService.getEvents,
+    staleTime: 3 * 60 * 1000,
+    retry: false,
+    ...options,
+  });
+};
+
+/**
+ * Hook to create a new event
+ * Endpoint: POST /admin/events
+ *
+ * @example
+ * const createEvent = useCreateEvent();
+ *
+ * createEvent.mutate({
+ *   title: "NACOS Freshers Orientation '26",
+ *   category: "Orientation",
+ *   event_date: "2026-02-14",
+ *   time_range: "10:00 AM - 2:00 PM",
+ *   location: "University Auditorium",
+ *   description: "Welcome event for freshers",
+ *   image_url: "https://...",
+ *   button_text: "Register Now",
+ *   registration_link: "https://...",
+ *   is_sold_out: 0
+ * });
+ */
+export const useCreateEvent = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: adminService.createEvent,
+    onSuccess: (data) => {
+      console.log("Event created successfully:", data);
+      // Invalidate both events list and dashboard metrics
+      queryClient.invalidateQueries({ queryKey: adminKeys.events() });
+      queryClient.invalidateQueries({ queryKey: adminKeys.eventsDashboard() });
+    },
+    onError: (error) => {
+      console.error("Failed to create event:", error);
+    },
+  });
+};
+
+/**
+ * Hook to update an existing event
+ * Endpoint: PUT /admin/events/update?id={event_id}
+ *
+ * @example
+ * const updateEvent = useUpdateEvent();
+ *
+ * updateEvent.mutate({
+ *   id: 1,
+ *   payload: {
+ *     title: "Updated Title",
+ *     category: "Workshop",
+ *     ...
+ *   }
+ * });
+ */
+export const useUpdateEvent = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: adminService.updateEvent,
+    onSuccess: (data) => {
+      console.log("Event updated successfully:", data);
+      // Invalidate both events list and dashboard metrics
+      queryClient.invalidateQueries({ queryKey: adminKeys.events() });
+      queryClient.invalidateQueries({ queryKey: adminKeys.eventsDashboard() });
+    },
+    onError: (error) => {
+      console.error("Failed to update event:", error);
+    },
+  });
+};
+
+/**
+ * Hook to delete an event
+ * Endpoint: DELETE /admin/events/delete?id={event_id}
+ *
+ * @example
+ * const deleteEvent = useDeleteEvent();
+ *
+ * deleteEvent.mutate(1); // event id
+ */
+export const useDeleteEvent = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: adminService.deleteEvent,
+    onSuccess: (data) => {
+      console.log("Event deleted successfully:", data);
+      // Invalidate both events list and dashboard metrics
+      queryClient.invalidateQueries({ queryKey: adminKeys.events() });
+      queryClient.invalidateQueries({ queryKey: adminKeys.eventsDashboard() });
+    },
+    onError: (error) => {
+      console.error("Failed to delete event:", error);
     },
   });
 };
