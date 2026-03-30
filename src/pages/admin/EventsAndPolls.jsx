@@ -1,8 +1,4 @@
-<<<<<<< Updated upstream
 import { useEffect, useMemo, useState, useCallback } from "react";
-=======
-import { useMemo, useState, useEffect } from "react";
->>>>>>> Stashed changes
 import {
   BarChart3,
   CalendarDays,
@@ -19,7 +15,6 @@ import {
   Edit,
   Loader2,
 } from "lucide-react";
-<<<<<<< Updated upstream
 import {
   getEventsDashboard,
   getEvents,
@@ -37,41 +32,6 @@ const parseEventDate = (dateStr) => {
     day: String(date.getDate()).padStart(2, "0"),
   };
 };
-=======
-import { useAdminEventsDashboard, useAdminEvents, useCreateEvent, useUpdateEvent, useDeleteEvent } from "@/hooks/useAdmin";
-
-// Default stats structure for error/loading states
-const DEFAULT_STATS = [
-  {
-    label: "Total Events",
-    value: "-",
-    Icon: CalendarDays,
-    iconBg: "bg-[#EFF6FF]",
-    iconColor: "text-[#2563EB]",
-  },
-  {
-    label: "Upcoming Events",
-    value: "-",
-    Icon: CalendarDays,
-    iconBg: "bg-[#DCFCE7]",
-    iconColor: "text-[#16A34A]",
-  },
-  {
-    label: "Past Events",
-    value: "-",
-    Icon: Users,
-    iconBg: "bg-[#FFF7ED]",
-    iconColor: "text-[#EA580C]",
-  },
-  {
-    label: "Draft Events",
-    value: "-",
-    Icon: Vote,
-    iconBg: "bg-[#F3E8FF]",
-    iconColor: "text-[#9333EA]",
-  },
-];
->>>>>>> Stashed changes
 
 // Helper to determine event status/tab
 const getEventTab = (eventDate) => {
@@ -197,7 +157,7 @@ function TabButton({ active, onClick, children }) {
 
 function EventCard({ event, onEdit, onDelete }) {
   const [showMenu, setShowMenu] = useState(false);
-  
+
   const dateBgClass = useMemo(() => {
     if (event.dateVariant === "neutral") {
       return "bg-[#F8FAFC] border-[#E2E8F0] text-[#64748B]";
@@ -270,48 +230,29 @@ function EventCard({ event, onEdit, onDelete }) {
             >
               <MoreVertical className="w-4 h-4" />
             </button>
-<<<<<<< Updated upstream
-            
-            {showMenu && (
-              <div className="absolute right-0 top-8 z-10 bg-white border border-[#E2E8F0] rounded-lg shadow-lg py-1 min-w-[120px]">
-=======
 
             {showMenu && (
-              <div className="absolute right-0 mt-1 w-32 bg-white border border-[#E2E8F0] rounded-lg shadow-lg z-10">
->>>>>>> Stashed changes
+              <div className="absolute right-0 top-8 z-10 bg-white border border-[#E2E8F0] rounded-lg shadow-lg py-1 min-w-[120px]">
                 <button
                   type="button"
                   onClick={() => {
                     onEdit(event);
                     setShowMenu(false);
                   }}
-<<<<<<< Updated upstream
                   className="w-full px-3 py-2 text-left text-sm text-[#334155] hover:bg-[#F8FAFC] flex items-center gap-2"
                 >
                   <Edit className="w-4 h-4" />
-=======
-                  className="w-full text-left px-4 py-2 text-sm text-[#0F172A] hover:bg-[#F8FAFC] border-b border-[#E2E8F0]"
-                >
->>>>>>> Stashed changes
                   Edit
                 </button>
                 <button
                   type="button"
                   onClick={() => {
-<<<<<<< Updated upstream
                     onDelete(event);
                     setShowMenu(false);
                   }}
                   className="w-full px-3 py-2 text-left text-sm text-[#EF4444] hover:bg-[#FEE2E2] flex items-center gap-2"
                 >
                   <Trash2 className="w-4 h-4" />
-=======
-                    onDelete(event.id);
-                    setShowMenu(false);
-                  }}
-                  className="w-full text-left px-4 py-2 text-sm text-[#EF4444] hover:bg-[#FEE2E2]"
-                >
->>>>>>> Stashed changes
                   Delete
                 </button>
               </div>
@@ -334,15 +275,7 @@ function EventCard({ event, onEdit, onDelete }) {
 
             <button
               type="button"
-<<<<<<< Updated upstream
               onClick={() => onEdit(event)}
-=======
-              onClick={() => {
-                if (event.registration_link) {
-                  window.open(event.registration_link, "_blank");
-                }
-              }}
->>>>>>> Stashed changes
               className={`h-7 px-3.5 rounded-lg text-[11px] font-semibold transition-colors ${
                 event.action === "Register"
                   ? "bg-[#138601] text-white hover:bg-green-700"
@@ -401,8 +334,7 @@ export default function EventsAndPolls() {
   const [tab, setTab] = useState("upcoming");
   const [question, setQuestion] = useState("");
   const [options, setOptions] = useState(["", ""]);
-<<<<<<< Updated upstream
-  
+
   // API State
   const [events, setEvents] = useState([]);
   const [dashboardStats, setDashboardStats] = useState({
@@ -413,24 +345,16 @@ export default function EventsAndPolls() {
   });
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  
+
   // Modal State
   const [showEventModal, setShowEventModal] = useState(false);
   const [editingEvent, setEditingEvent] = useState(null);
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const [eventToDelete, setEventToDelete] = useState(null);
   const [submitting, setSubmitting] = useState(false);
-  
+
   // Form State
   const [eventForm, setEventForm] = useState({
-=======
-  const [stats, setStats] = useState(DEFAULT_STATS);
-  const [displayEvents, setDisplayEvents] = useState([]);
-  const [showEventForm, setShowEventForm] = useState(false);
-  const [editingEvent, setEditingEvent] = useState(null);
-  const [formError, setFormError] = useState("");
-  const [formData, setFormData] = useState({
->>>>>>> Stashed changes
     title: "",
     category: "",
     image_url: "",
@@ -443,7 +367,6 @@ export default function EventsAndPolls() {
     is_sold_out: 0,
   });
 
-<<<<<<< Updated upstream
   // Fetch dashboard stats and events
   const fetchData = useCallback(async () => {
     setLoading(true);
@@ -506,203 +429,10 @@ export default function EventsAndPolls() {
   const visibleEvents = useMemo(() => {
     if (tab === "upcoming") {
       return events.filter((evt) => evt.tab === "upcoming");
-=======
-  // Fetch events dashboard data
-  const { data: dashboardData, isLoading: dashboardLoading, error: dashboardError } = useAdminEventsDashboard();
-
-  // Fetch all events data
-  const { data: eventsData, isLoading: eventsLoading, error: eventsError } = useAdminEvents();
-
-  // Mutations
-  const createEventMutation = useCreateEvent();
-  const updateEventMutation = useUpdateEvent();
-  const deleteEventMutation = useDeleteEvent();
-
-  // Log any errors
-  useEffect(() => {
-    if (dashboardError) {
-      console.error("Failed to fetch events dashboard:", dashboardError);
-    }
-    if (eventsError) {
-      console.error("Failed to fetch events:", eventsError);
-    }
-  }, [dashboardError, eventsError]);
-
-  // Transform API data to stats cards
-  useEffect(() => {
-    if (dashboardData?.data) {
-      const eventData = dashboardData.data;
-      
-      setStats([
-        {
-          ...DEFAULT_STATS[0],
-          value: eventData.total_events?.toString() || "-",
-        },
-        {
-          ...DEFAULT_STATS[1],
-          value: eventData.upcoming_events?.toString() || "-",
-        },
-        {
-          ...DEFAULT_STATS[2],
-          value: eventData.past_events?.toString() || "-",
-        },
-        {
-          ...DEFAULT_STATS[3],
-          value: eventData.draft_events?.toString() || "-",
-        },
-      ]);
-    }
-  }, [dashboardData]);
-
-  // Transform API events to display format
-  useEffect(() => {
-    if (eventsData?.data && Array.isArray(eventsData.data)) {
-      const transformedEvents = eventsData.data.map((event) => {
-        const eventDate = new Date(event.event_date);
-        const month = eventDate.toLocaleDateString("en-US", { month: "short" }).toUpperCase();
-        const day = eventDate.getDate().toString().padStart(2, "0");
-
-        return {
-          id: event.id,
-          tab: "upcoming",
-          month,
-          day,
-          event_date: event.event_date,
-          badge: event.category || "Event",
-          badgeClass: "bg-[#DBEAFE] text-[#2563EB]",
-          title: event.title,
-          desc: event.description || "",
-          time: event.time_range || "Time TBA",
-          location: event.location || "Location TBA",
-          people: event.is_sold_out ? "Sold Out" : "Registration Open",
-          action: event.registration_link ? "Register" : "View",
-          avatars: [],
-          image_url: event.image_url,
-          registration_link: event.registration_link,
-        };
-      });
-      setDisplayEvents(transformedEvents);
-    }
-  }, [eventsData]);
-
-  // Event form handlers
-  const handleOpenCreateForm = () => {
-    setEditingEvent(null);
-    setFormError("");
-    setFormData({
-      title: "",
-      category: "",
-      image_url: "",
-      event_date: "",
-      time_range: "",
-      location: "",
-      description: "",
-      button_text: "Register Now",
-      registration_link: "",
-      is_sold_out: 0,
-    });
-    setShowEventForm(true);
-  };
-
-  const handleOpenEditForm = (event) => {
-    setEditingEvent(event);
-    setFormData({
-      title: event.title,
-      category: event.badge,
-      image_url: event.image_url || "",
-      event_date: calculateEventDate(event),
-      time_range: event.time,
-      location: event.location,
-      description: event.desc,
-      button_text: "Register Now",
-      registration_link: event.registration_link || "",
-      is_sold_out: event.people === "Sold Out" ? 1 : 0,
-    });
-    setShowEventForm(true);
-  };
-
-  const calculateEventDate = (event) => {
-    // Use the original event_date if available
-    return event.event_date || "";
-  };
-
-  const handleCloseForm = () => {
-    setShowEventForm(false);
-    setEditingEvent(null);
-    setFormError("");
-  };
-
-  const handleFormChange = (e) => {
-    const { name, value, type, checked } = e.target;
-    setFormData((prev) => ({
-      ...prev,
-      [name]: type === "checkbox" ? (checked ? 1 : 0) : value,
-    }));
-  };
-
-  const handleSubmitForm = async (e) => {
-    e.preventDefault();
-    
-    // Validation
-    if (!formData.title || !formData.category || !formData.event_date || !formData.time_range || !formData.location || !formData.description) {
-      setFormError("Please fill in all required fields");
-      return;
-    }
-
-    setFormError("");
-    console.log("Submitting event form:", { editingEvent, formData });
-    
-    if (editingEvent) {
-      console.log("Updating event with ID:", editingEvent.id);
-      updateEventMutation.mutate(
-        { id: editingEvent.id, payload: formData },
-        {
-          onSuccess: () => {
-            console.log("Event updated successfully");
-            handleCloseForm();
-          },
-          onError: (error) => {
-            console.error("Update error:", error);
-            setFormError(`Failed to update event: ${error.message || "Unknown error"}`);
-          },
-        }
-      );
-    } else {
-      console.log("Creating new event");
-      createEventMutation.mutate(formData, {
-        onSuccess: () => {
-          console.log("Event created successfully");
-          handleCloseForm();
-        },
-        onError: (error) => {
-          console.error("Create error:", error);
-          setFormError(`Failed to create event: ${error.message || "Unknown error"}`);
-        },
-      });
-    }
-  };
-
-  const handleDeleteEvent = (eventId) => {
-    if (confirm("Are you sure you want to delete this event?")) {
-      console.log("Deleting event with ID:", eventId);
-      deleteEventMutation.mutate(eventId, {
-        onError: (error) => {
-          console.error("Delete error:", error);
-          alert(`Failed to delete event: ${error.message || "Unknown error"}`);
-        },
-      });
-    }
-  };
-
-  const visibleEvents = useMemo(() => {
-    if (tab === "upcoming") {
-      return displayEvents.filter((evt) => evt.tab !== "drafts");
->>>>>>> Stashed changes
     }
     return events.filter((evt) => evt.tab === tab);
   }, [tab, events]);
 
-<<<<<<< Updated upstream
   // Open modal for creating new event
   const handleCreateEvent = () => {
     setEditingEvent(null);
@@ -785,10 +515,6 @@ export default function EventsAndPolls() {
   const updateFormField = (field, value) => {
     setEventForm((prev) => ({ ...prev, [field]: value }));
   };
-=======
-    return displayEvents.filter((evt) => evt.tab === tab);
-  }, [tab, displayEvents]);
->>>>>>> Stashed changes
 
   return (
     <div className="max-w-7xl mx-auto flex flex-col gap-6">
@@ -823,11 +549,7 @@ export default function EventsAndPolls() {
 
           <button
             type="button"
-<<<<<<< Updated upstream
             onClick={handleCreateEvent}
-=======
-            onClick={handleOpenCreateForm}
->>>>>>> Stashed changes
             className="flex items-center w-max gap-2 py-2 px-4 bg-[#138601] rounded-xl text-sm text-white font-semibold transition-all active:scale-95 duration-150"
           >
             <Plus className="w-4 h-4" />
@@ -837,15 +559,11 @@ export default function EventsAndPolls() {
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-6">
-        {stats.map((s) => (
+        {STATS.map((s) => (
           <StatCard
             key={s.label}
             label={s.label}
-<<<<<<< Updated upstream
             value={loading ? "..." : s.value}
-=======
-            value={dashboardLoading ? "..." : s.value}
->>>>>>> Stashed changes
             Icon={s.Icon}
             iconBg={s.iconBg}
             iconColor={s.iconColor}
@@ -872,7 +590,6 @@ export default function EventsAndPolls() {
           </div>
 
           <div className="flex flex-col gap-4">
-<<<<<<< Updated upstream
             {loading ? (
               <div className="flex items-center justify-center py-12">
                 <Loader2 className="w-8 h-8 animate-spin text-[#138601]" />
@@ -888,22 +605,6 @@ export default function EventsAndPolls() {
                   key={evt.id}
                   event={evt}
                   onEdit={handleEditEvent}
-=======
-            {eventsLoading ? (
-              <div className="text-center py-8 text-[#64748B]">
-                <p className="text-sm font-medium">Loading events...</p>
-              </div>
-            ) : visibleEvents.length === 0 ? (
-              <div className="text-center py-8 text-[#64748B]">
-                <p className="text-sm font-medium">No events found</p>
-              </div>
-            ) : (
-              visibleEvents.map((evt) => (
-                <EventCard 
-                  key={evt.id} 
-                  event={evt}
-                  onEdit={handleOpenEditForm}
->>>>>>> Stashed changes
                   onDelete={handleDeleteEvent}
                 />
               ))
@@ -980,7 +681,6 @@ export default function EventsAndPolls() {
         </aside>
       </div>
 
-<<<<<<< Updated upstream
       {/* Event Modal */}
       {showEventModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
@@ -1010,66 +710,23 @@ export default function EventsAndPolls() {
                     onChange={(e) => updateFormField("title", e.target.value)}
                     className="w-full rounded-xl border border-[#E2E8F0] px-4 py-2.5 text-sm outline-none focus:ring-2 focus:ring-green-500"
                     placeholder="e.g., NACOS Freshers Orientation '26"
-=======
-      {/* Event Form Modal */}
-      {showEventForm && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-          <div className="bg-white rounded-2xl shadow-lg max-w-md w-full max-h-[90vh] overflow-y-auto">
-            <div className="p-6">
-              <h2 className="text-xl font-bold text-[#0F172A] mb-4">
-                {editingEvent ? "Edit Event" : "Create New Event"}
-              </h2>
-
-              {formError && (
-                <div className="mb-4 p-3 bg-[#FEE2E2] border border-[#FECACA] rounded-lg text-sm text-[#DC2626]">
-                  {formError}
-                </div>
-              )}
-
-              <form onSubmit={handleSubmitForm} className="space-y-4">
-                <div>
-                  <label className="block text-sm font-semibold text-[#0F172A] mb-1">
-                    Title
-                  </label>
-                  <input
-                    type="text"
-                    name="title"
-                    value={formData.title}
-                    onChange={handleFormChange}
-                    required
-                    className="w-full px-3 py-2 border border-[#E2E8F0] rounded-lg text-sm focus:ring-2 focus:ring-green-500 outline-none"
-                    placeholder="Event title"
->>>>>>> Stashed changes
                   />
                 </div>
 
                 <div>
-<<<<<<< Updated upstream
                   <label className="block text-sm font-medium text-[#334155] mb-1">
-=======
-                  <label className="block text-sm font-semibold text-[#0F172A] mb-1">
->>>>>>> Stashed changes
                     Category
                   </label>
                   <input
                     type="text"
-<<<<<<< Updated upstream
                     value={eventForm.category}
                     onChange={(e) => updateFormField("category", e.target.value)}
                     className="w-full rounded-xl border border-[#E2E8F0] px-4 py-2.5 text-sm outline-none focus:ring-2 focus:ring-green-500"
-=======
-                    name="category"
-                    value={formData.category}
-                    onChange={handleFormChange}
-                    required
-                    className="w-full px-3 py-2 border border-[#E2E8F0] rounded-lg text-sm focus:ring-2 focus:ring-green-500 outline-none"
->>>>>>> Stashed changes
                     placeholder="e.g., Orientation, Workshop"
                   />
                 </div>
 
                 <div>
-<<<<<<< Updated upstream
                   <label className="block text-sm font-medium text-[#334155] mb-1">
                     Event Date *
                   </label>
@@ -1079,23 +736,10 @@ export default function EventsAndPolls() {
                     value={eventForm.event_date}
                     onChange={(e) => updateFormField("event_date", e.target.value)}
                     className="w-full rounded-xl border border-[#E2E8F0] px-4 py-2.5 text-sm outline-none focus:ring-2 focus:ring-green-500"
-=======
-                  <label className="block text-sm font-semibold text-[#0F172A] mb-1">
-                    Event Date
-                  </label>
-                  <input
-                    type="date"
-                    name="event_date"
-                    value={formData.event_date}
-                    onChange={handleFormChange}
-                    required
-                    className="w-full px-3 py-2 border border-[#E2E8F0] rounded-lg text-sm focus:ring-2 focus:ring-green-500 outline-none"
->>>>>>> Stashed changes
                   />
                 </div>
 
                 <div>
-<<<<<<< Updated upstream
                   <label className="block text-sm font-medium text-[#334155] mb-1">
                     Time Range *
                   </label>
@@ -1105,24 +749,11 @@ export default function EventsAndPolls() {
                     value={eventForm.time_range}
                     onChange={(e) => updateFormField("time_range", e.target.value)}
                     className="w-full rounded-xl border border-[#E2E8F0] px-4 py-2.5 text-sm outline-none focus:ring-2 focus:ring-green-500"
-=======
-                  <label className="block text-sm font-semibold text-[#0F172A] mb-1">
-                    Time Range
-                  </label>
-                  <input
-                    type="text"
-                    name="time_range"
-                    value={formData.time_range}
-                    onChange={handleFormChange}
-                    required
-                    className="w-full px-3 py-2 border border-[#E2E8F0] rounded-lg text-sm focus:ring-2 focus:ring-green-500 outline-none"
->>>>>>> Stashed changes
                     placeholder="e.g., 10:00 AM - 2:00 PM"
                   />
                 </div>
 
                 <div>
-<<<<<<< Updated upstream
                   <label className="block text-sm font-medium text-[#334155] mb-1">
                     Location *
                   </label>
@@ -1132,23 +763,10 @@ export default function EventsAndPolls() {
                     value={eventForm.location}
                     onChange={(e) => updateFormField("location", e.target.value)}
                     className="w-full rounded-xl border border-[#E2E8F0] px-4 py-2.5 text-sm outline-none focus:ring-2 focus:ring-green-500"
-=======
-                  <label className="block text-sm font-semibold text-[#0F172A] mb-1">
-                    Location
-                  </label>
-                  <input
-                    type="text"
-                    name="location"
-                    value={formData.location}
-                    onChange={handleFormChange}
-                    required
-                    className="w-full px-3 py-2 border border-[#E2E8F0] rounded-lg text-sm focus:ring-2 focus:ring-green-500 outline-none"
->>>>>>> Stashed changes
                     placeholder="e.g., University Auditorium"
                   />
                 </div>
 
-<<<<<<< Updated upstream
                 <div className="md:col-span-2">
                   <label className="block text-sm font-medium text-[#334155] mb-1">
                     Description *
@@ -1160,58 +778,28 @@ export default function EventsAndPolls() {
                     onChange={(e) => updateFormField("description", e.target.value)}
                     className="w-full rounded-xl border border-[#E2E8F0] px-4 py-2.5 text-sm outline-none focus:ring-2 focus:ring-green-500 resize-none"
                     placeholder="Describe the event..."
-=======
-                <div>
-                  <label className="block text-sm font-semibold text-[#0F172A] mb-1">
-                    Description
-                  </label>
-                  <textarea
-                    name="description"
-                    value={formData.description}
-                    onChange={handleFormChange}
-                    required
-                    rows="3"
-                    className="w-full px-3 py-2 border border-[#E2E8F0] rounded-lg text-sm focus:ring-2 focus:ring-green-500 outline-none"
-                    placeholder="Event description"
->>>>>>> Stashed changes
                   />
                 </div>
 
                 <div>
-<<<<<<< Updated upstream
                   <label className="block text-sm font-medium text-[#334155] mb-1">
-=======
-                  <label className="block text-sm font-semibold text-[#0F172A] mb-1">
->>>>>>> Stashed changes
                     Image URL
                   </label>
                   <input
                     type="url"
-<<<<<<< Updated upstream
                     value={eventForm.image_url}
                     onChange={(e) => updateFormField("image_url", e.target.value)}
                     className="w-full rounded-xl border border-[#E2E8F0] px-4 py-2.5 text-sm outline-none focus:ring-2 focus:ring-green-500"
-=======
-                    name="image_url"
-                    value={formData.image_url}
-                    onChange={handleFormChange}
-                    className="w-full px-3 py-2 border border-[#E2E8F0] rounded-lg text-sm focus:ring-2 focus:ring-green-500 outline-none"
->>>>>>> Stashed changes
                     placeholder="https://..."
                   />
                 </div>
 
                 <div>
-<<<<<<< Updated upstream
                   <label className="block text-sm font-medium text-[#334155] mb-1">
-=======
-                  <label className="block text-sm font-semibold text-[#0F172A] mb-1">
->>>>>>> Stashed changes
                     Registration Link
                   </label>
                   <input
                     type="url"
-<<<<<<< Updated upstream
                     value={eventForm.registration_link}
                     onChange={(e) => updateFormField("registration_link", e.target.value)}
                     className="w-full rounded-xl border border-[#E2E8F0] px-4 py-2.5 text-sm outline-none focus:ring-2 focus:ring-green-500"
@@ -1306,48 +894,6 @@ export default function EventsAndPolls() {
                 {submitting && <Loader2 className="w-4 h-4 animate-spin" />}
                 Delete Event
               </button>
-=======
-                    name="registration_link"
-                    value={formData.registration_link}
-                    onChange={handleFormChange}
-                    className="w-full px-3 py-2 border border-[#E2E8F0] rounded-lg text-sm focus:ring-2 focus:ring-green-500 outline-none"
-                    placeholder="https://..."
-                  />
-                </div>
-
-                <div className="flex items-center gap-2">
-                  <input
-                    type="checkbox"
-                    name="is_sold_out"
-                    checked={formData.is_sold_out === 1}
-                    onChange={handleFormChange}
-                    className="w-4 h-4 rounded border-[#E2E8F0]"
-                  />
-                  <label className="text-sm font-semibold text-[#0F172A]">
-                    Mark as Sold Out
-                  </label>
-                </div>
-
-                <div className="flex gap-3 pt-4 border-t border-[#E2E8F0]">
-                  <button
-                    type="button"
-                    onClick={handleCloseForm}
-                    className="flex-1 px-4 py-2 border border-[#E2E8F0] bg-white text-[#0F172A] rounded-lg text-sm font-semibold hover:bg-[#F8FAFC]"
-                  >
-                    Cancel
-                  </button>
-                  <button
-                    type="submit"
-                    disabled={createEventMutation.isPending || updateEventMutation.isPending}
-                    className="flex-1 px-4 py-2 bg-[#138601] text-white rounded-lg text-sm font-semibold hover:bg-green-700 disabled:opacity-50 disabled:cursor-not-allowed"
-                  >
-                    {createEventMutation.isPending || updateEventMutation.isPending
-                      ? (editingEvent ? "Updating..." : "Creating...")
-                      : (editingEvent ? "Update" : "Create")}
-                  </button>
-                </div>
-              </form>
->>>>>>> Stashed changes
             </div>
           </div>
         </div>
