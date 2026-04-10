@@ -372,6 +372,7 @@ export default function EventsAndPolls() {
     setError(null);
     try {
       const eventsData = await getEvents();
+      console.log(eventsData)
 
       const transformed = eventsData
         .map(transformEvent)
