@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
 import useUserStore from "@/store/useUserStore";
+import { Link } from "react-router-dom";
+import ContactSupportModal from "../../components/shared/ContactSupportModal";
 
 import { Plus } from "lucide-react";
 import {
@@ -22,6 +24,7 @@ const DashboardHome = () => {
   const [isUploadModalOpen, setIsUploadModalOpen] = useState(false);
   const [user, setUser] = useState(null)
   const [loading, setLoading] = useState(true);
+  const [isContactModalOpen, setIsContactModalOpen] = useState(false);
 
   useEffect(() => {
     fetchUserData();
@@ -136,14 +139,14 @@ const DashboardHome = () => {
                   alt={`${displayUser.first_name} ${displayUser.last_name}`}
                   className="size-24 rounded-2xl bg-[#5d8b83] drop-shadow-sm border-3 border-white/30 object-cover"
                   onError={(e) => {
-                    e.currentTarget.style.display = 'none';
-                    e.currentTarget.nextElementSibling.style.display = 'flex';
+                    e.currentTarget.style.display = "none";
+                    e.currentTarget.nextElementSibling.style.display = "flex";
                   }}
                 />
               ) : null}
               <div
                 className="size-24 rounded-2xl bg-[#5d8b83] drop-shadow-sm border-3 border-white/30 flex items-center justify-center text-white text-2xl font-bold uppercase"
-                style={{ display: displayUser.avatar_url ? 'none' : 'flex' }}
+                style={{display: displayUser.avatar_url ? "none" : "flex"}}
               >
                 {displayUser.first_name?.[0]}
                 {displayUser.last_name?.[0]}
@@ -188,11 +191,13 @@ const DashboardHome = () => {
               Complete your profile
             </h3>
             <p className="text-xs text-[#64748B] mt-1">
-              {displayUser.bio ? "Great! Keep updating your profile" : "Add your bio and skills to reach 100%"}
+              {displayUser.bio
+                ? "Great! Keep updating your profile"
+                : "Add your bio and skills to reach 100%"}
             </p>
             <div className="overflow-hidden mt-3 h-2 text-xs flex rounded-full bg-[#F1F5F9]">
               <div
-                style={{ width: `${calculateProfileCompletion(displayUser)}%` }}
+                style={{width: `${calculateProfileCompletion(displayUser)}%`}}
                 className="shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center bg-[#138601] rounded-full transition-all duration-500 ease-out"
               />
             </div>
@@ -217,12 +222,17 @@ const DashboardHome = () => {
                 strokeWidth="8"
                 fill="none"
                 strokeDasharray="251.2"
-                strokeDashoffset={251.2 - (251.2 * calculateProfileCompletion(displayUser)) / 100}
+                strokeDashoffset={
+                  251.2 -
+                  (251.2 * calculateProfileCompletion(displayUser)) / 100
+                }
                 strokeLinecap="round"
               />
             </svg>
             <div className="absolute inset-0 flex items-center justify-center">
-              <span className="text-xs font-bold text-[#138601]">{calculateProfileCompletion(displayUser)}%</span>
+              <span className="text-xs font-bold text-[#138601]">
+                {calculateProfileCompletion(displayUser)}%
+              </span>
             </div>
           </div>
         </div>
@@ -294,7 +304,7 @@ const DashboardHome = () => {
               </div>
               <div className="overflow-hidden h-2 text-xs flex rounded-full bg-[#F1F5F9]">
                 <div
-                  style={{ width: "75%" }}
+                  style={{width: "75%"}}
                   className="shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center bg-[#F97316] rounded-full transition-all duration-500 ease-out"
                 />
               </div>
@@ -332,12 +342,12 @@ const DashboardHome = () => {
               <NotificationIcon className="text-[#138601] size-5" /> Recent
               Notifications
             </h3>
-            <a
-              href="#"
-              className="text-sm font-medium text-[#138601] hover:underline"
+            <Link
+              to="/student/news"
+              className="text-[#138601] text-sm font-semibold hover:underline"
             >
-              View All
-            </a>
+              View All →
+            </Link>
           </div>
 
           <div className="flex flex-col gap-4">
@@ -396,7 +406,10 @@ const DashboardHome = () => {
             </p>
           </div>
 
-          <button className="relative z-10 bg-white text-green-800 w-full py-3 rounded-xl font-bold text-sm mt-6 hover:bg-green-50 transition-colors">
+          <button
+            onClick={() => setIsContactModalOpen(true)}
+            className="relative z-10 bg-white text-green-800 w-full py-3 rounded-xl font-bold text-sm mt-6 hover:bg-green-50 transition-colors"
+          >
             Contact Support
           </button>
         </div>
@@ -404,6 +417,10 @@ const DashboardHome = () => {
       <UploadResourceModal
         isOpen={isUploadModalOpen}
         onClose={() => setIsUploadModalOpen(false)}
+      />
+      <ContactSupportModal
+        isOpen={isContactModalOpen}
+        onClose={() => setIsContactModalOpen(false)}
       />
     </div>
   );
