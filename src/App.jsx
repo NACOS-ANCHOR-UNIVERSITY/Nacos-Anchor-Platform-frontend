@@ -1,7 +1,7 @@
 import "./index.css";
-import { useState, useEffect } from "react";
-import { Routes, Route } from "react-router-dom";
-import { Toaster } from "sonner";
+import {useState, useEffect} from "react";
+import {Routes, Route} from "react-router-dom";
+import {Toaster} from "sonner";
 import Landing from "./pages/public/Landing";
 import AboutUs from "./pages/public/AboutUs";
 import Executivepage from "./pages/public/Executivepage";
@@ -12,7 +12,7 @@ import Signup from "./pages/public/signup/signUp";
 import PublicLayout from "./layouts/PublicLayout";
 import StudentDashboardLayout from "./layouts/StudentDashboardLayout";
 import DashboardHome from "./pages/student/dashboard-home";
-// import StudentSiwesPage from "./features/student/dashboard/StudentSiwesPage";
+import StudentSiwesPage from "./features/student/dashboard/StudentSiwesPage";
 import StudentPaymentReceipt from "./features/student/dashboard/StudentPayementReceipt";
 import Settings from "./pages/student/settings";
 import Portfolio from "./pages/student/Portfolio";
@@ -85,7 +85,7 @@ function App() {
               path="/student/payments"
               element={<StudentPaymentReceipt />}
             />
-            <Route path="/student/siwes" element={<SiwesBoard />} />
+            <Route path="/student/siwes" element={<StudentSiwesPage />} />
             <Route path="/student/library" element={<LibraryPage />} />
             <Route path="/student/settings" element={<Settings />} />
             <Route
@@ -118,4 +118,3 @@ function App() {
 }
 
 export default App;
-

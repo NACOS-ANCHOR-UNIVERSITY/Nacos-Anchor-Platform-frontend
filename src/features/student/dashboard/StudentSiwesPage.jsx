@@ -1,5 +1,6 @@
 import React, {useState, useEffect} from "react";
 import PageHeader from "../../../components/ui/PageHeader";
+import SiwesDetailsModal from "../../../features/library/components/SiwesDetailsModal";
 // import Sidebar from "../../../components/ui/Sidebar" // Uncomment if using
 import {
   Calendar,
@@ -60,6 +61,10 @@ function StudentSiwesPageBody() {
   const [opportunities, setOpportunities] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
 
+  //to track click action on view details
+  const [isDetailsModalOpen, setIsDetailsModalOpen] = useState(false);
+  const [selectedOppId, setSelectedOppId] = useState(null);
+
   const categories = [
     "Software Dev",
     "Networking",
@@ -69,21 +74,41 @@ function StudentSiwesPageBody() {
   const locations = ["Lagos", "Remote", "Abuja", "Hybrid"];
 
   // Fetch Data from API
+  // Fetch Data from API
   useEffect(() => {
     const fetchOpportunities = async () => {
       try {
-        const token =
+        // 1. 🧠 SMART TOKEN EXTRACTOR (X-RAY VERSION)
+        let token =
           localStorage.getItem("token") || localStorage.getItem("ACCESS_TOKEN");
-        // Notice the /api/proxy prefix to prevent CORS issues, and the exact spelling of your endpoint
-        const response = await fetch(
-          "/https://nacos.nextgenerationones.org/api/events-list",
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-              "Content-Type": "application/json",
-            },
+
+        if (!token || token === "null") {
+          try {
+            const authKey = Object.keys(localStorage).find((key) =>
+              key.startsWith("nacos-au"),
+            );
+            if (authKey) {
+              const authData = JSON.parse(localStorage.getItem(authKey));
+              console.log("📦 [LIST] INSIDE THE VAULT:", authData); // <--- Look for this in the console!
+
+              token =
+                authData?.state?.token ||
+                authData?.state?.user?.token ||
+                authData?.token;
+              console.log("🔑 [LIST] EXTRACTED TOKEN:", token);
+            }
+          } catch (e) {
+            console.error("Failed to parse auth storage:", e);
+          }
+        }
+
+        // 2. VITE PROXY URL (Tricks the browser to bypass CORS!)
+        const response = await fetch("/api/siwes/list", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
           },
-        );
+        });
 
         const data = await response.json();
 
@@ -302,14 +327,16 @@ function StudentSiwesPageBody() {
                         {opp.posted_text}
                       </p>
 
-                      <a
-                        href={opp.application_link || "#"}
-                        className="text-[#138601] font-semibold text-sm hover:underline"
-                        target="_blank"
-                        rel="noreferrer"
+                      <button
+                        onClick={() => {
+                          console.log("🚨 BUTTON CLICKED! ID:", opp.id); // ADD THIS LINE
+                          setSelectedOppId(opp.id);
+                          setIsDetailsModalOpen(true);
+                        }}
+                        className="text-[#138601] font-semibold text-sm hover:underline cursor-pointer"
                       >
                         View Details →
-                      </a>
+                      </button>
                     </div>
                   </div>
                 </div>
@@ -343,6 +370,11 @@ function StudentSiwesPageBody() {
           </div>
         )}
       </div>
+      <SiwesDetailsModal
+        isOpen={isDetailsModalOpen}
+        onClose={() => setIsDetailsModalOpen(false)}
+        opportunityId={selectedOppId}
+      />
     </div>
   );
 }
