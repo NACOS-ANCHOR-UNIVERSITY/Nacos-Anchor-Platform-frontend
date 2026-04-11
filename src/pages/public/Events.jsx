@@ -1,12 +1,12 @@
 import { useState, useEffect } from "react";
-import { Calendar, Clock, MapPin, Ticket, ArrowRight, Eye } from "lucide-react";
-import Team from "../../assets/images/team.png";
-import TechWeek from "../../assets/images/tech_week.png";
-import Bootcamp from "../../assets/images/bootcamp.png";
-import Nacos from "../../assets/images/nacos night.png";
-import UIUX from "../../assets/images/ui ux.png";
-import CareerTalk from "../../assets/images/career talk.png";
-import CodeAThon from "../../assets/images/code a thon.png";
+import {  Clock, MapPin, Ticket, ArrowRight, Eye } from "lucide-react";
+// import Team from "../../assets/images/team.png";
+// import TechWeek from "../../assets/images/tech_week.png";
+// import Bootcamp from "../../assets/images/bootcamp.png";
+// import Nacos from "../../assets/images/nacos night.png";
+// import UIUX from "../../assets/images/ui ux.png";
+// import CareerTalk from "../../assets/images/career talk.png";
+// import CodeAThon from "../../assets/images/code a thon.png";
 
 const Events = () => {
   const [filter, setFilter] = useState("All Events");
