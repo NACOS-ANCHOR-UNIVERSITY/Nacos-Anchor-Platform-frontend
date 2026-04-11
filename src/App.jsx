@@ -33,6 +33,7 @@ import ComingSoon from "./components/shared/ComingSoon";
 import ProtectedRoutes from "./components/shared/ProtectedRoutes";
 import useUserStore from "./store/useUserStore";
 import SplashScreen from "./components/shared/SplashScreen";
+import VotingPortal from "./pages/student/voting-portal";
 
 function App() {
   const hasHydrated = useUserStore((state) => state._hasHydrated);
@@ -75,6 +76,9 @@ function App() {
 
         {/* student routes (secured) */}
         <Route element={<ProtectedRoutes allowedRoles={["student"]} />}>
+          {/* Voting portal has its own full-page layout */}
+          <Route path="/student/voting-portal" element={<VotingPortal />} />
+
           <Route element={<StudentDashboardLayout />}>
             <Route path="/student/dashboard" element={<DashboardHome />} />
             <Route

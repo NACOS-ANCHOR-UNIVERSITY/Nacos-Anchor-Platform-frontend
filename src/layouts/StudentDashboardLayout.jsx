@@ -13,7 +13,8 @@ import {
   SearchIcon,
   NotificationIcon,
   BookIcon,
-} from "../assets/icons";
+  VotingIcon,
+} from "../assets/icons/icons";
 import { toast } from "sonner";
 import { authService } from "@/services/authService";
 import useUserStore from "@/store/useUserStore";
@@ -79,6 +80,7 @@ const StudentDashboardLayout = () => {
     { name: "SIWES", icon: BriefcaseIcon, href: "/student/siwes" },
     { name: "Payments", icon: CashIcon, href: "/student/payments" },
     { name: "News", icon: CloudIcon, href: "/student/news" },
+    { name: "Voting System", icon: VotingIcon, href: "/student/voting-portal" },
     { name: "Profile", icon: IDCardIcon, href: "/student/profile" },
     { name: "Settings", icon: SettingsIcon, href: "/student/settings" },
   ];
