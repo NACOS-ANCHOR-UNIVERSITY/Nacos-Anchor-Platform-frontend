@@ -16,7 +16,7 @@ import {
   Loader2,
 } from "lucide-react";
 import {
-  getEventsDashboard,
+  // getEventsDashboard,
   getEvents,
   createEvent,
   updateEvent,
@@ -62,8 +62,8 @@ const transformEvent = (apiEvent) => {
     badgeClass: apiEvent.is_sold_out
       ? "bg-[#FEE2E2] text-[#991B1B]"
       : isUpcoming
-      ? "bg-[#DCFCE7] text-[#166534]"
-      : "bg-[#F1F5F9] text-[#475569]",
+        ? "bg-[#DCFCE7] text-[#166534]"
+        : "bg-[#F1F5F9] text-[#475569]",
     title: apiEvent.title,
     desc: apiEvent.description,
     time: apiEvent.time_range,
@@ -144,11 +144,10 @@ function TabButton({ active, onClick, children }) {
     <button
       type="button"
       onClick={onClick}
-      className={`h-7 px-3 rounded-full text-[11px] font-semibold transition-colors ${
-        active
-          ? "bg-white text-[#0F172A] shadow-sm"
-          : "bg-transparent text-[#64748B] hover:text-[#0F172A]"
-      }`}
+      className={`h-7 px-3 rounded-full text-[11px] font-semibold transition-colors ${active
+        ? "bg-white text-[#0F172A] shadow-sm"
+        : "bg-transparent text-[#64748B] hover:text-[#0F172A]"
+        }`}
     >
       {children}
     </button>
@@ -276,11 +275,10 @@ function EventCard({ event, onEdit, onDelete }) {
             <button
               type="button"
               onClick={() => onEdit(event)}
-              className={`h-7 px-3.5 rounded-lg text-[11px] font-semibold transition-colors ${
-                event.action === "Register"
-                  ? "bg-[#138601] text-white hover:bg-green-700"
-                  : "border border-[#E2E8F0] bg-white text-[#334155] hover:bg-[#F8FAFC]"
-              }`}
+              className={`h-7 px-3.5 rounded-lg text-[11px] font-semibold transition-colors ${event.action === "Register"
+                ? "bg-[#138601] text-white hover:bg-green-700"
+                : "border border-[#E2E8F0] bg-white text-[#334155] hover:bg-[#F8FAFC]"
+                }`}
             >
               {event.action}
             </button>
@@ -368,28 +366,34 @@ export default function EventsAndPolls() {
   });
 
   // Fetch dashboard stats and events
+  // Replace the fetchData function
   const fetchData = useCallback(async () => {
     setLoading(true);
     setError(null);
     try {
-      const [statsData, eventsData] = await Promise.all([
-        getEventsDashboard(),
-        getEvents(),
-      ]);
-      setDashboardStats(statsData);
-      // transform and ensure latest-first ordering by `created_at` (fallback to event_date)
+      const eventsData = await getEvents();
+      console.log(eventsData)
+
       const transformed = eventsData
         .map(transformEvent)
         .sort((a, b) => new Date(b.created_at || b.event_date) - new Date(a.created_at || a.event_date));
+
+      // Derive stats from the events list directly
+      setDashboardStats({
+        total_events: transformed.length,
+        upcoming_events: transformed.filter((e) => e.tab === "upcoming").length,
+        past_events: transformed.filter((e) => e.tab === "past").length,
+        draft_events: 0, // No draft concept in the API yet
+      });
+
       setEvents(transformed);
     } catch (err) {
-      setError(err.response?.data?.message || "Failed to fetch data");
-      console.error("Error fetching events data:", err);
+      setError(err.response?.data?.message || "Failed to fetch events");
+      console.error("Error fetching events:", err);
     } finally {
       setLoading(false);
     }
   }, []);
-
   useEffect(() => {
     fetchData();
   }, [fetchData]);

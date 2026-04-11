@@ -55,7 +55,7 @@ const Events = () => {
   const filteredEvents = eventsData.filter((event) => {
     const matchesCategory =
       filter === "All Events" ||
-      event.category.toUpperCase() === filter.toUpperCase();
+      (event.category || "").toUpperCase() === filter.toUpperCase();
     const matchesSearch =
       event.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
       event.description.toLowerCase().includes(searchTerm.toLowerCase());
@@ -189,9 +189,14 @@ const Events = () => {
 
                     {/* Category Badge */}
                     <span
-                      className={`absolute top-3 right-3 ${event.category.toUpperCase() === "WORKSHOP" ? "bg-[#2563EB]" : event.category.toUpperCase() === "HACKATHON" ? "bg-[#007BFF]" : event.category.toUpperCase() === "SOCIAL" ? "bg-[#9333EA]" : event.category.toUpperCase() === "SEMINAR" ? "bg-[#138301]" : "bg-gray-500"} text-white text-xs font-bold px-3 py-1 rounded-full uppercase z-10`}
+                      className={`absolute top-3 right-3 ${(event.category || "").toUpperCase() === "WORKSHOP" ? "bg-[#2563EB]" :
+                        (event.category || "").toUpperCase() === "HACKATHON" ? "bg-[#007BFF]" :
+                          (event.category || "").toUpperCase() === "SOCIAL" ? "bg-[#9333EA]" :
+                            (event.category || "").toUpperCase() === "SEMINAR" ? "bg-[#138301]" :
+                              "bg-gray-500"
+                        } text-white text-xs font-bold px-3 py-1 rounded-full uppercase z-10`}
                     >
-                      {event.category}
+                      {event.category || "General"}
                     </span>
 
                     {/* SOLD OUT OVERLAY */}

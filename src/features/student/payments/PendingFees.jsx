@@ -78,7 +78,7 @@ const getBadgeStyle = (status) => {
 };
 
 export default function PendingFees({ fees = [] }) {
-  const user =  (JSON.parse(localStorage.getItem("nacos-auth-storage")).state.user || "{}");
+  const user = (JSON.parse(localStorage.getItem("nacos-auth-storage")).state.user || "{}");
   const userEmail = user.email || "student@aul.edu.ng";
   const token = JSON.parse(localStorage.getItem("nacos-auth-storage")).state.token
 
@@ -94,17 +94,27 @@ export default function PendingFees({ fees = [] }) {
 
   const getButtonProps = (fee) => {
     const type = (fee.type || "").toLowerCase();
-    const buttonText = fee.button_text || "Pay Now";
+    const buttonText = fee.can_pay ? (fee.button_text || "Pay Now") : "Paid";
 
+    if (!fee.can_pay) {
+      return {
+        text: buttonText,
+        disabled: true,
+        className:
+          "min-w-[5rem] bg-gray-100 text-gray-400 py-2.5 px-4 rounded-lg text-sm font-medium cursor-not-allowed",
+      };
+    }
     if (type === "compulsory" || type === "required") {
       return {
         text: buttonText,
+        disabled: false,
         className:
           "min-w-[5rem] bg-[#138601] hover:bg-[#0e6001] shadow-[0px_2px_4px_-2px_#138601] hover:shadow-[0px_4px_6px_-1px_#138601] transition text-white py-2.5 px-4 rounded-lg text-sm font-medium cursor-pointer",
       };
     }
     return {
       text: buttonText,
+      disabled: false,
       className:
         "min-w-[5rem] border border-gray-300 hover:bg-gray-50 transition py-2.5 px-4 rounded-lg text-sm font-medium cursor-pointer",
     };
@@ -209,19 +219,23 @@ export default function PendingFees({ fees = [] }) {
 
               <div className="border-t border-gray-200 mt-6 pt-4 flex items-center justify-between gap-3">
                 <div>
-                  <p className="text-xs tracking-wide text-gray-400 mb-1">
-                    AMOUNT
-                  </p>
+                  <p className="text-xs tracking-wide text-gray-400 mb-1">AMOUNT DUE</p>
                   <h4 className="text-2xl font-bold text-gray-900">
-                    {formatAmount(fee.amount)}
+                    {formatAmount(fee.balance_due ?? fee.amount)}
                   </h4>
+                  {fee.amount_paid > 0 && (
+                    <p className="text-xs text-green-600 mt-0.5">
+                      {formatAmount(fee.amount_paid)} already paid
+                    </p>
+                  )}
                 </div>
 
                 <PaymentComponent
-                  amount={(parseInt(fee.amount) + 375)}
+                  amount={fee.can_pay ? (parseFloat(fee.balance_due) + 375) : 0}
                   email={userEmail}
                   purpose={fee.title}
                   btnText={buttonProps.text}
+                  disabled={buttonProps.disabled}
                   onSuccess={(ref) => handlePaymentSuccess(ref, fee)}
                 />
               </div>
