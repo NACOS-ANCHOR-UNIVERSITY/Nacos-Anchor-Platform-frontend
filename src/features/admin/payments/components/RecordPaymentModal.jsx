@@ -98,6 +98,7 @@ export default function RecordPaymentModal({ isOpen, onClose }) {
 
   const [formData, setFormData] = useState({
     user_id: "",
+    fee_id: "",
     description: "",
     amount: "",
     status: "Successful",
@@ -150,18 +151,38 @@ export default function RecordPaymentModal({ isOpen, onClose }) {
   }, [studentQuery]);
 
   // Fees - static only, no API call 
+  // useEffect(() => {
+  //   const staticFees = [
+  //     { title: "Departmental Dues", amount: "" },
+  //     { title: "T-Shirt Fee", amount: "" },
+  //     { title: "Dinner Fee", amount: "" },
+  //     { title: "Other", amount: "" },
+  //   ];
+  //   const filtered = staticFees.filter((f) =>
+  //     f.title.toLowerCase().includes(paymentQuery.toLowerCase())
+  //   );
+  //   setPaymentOptions(filtered.map((f) => ({ ...f, _displayLabel: f.title })));
+  // }, [paymentQuery]);
   useEffect(() => {
-    const staticFees = [
-      { title: "Departmental Dues", amount: "" },
-      { title: "T-Shirt Fee", amount: "" },
-      { title: "Dinner Fee", amount: "" },
-      { title: "Other", amount: "" },
-    ];
-    const filtered = staticFees.filter((f) =>
-      f.title.toLowerCase().includes(paymentQuery.toLowerCase())
-    );
-    setPaymentOptions(filtered.map((f) => ({ ...f, _displayLabel: f.title })));
-  }, [paymentQuery]);
+    const fetchFees = async () => {
+      try {
+        const res = await fetch("https://nacos.nextgenerationones.org/api/finance/fees/list", {
+          headers: {
+            Authorization: `Bearer ${token}` // however you're storing your token
+          }
+        })
+        const data = await res.json()
+        console.log(data)
+        if (data.status === "success") {
+          setPaymentOptions(data.data.map((f) => ({ ...f, _displayLabel: f.title, fee_id: f.id })))
+        }
+      } catch (err) {
+        console.error("Failed to fetch fees:", err)
+      }
+    }
+    fetchFees()
+  }, [paymentQuery])
+
 
   // Load payment options on mount
   useEffect(() => {
@@ -177,8 +198,8 @@ export default function RecordPaymentModal({ isOpen, onClose }) {
     setSelectedPayment(payment);
     setFormData((prev) => ({
       ...prev,
+      fee_id: payment.fee_id || payment.id,
       description: payment._displayLabel,
-      // Pre-fill amount if the fee has a known amount
       amount: payment.amount || prev.amount,
     }));
   };
@@ -216,6 +237,7 @@ export default function RecordPaymentModal({ isOpen, onClose }) {
     try {
       const data = new FormData();
       data.append("user_id", formData.user_id);
+      data.append("fee_id", formData.fee_id);   // 👈 add this line
       data.append("description", formData.description);
       data.append("amount", formData.amount);
       data.append("status", formData.status);

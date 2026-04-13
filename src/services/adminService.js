@@ -42,7 +42,7 @@ export const adminService = {
   },
 
   getSiwesBoard: async () => {
-    const response = await client.get("/admin/siwes");
+    const response = await client.get("/admin/siwes/opportunities");
     return response.data;
   },
 

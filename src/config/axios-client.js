@@ -4,8 +4,8 @@ import { toast } from "sonner";
 
 // In development, use the Vite proxy (just '/api')
 // In production, use the full URL from env variable
-const baseURL = import.meta.env.DEV 
-  ? "/api" 
+const baseURL = import.meta.env.DEV
+  ? "/api"
   : (import.meta.env.VITE_API_BASE_URL || "https://nacos.nextgenerationones.org/api");
 
 const client = axios.create({

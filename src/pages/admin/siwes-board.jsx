@@ -18,13 +18,15 @@ import Skeleton from "@/components/ui/Skeleton";
 const SiwesBoardMgt = () => {
   const { data: boardData, isLoading: loading, refetch } = useAdminSiwesBoard();
 
-  const metrics = boardData?.data?.metrics || {
-    active_opportunities: 0,
-    pending_logs: 0,
-    placed_students: 0,
+  // API returns { status, meta, data: [...listings] }
+  // metrics and moderation_queue don't exist on this endpoint yet
+  const listings = boardData?.data || [];
+  const metrics = {
+    active_opportunities: listings.filter(l => l.status === "Active").length,
+    pending_logs: 0,      // not returned by this endpoint
+    placed_students: 0,   // not returned by this endpoint
   };
-  const moderationQueue = boardData?.data?.moderation_queue || [];
-  const listings = boardData?.data?.listings || [];
+  const moderationQueue = []; // not returned by this endpoint
 
   const handleSuccess = () => {
     refetch();
