@@ -103,7 +103,7 @@ function StudentSiwesPageBody() {
         }
 
         // 2. VITE PROXY URL (Tricks the browser to bypass CORS!)
-        const response = await fetch("/api/siwes/list", {
+        const response = await fetch("https://nacos.nextgenerationones.org/api/siwes/list", {
           headers: {
             Authorization: `Bearer ${token}`,
             "Content-Type": "application/json",
