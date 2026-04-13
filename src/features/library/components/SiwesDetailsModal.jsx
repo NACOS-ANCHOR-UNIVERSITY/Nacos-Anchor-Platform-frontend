@@ -48,7 +48,7 @@ export default function SiwesDetailsModal({isOpen, onClose, opportunityId}) {
 
         // 2. VITE PROXY URL
         const response = await fetch(
-          `/api/siwes/details.php?id=${opportunityId}`,
+          `https://nacos.nextgenerationones.org/api/siwes/details.php?id=${opportunityId}`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
