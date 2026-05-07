@@ -37,6 +37,8 @@ cd nacos-anchor-platform
 # Install dependencies
 npm install
 
+> **Note on Dependencies:** This project uses React 19, which is newer than what some dependencies officially support. We use npm's `overrides` feature in `package.json` to ensure compatibility with `react-paystack`, which officially supports up to React 18. The library works correctly with React 19 in practice.
+
 3. Environment Setup
 
 Create a .env file in the root directory. Copy the keys from .env.example (if available).
